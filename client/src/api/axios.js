@@ -1,7 +1,16 @@
+// @ts-nocheck
+// src/api/axios.js
 import axios from 'axios';
 
-const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5000/api'
-})
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-export default axiosInstance; 
+if (import.meta.env.MODE === 'development') {
+	console.log('🔧 Axios Base URL (DEV):', baseURL);
+}
+
+const axiosInstance = axios.create({
+	baseURL,
+	withCredentials: true,
+});
+
+export default axiosInstance;

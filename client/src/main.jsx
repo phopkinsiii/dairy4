@@ -9,9 +9,10 @@ import { CartProvider } from './contexts/CartContext.jsx';
 import { ContactProvider } from './contexts/ContactContext.jsx';
 import { UserProvider } from './contexts/UserContext.jsx';
 import { NavbarProvider } from './contexts/NavbarContext.jsx';
-
+import { HeadProvider } from 'react-head'; // ✅ Import
 createRoot(document.getElementById('root')).render(
-	//<StrictMode>
+	<StrictMode>
+		<HeadProvider>
 		<CartProvider>
 		<ProductProvider>
 			
@@ -27,5 +28,6 @@ createRoot(document.getElementById('root')).render(
 			
 		</ProductProvider>
 		</CartProvider>
-	//</StrictMode>
+		</HeadProvider>
+	</StrictMode>
 );

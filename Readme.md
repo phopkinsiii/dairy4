@@ -1,46 +1,26 @@
-const sendOrderConfirmationEmail = async ({
-  to,
-  subject,
-  name,
-  cartItems = [],
-  pickupName,
-  pickupLocation,
-  pickupTime,
-  isAdminCopy = false,
-}) => {
-  const resend = new Resend(process.env.RESEND_API_KEY);
+import React from 'react';
+import { Title, Meta, Link as HeadLink } from 'react-head';
+import ProductGrid from '../components/ProductGrid'; // adjust this import if needed
 
-  const html = `
-    <div>
-      <h2>Order Confirmation</h2>
-      <p>Hi ${name}, thank you for your order.</p>
+const ProductList = () => {
+	return (
+		<>
+			{/* SEO Metadata */}
+			<Title>Our Farm Products | Blueberry Dairy</Title>
+			<Meta name="description" content="Browse organic farm products including raw goat milk, cheese, yogurt, apples, blueberries, and more from Blueberry Dairy." />
+			<HeadLink rel="canonical" href="https://blueberrydairy.com/products" />
 
-      <h3>Pickup Info:</h3>
-      <ul>
-        <li><strong>Name:</strong> ${pickupName}</li>
-        <li><strong>Location:</strong> ${pickupLocation}</li>
-        <li><strong>Time:</strong> ${pickupTime}</li>
-      </ul>
+			{/* Page Content */}
+			<main className="min-h-screen bg-white pt-12 px-4 sm:px-6 lg:px-8">
+				<h1 className="text-4xl font-bold text-gray-900 mb-6">Farm Products</h1>
+				<p className="text-lg text-gray-600 mb-10">
+					Fresh, local, and organic. Explore our selection of raw goat milk, handcrafted cheeses, blueberries, apples, and more.
+				</p>
 
-      <h3>Items:</h3>
-      <ul>
-        ${
-          cartItems && Array.isArray(cartItems)
-            ? cartItems.map(
-                (item) => `<li>${item.quantity} × ${item.name} — $${item.price.toFixed(2)}</li>`
-              ).join('')
-            : '<li>No items found</li>'
-        }
-      </ul>
-
-      <p>We'll see you soon!</p>
-    </div>
-  `;
-
-  return await resend.emails.send({
-    from: 'Blueberry Dairy <orders@yourdomain.com>',
-    to,
-    subject,
-    html,
-  });
+				<ProductGrid />
+			</main>
+		</>
+	);
 };
+
+export default ProductList;

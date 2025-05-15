@@ -17,13 +17,12 @@ import uploadRoutes from './routes/uploadRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
-
-
 const app = express();
 
 // Resolve __dirname in ES module scope
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const allowedOrigins = ['http://localhost:5173']; // Add your deployed domain later too
 
 // ✅ Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, '/uploads');
@@ -32,7 +31,12 @@ if (!fs.existsSync(uploadsDir)) {
 }
 
 // Middleware
-app.use(cors());
+app.use(
+	cors({
+		origin: allowedOrigins,
+		credentials: true,
+	})
+); //be sure to add real domain name after deployment.
 app.use(morgan('dev'));
 app.use(express.json());
 

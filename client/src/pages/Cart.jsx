@@ -16,6 +16,15 @@ const Cart = () => {
     });
   };
 
+  	// ✅ Truncate description to first 2 sentences
+	const shortDescription = (desc) => {
+		if (!desc) return '';
+		const sentences = desc.split('.').filter(Boolean);
+		return (
+			sentences.slice(0, 1).join('. ') + (sentences.length > 1 ? '...' : '.')
+		);
+	};
+
   return (
     <div className="bg-white py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-8">Shopping Cart</h1>
@@ -38,7 +47,7 @@ const Cart = () => {
                     <div className="sm:flex sm:justify-between">
                       <div>
                         <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
-                        <p className="text-sm text-gray-500">{product.description}</p>
+                        <p className="text-sm text-gray-500">{shortDescription(product.description)}</p>
                       </div>
                       <p className="text-lg font-semibold text-gray-900">
                         ${((+product.price || 0) * (+product.quantity || 1)).toFixed(2)}

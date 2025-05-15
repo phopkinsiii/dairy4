@@ -24,7 +24,6 @@ export default function Checkout() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
 		try {
 			const response = await axiosInstance.post('/orders', {
 				guest: true,
@@ -32,7 +31,7 @@ export default function Checkout() {
 				name: form.name,
 				cartItems,
 				pickupName: form.name,
-				pickupLocation: 'Farm', // can make dynamic later
+				pickupLocation: 'Farm',
 				pickupTime: form.pickupTime,
 			});
 
@@ -46,41 +45,47 @@ export default function Checkout() {
 
 	const formatPrice = (price) => `$${price.toFixed(2)}`;
 
+	// ✅ Truncate description to first 2 sentences
+	const shortDescription = (desc) => {
+		if (!desc) return '';
+		const sentences = desc.split('.').filter(Boolean);
+		return (
+			sentences.slice(0, 1).join('. ') + (sentences.length > 1 ? '...' : '.')
+		);
+	};
+
 	const inputClass =
-		'mt-1 block w-full rounded-md border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg lg:text-xl';
+		'readable-input mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500';
 
 	return (
-		<main className='lg:flex lg:min-h-full lg:flex-row-reverse lg:overflow-hidden bg-white'>
+		<main className='flex flex-col lg:flex-row-reverse min-h-screen overflow-hidden bg-white'>
 			<h1 className='sr-only'>Checkout</h1>
 
-			{/* Order Summary */}
+			{/* Order Summary (desktop only) */}
 			<section
 				aria-labelledby='summary-heading'
-				className='hidden w-full max-w-md flex-col bg-gray-50 lg:flex'
+				className='hidden lg:flex w-full max-w-md flex-col bg-gray-50'
 			>
 				<h2 id='summary-heading' className='sr-only'>
 					Order summary
 				</h2>
 
-				<ul
-					role='list'
-					className='flex-auto divide-y divide-gray-200 overflow-y-auto px-6'
-				>
+				<ul className='flex-auto divide-y divide-gray-200 overflow-y-auto px-6'>
 					{cartItems.map((product) => (
 						<li key={product._id} className='flex space-x-6 py-6'>
 							<img
-								alt={product.name}
 								src={product.imageSrc}
-								className='size-40 flex-none rounded-md bg-gray-200 object-cover'
+								alt={product.name}
+								className='w-32 h-32 rounded-md object-cover bg-gray-200'
 							/>
-							<div className='flex flex-col justify-between space-y-2'>
-								<div className='text-lg font-medium text-gray-900'>
+							<div className='flex flex-col justify-between space-y-2 text-sm sm:text-base'>
+								<span className='font-medium text-gray-900'>
 									{product.name}
-								</div>
+								</span>
 								<p className='text-gray-500'>
-									{product.quantity} × {formatPrice(product.price)}
+									{shortDescription(product.description)}
 								</p>
-								<p className='text-gray-900'>
+								<p className='text-gray-900 font-medium'>
 									{formatPrice(product.quantity * product.price)}
 								</p>
 							</div>
@@ -89,7 +94,7 @@ export default function Checkout() {
 				</ul>
 
 				<div className='sticky bottom-0 border-t border-gray-200 bg-gray-50 p-6'>
-					<dl className='space-y-4 text-lg text-gray-700'>
+					<dl className='space-y-4 text-sm sm:text-base text-gray-700'>
 						<div className='flex justify-between'>
 							<dt>Subtotal</dt>
 							<dd className='font-semibold text-gray-900'>
@@ -97,8 +102,8 @@ export default function Checkout() {
 							</dd>
 						</div>
 						<div className='flex justify-between border-t border-gray-200 pt-4'>
-							<dt className='text-xl font-semibold text-gray-900'>Total</dt>
-							<dd className='text-xl font-semibold text-gray-900'>
+							<dt className='font-semibold text-gray-900'>Total</dt>
+							<dd className='font-semibold text-gray-900'>
 								{formatPrice(subtotal)}
 							</dd>
 						</div>
@@ -107,12 +112,9 @@ export default function Checkout() {
 			</section>
 
 			{/* Checkout Form */}
-			<section
-				aria-labelledby='payment-heading'
-				className='flex-auto overflow-y-auto px-4 pt-12 pb-16 sm:px-6 lg:px-8 lg:pt-0 lg:pb-24 text-lg'
-			>
-				<div className='mx-auto max-w-lg'>
-					<h2 className='text-2xl font-semibold mb-8 text-gray-900'>
+			<section className='flex-auto px-4 pt-10 pb-16 sm:px-6 lg:px-8 lg:pt-14 lg:pb-24'>
+				<div className='max-w-xl mx-auto'>
+					<h2 className='text-2xl sm:text-3xl font-bold text-gray-900 mb-8'>
 						Pickup & Contact Info
 					</h2>
 
@@ -120,7 +122,7 @@ export default function Checkout() {
 						<div>
 							<label
 								htmlFor='email'
-								className='block font-medium text-gray-700'
+								className='block text-base sm:text-lg font-medium text-gray-700'
 							>
 								Email address
 							</label>
@@ -138,7 +140,7 @@ export default function Checkout() {
 						<div>
 							<label
 								htmlFor='name'
-								className='block font-medium text-gray-700'
+								className='block text-base sm:text-lg font-medium text-gray-700'
 							>
 								Pickup Person's Name
 							</label>
@@ -156,7 +158,7 @@ export default function Checkout() {
 						<div>
 							<label
 								htmlFor='pickupTime'
-								className='block font-medium text-gray-700'
+								className='block text-base sm:text-lg font-medium text-gray-700'
 							>
 								Pickup Date & Time
 							</label>
@@ -173,9 +175,9 @@ export default function Checkout() {
 
 						<button
 							type='submit'
-							className='w-full mt-6 bg-indigo-600 text-white py-3 px-6 rounded-md hover:bg-indigo-700 font-semibold text-lg'
+							className='w-full mt-6 bg-indigo-600 text-white py-3 px-6 rounded-md hover:bg-indigo-700 font-semibold text-base sm:text-lg'
 						>
-							Pay {formatPrice(subtotal)}
+							Confirm Pickup – {formatPrice(subtotal)}
 						</button>
 
 						<p className='mt-4 text-center text-sm text-gray-500 flex items-center justify-center'>
@@ -183,7 +185,7 @@ export default function Checkout() {
 								className='w-5 h-5 mr-2 text-gray-400'
 								aria-hidden='true'
 							/>
-							Secure pickup confirmation – no payment required
+							No payment required – pickup only
 						</p>
 					</form>
 				</div>
