@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 import bcrypt from 'bcryptjs';
-import { sendEmail } from '../utils/sendEmail.js';
+// import { sendEmail } from '../utils/sendEmail.js';
 
 const generateToken = (id, role) => {
 	return jwt.sign({ id, role }, process.env.JWT_SECRET, {
@@ -77,60 +77,60 @@ export const loginUser = async (req, res, next) => {
 	}
 };
 
-export const requestPasswordReset = async (req, res) => {
-	const { email } = req.body;
+// export const requestPasswordReset = async (req, res) => {
+// 	const { email } = req.body;
 
-	try {
-		const user = await User.findOne({ email });
-		if (!user) {
-			return res.status(404).json({ message: 'User not found' });
-		}
-		//Generate a reset token
-		const resetToken = nanoid();
-		user.resetToken = resetToken;
-		user.resetTokenExpires = dayjs().add(1, 'hour').toDate(); //Token expires one hour
-		await user.save();
+// 	try {
+// 		const user = await User.findOne({ email });
+// 		if (!user) {
+// 			return res.status(404).json({ message: 'User not found' });
+// 		}
+// 		//Generate a reset token
+// 		const resetToken = nanoid();
+// 		user.resetToken = resetToken;
+// 		user.resetTokenExpires = dayjs().add(1, 'hour').toDate(); //Token expires one hour
+// 		await user.save();
 
-		//Email Content
-		const resetURL = `http://localhost:5173/reset-password?token=${resetToken}`;
-		const message = `Hello ${user.name} \n\nYou requested a password reset. Click the link below to reset your password:\n\n${resetURL}\n\nIf you did not request this, please contact us immediately.`;
+// 		//Email Content
+// 		const resetURL = `http://localhost:5173/reset-password?token=${resetToken}`;
+// 		const message = `Hello ${user.name} \n\nYou requested a password reset. Click the link below to reset your password:\n\n${resetURL}\n\nIf you did not request this, please contact us immediately.`;
 
-		//Send the email.
-		await sendEmail(user.email, 'Password Reset Request', message);
+// 		//Send the email.
+// 		await sendEmail(user.email, 'Password Reset Request', message);
 
-		res
-			.status(200)
-			.json({ message: 'Password reset link sent to your email.' });
-	} catch (error) {
-		res.status(500).json({ message: 'Server Error', error: error.message });
-	}
-};
+// 		res
+// 			.status(200)
+// 			.json({ message: 'Password reset link sent to your email.' });
+// 	} catch (error) {
+// 		res.status(500).json({ message: 'Server Error', error: error.message });
+// 	}
+// };
 
 //Reset password
-export const resetPassword = async (req, res) => {
-	const { resetToken, newPassword } = req.body;
+// export const resetPassword = async (req, res) => {
+// 	const { resetToken, newPassword } = req.body;
 
-	try {
-		const user = await User.findOne({
-			resetToken,
-			resetTokenExpires: { $gt: new Date() },
-		});
+// 	try {
+// 		const user = await User.findOne({
+// 			resetToken,
+// 			resetTokenExpires: { $gt: new Date() },
+// 		});
 
-		if (!user) {
-			return res
-				.status(400)
-				.json({ message: 'Invalid or expired reset request' });
-		}
-		//Update the password
-		user.password = await bcrypt.hash(newPassword, 10);
-		user.resetToken = undefined;
-		user.resetTokenExpires = undefined;
-		await user.save();
-		res.status(200).json({ message: 'Password updated successfully.' });
-	} catch (error) {
-		res.status(500).json({ message: 'Server Error', error: error.message });
-	}
-};
+// 		if (!user) {
+// 			return res
+// 				.status(400)
+// 				.json({ message: 'Invalid or expired reset request' });
+// 		}
+// 		//Update the password
+// 		user.password = await bcrypt.hash(newPassword, 10);
+// 		user.resetToken = undefined;
+// 		user.resetTokenExpires = undefined;
+// 		await user.save();
+// 		res.status(200).json({ message: 'Password updated successfully.' });
+// 	} catch (error) {
+// 		res.status(500).json({ message: 'Server Error', error: error.message });
+// 	}
+// };
 
 //set Admin role
 export const setAdminRole = async (req, res, next) => {

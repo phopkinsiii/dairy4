@@ -1,10 +1,12 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
+
 
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
@@ -12,9 +14,10 @@ import productRoutes from './routes/productRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
-dotenv.config();
+
 
 const app = express();
 
@@ -42,7 +45,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/uploads', uploadRoutes);
-
+app.use('/api/orders', orderRoutes);
 // Error handler
 app.use(errorHandler);
 

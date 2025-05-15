@@ -1,7 +1,7 @@
 // @ts-nocheck
 //Tools and Packages
 
-import { useState, useEffect } from 'react';
+
 import { Routes, Route, Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,6 +23,7 @@ import NavbarLayout from './components/NavbarLayout.jsx';
 import AddBlogPost from './pages/admin/AddBlogPost.jsx';
 import EditProduct from './pages/admin/EditProduct.jsx';
 import Checkout from './pages/Checkout.jsx';
+import Confirmation from './pages/Confirmation.jsx';
 
 function App() {
 
@@ -81,6 +82,7 @@ function App() {
 					/>
 					<Route path='/blog' element={<BlogPage />} />
 					<Route path='/checkout' element={<Checkout />} />
+					<Route path='/confirmation' element={<Confirmation />} />
 
 					{/* <Route path='/product/:id' element={<ProductDetails />} />
           <Route path='/admin' element={<AdminDashboard />} /> */}

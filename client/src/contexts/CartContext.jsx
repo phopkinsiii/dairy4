@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createContext, useReducer, useContext, useEffect, useMemo } from 'react';
 
 const CartContext = createContext();

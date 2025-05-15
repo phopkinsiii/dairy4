@@ -1,154 +1,193 @@
 // src/pages/Checkout.jsx
-import React from 'react';
-import { useCartContext } from '../contexts/CartContext';
+import { useCartContext } from '../contexts/CartContext.jsx';
+import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../api/axios.js';
 import { LockClosedIcon } from '@heroicons/react/20/solid';
+import { useState } from 'react';
 
 export default function Checkout() {
-  const { cartItems, subtotal } = useCartContext();
+	const navigate = useNavigate();
+	const { cartItems, subtotal, dispatch } = useCartContext();
 
-  const formatPrice = (price) => `$${price.toFixed(2)}`;
+	const [form, setForm] = useState({
+		email: '',
+		name: '',
+		pickupTime: '',
+	});
 
-  return (
-    <main className="lg:flex lg:min-h-full lg:flex-row-reverse lg:overflow-hidden bg-white">
-      <h1 className="sr-only">Checkout</h1>
+	const handleChange = (e) => {
+		setForm((prev) => ({
+			...prev,
+			[e.target.name]: e.target.value,
+		}));
+	};
 
-      {/* Order summary (desktop) */}
-      <section
-        aria-labelledby="summary-heading"
-        className="hidden w-full max-w-md flex-col bg-gray-50 lg:flex"
-      >
-        <h2 id="summary-heading" className="sr-only">
-          Order summary
-        </h2>
+	const handleSubmit = async (e) => {
+		e.preventDefault();
 
-        <ul role="list" className="flex-auto divide-y divide-gray-200 overflow-y-auto px-6">
-          {cartItems.map((product) => (
-            <li key={product._id} className="flex space-x-6 py-6">
-              <img
-                alt={product.name}
-                src={product.imageSrc}
-                className="size-40 flex-none rounded-md bg-gray-200 object-cover"
-              />
-              <div className="flex flex-col justify-between space-y-2">
-                <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                <p className="text-gray-500 text-sm">
-                  {product.quantity} × {formatPrice(product.price)}
-                </p>
-                <p className="text-gray-900 text-sm">
-                  {formatPrice(product.quantity * product.price)}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
+		try {
+			const response = await axiosInstance.post('/orders', {
+				guest: true,
+				email: form.email,
+				name: form.name,
+				cartItems,
+				pickupName: form.name,
+				pickupLocation: 'Farm', // can make dynamic later
+				pickupTime: form.pickupTime,
+			});
 
-        <div className="sticky bottom-0 border-t border-gray-200 bg-gray-50 p-6">
-          <dl className="space-y-4 text-sm text-gray-700">
-            <div className="flex justify-between">
-              <dt>Subtotal</dt>
-              <dd className="font-medium text-gray-900">{formatPrice(subtotal)}</dd>
-            </div>
-            <div className="flex justify-between border-t border-gray-200 pt-4">
-              <dt className="text-base font-semibold text-gray-900">Total</dt>
-              <dd className="text-base font-semibold text-gray-900">{formatPrice(subtotal)}</dd>
-            </div>
-          </dl>
-        </div>
-      </section>
+			localStorage.setItem('latestOrder', JSON.stringify(response.data));
+			dispatch({ type: 'CLEAR_CART' });
+			navigate('/confirmation');
+		} catch (error) {
+			console.error('❌ Checkout failed:', error);
+		}
+	};
 
-      {/* Checkout form */}
-      <section
-        aria-labelledby="payment-heading"
-        className="flex-auto overflow-y-auto px-4 pt-12 pb-16 sm:px-6 lg:px-8 lg:pt-0 lg:pb-24"
-      >
-        <div className="mx-auto max-w-lg">
-          <h2 className="text-xl font-semibold mb-8 text-gray-900">Payment Information</h2>
+	const formatPrice = (price) => `$${price.toFixed(2)}`;
 
-          <form className="space-y-6">
-            <div>
-              <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <input
-                id="email-address"
-                name="email"
-                type="email"
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
+	const inputClass =
+		'mt-1 block w-full rounded-md border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg lg:text-xl';
 
-            <div>
-              <label htmlFor="name-on-card" className="block text-sm font-medium text-gray-700">
-                Name on card
-              </label>
-              <input
-                id="name-on-card"
-                name="name-on-card"
-                type="text"
-                required
-                autoComplete="cc-name"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
+	return (
+		<main className='lg:flex lg:min-h-full lg:flex-row-reverse lg:overflow-hidden bg-white'>
+			<h1 className='sr-only'>Checkout</h1>
 
-            <div>
-              <label htmlFor="card-number" className="block text-sm font-medium text-gray-700">
-                Card number
-              </label>
-              <input
-                id="card-number"
-                name="card-number"
-                type="text"
-                required
-                autoComplete="cc-number"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
+			{/* Order Summary */}
+			<section
+				aria-labelledby='summary-heading'
+				className='hidden w-full max-w-md flex-col bg-gray-50 lg:flex'
+			>
+				<h2 id='summary-heading' className='sr-only'>
+					Order summary
+				</h2>
 
-            <div className="flex space-x-4">
-              <div className="flex-1">
-                <label htmlFor="expiration-date" className="block text-sm font-medium text-gray-700">
-                  Expiration (MM/YY)
-                </label>
-                <input
-                  id="expiration-date"
-                  name="expiration-date"
-                  type="text"
-                  required
-                  autoComplete="cc-exp"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div className="w-1/3">
-                <label htmlFor="cvc" className="block text-sm font-medium text-gray-700">
-                  CVC
-                </label>
-                <input
-                  id="cvc"
-                  name="cvc"
-                  type="text"
-                  required
-                  autoComplete="csc"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-            </div>
+				<ul
+					role='list'
+					className='flex-auto divide-y divide-gray-200 overflow-y-auto px-6'
+				>
+					{cartItems.map((product) => (
+						<li key={product._id} className='flex space-x-6 py-6'>
+							<img
+								alt={product.name}
+								src={product.imageSrc}
+								className='size-40 flex-none rounded-md bg-gray-200 object-cover'
+							/>
+							<div className='flex flex-col justify-between space-y-2'>
+								<div className='text-lg font-medium text-gray-900'>
+									{product.name}
+								</div>
+								<p className='text-gray-500'>
+									{product.quantity} × {formatPrice(product.price)}
+								</p>
+								<p className='text-gray-900'>
+									{formatPrice(product.quantity * product.price)}
+								</p>
+							</div>
+						</li>
+					))}
+				</ul>
 
-            <button
-              type="submit"
-              className="w-full mt-4 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 text-sm font-medium"
-            >
-              Pay {formatPrice(subtotal)}
-            </button>
+				<div className='sticky bottom-0 border-t border-gray-200 bg-gray-50 p-6'>
+					<dl className='space-y-4 text-lg text-gray-700'>
+						<div className='flex justify-between'>
+							<dt>Subtotal</dt>
+							<dd className='font-semibold text-gray-900'>
+								{formatPrice(subtotal)}
+							</dd>
+						</div>
+						<div className='flex justify-between border-t border-gray-200 pt-4'>
+							<dt className='text-xl font-semibold text-gray-900'>Total</dt>
+							<dd className='text-xl font-semibold text-gray-900'>
+								{formatPrice(subtotal)}
+							</dd>
+						</div>
+					</dl>
+				</div>
+			</section>
 
-            <p className="mt-4 text-center text-xs text-gray-500 flex items-center justify-center">
-              <LockClosedIcon className="w-4 h-4 mr-1 text-gray-400" aria-hidden="true" />
-              Secure payment processing
-            </p>
-          </form>
-        </div>
-      </section>
-    </main>
-  );
+			{/* Checkout Form */}
+			<section
+				aria-labelledby='payment-heading'
+				className='flex-auto overflow-y-auto px-4 pt-12 pb-16 sm:px-6 lg:px-8 lg:pt-0 lg:pb-24 text-lg'
+			>
+				<div className='mx-auto max-w-lg'>
+					<h2 className='text-2xl font-semibold mb-8 text-gray-900'>
+						Pickup & Contact Info
+					</h2>
+
+					<form className='space-y-6' onSubmit={handleSubmit}>
+						<div>
+							<label
+								htmlFor='email'
+								className='block font-medium text-gray-700'
+							>
+								Email address
+							</label>
+							<input
+								id='email'
+								name='email'
+								type='email'
+								required
+								value={form.email}
+								onChange={handleChange}
+								className={inputClass}
+							/>
+						</div>
+
+						<div>
+							<label
+								htmlFor='name'
+								className='block font-medium text-gray-700'
+							>
+								Pickup Person's Name
+							</label>
+							<input
+								id='name'
+								name='name'
+								type='text'
+								required
+								value={form.name}
+								onChange={handleChange}
+								className={inputClass}
+							/>
+						</div>
+
+						<div>
+							<label
+								htmlFor='pickupTime'
+								className='block font-medium text-gray-700'
+							>
+								Pickup Date & Time
+							</label>
+							<input
+								id='pickupTime'
+								name='pickupTime'
+								type='datetime-local'
+								required
+								value={form.pickupTime}
+								onChange={handleChange}
+								className={inputClass}
+							/>
+						</div>
+
+						<button
+							type='submit'
+							className='w-full mt-6 bg-indigo-600 text-white py-3 px-6 rounded-md hover:bg-indigo-700 font-semibold text-lg'
+						>
+							Pay {formatPrice(subtotal)}
+						</button>
+
+						<p className='mt-4 text-center text-sm text-gray-500 flex items-center justify-center'>
+							<LockClosedIcon
+								className='w-5 h-5 mr-2 text-gray-400'
+								aria-hidden='true'
+							/>
+							Secure pickup confirmation – no payment required
+						</p>
+					</form>
+				</div>
+			</section>
+		</main>
+	);
 }
