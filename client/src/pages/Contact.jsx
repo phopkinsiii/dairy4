@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React from 'react';
 import { useContactContext } from '../contexts/ContactContext';
+import { Title, Meta, Link as HeadLink } from 'react-head';
 
 export default function Contact() {
 	const { state, dispatch, submitContactForm } = useContactContext();
@@ -30,6 +31,15 @@ export default function Contact() {
 		}
 	};
 	return (
+		<>
+			{/* SEO Metadata */}
+			<Title>Contact Us | Blueberry Dairy</Title>
+			<Meta
+				name="description"
+				content="Have questions about our raw goat milk, farm pickups, or local deliveries? Contact Blueberry Dairy — we'd love to hear from you!"
+			/>
+			<HeadLink rel="canonical" href="https://blueberrydairy.com/contact" />
+			
 		<div className="bg-gray-200">
 		{/* Parent container for both columns */}
 		<div className="pt-16 pb-24 sm:pt-24 sm:pb-32 lg:mx-auto lg:grid lg:grid-cols-2 lg:gap-8 lg:max-w-7xl lg:pt-40">
@@ -172,5 +182,6 @@ export default function Contact() {
 		  </div>
 		</div>
 	  </div>
+	  </>
 	);
 }

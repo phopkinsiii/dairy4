@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import AuthButton from './AuthButton';
 import UserGreeting from './UserGreeting';
@@ -12,6 +12,7 @@ const StickyNavbar = () => {
 	const { cartItems } = useCartContext();
 	const cartItemCount = cartItems?.length || 0;
 	const isAdmin = userState.user?.role === 'admin';
+	const location = useLocation();
 
 	const [scrolled, setScrolled] = useState(false);
 
@@ -49,9 +50,11 @@ const StickyNavbar = () => {
 				<div className='flex items-center justify-between max-w-7xl mx-auto px-6 py-4 text-xl'>
 					<Link to='/' className='flex items-center'>
 						<img
+							key={location.pathname} // 🌀 Force remount on route change
 							src='/images/goat_logo1.png'
 							alt='Blueberry Dairy Logo'
-							className='h-20 w-20 object-contain rounded-full bg-white/60 backdrop-blur-sm p-1 shadow-lg ring-2 ring-amber-950'
+							className='h-20 w-20 object-contain rounded-full bg-white/60 backdrop-blur-sm p-1 shadow-lg ring-2 ring-amber-950 roll-in-left'
+							style={{ animationDelay: '0.3s' }} // ⏱ Add delay
 						/>
 					</Link>
 

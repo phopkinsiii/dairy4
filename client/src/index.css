@@ -24,6 +24,22 @@
 	.fade-in-up {
 		animation: fadeInUp 0.8s ease-out forwards;
 	}
+	
+	@keyframes roll-in-left {
+  0% {
+    transform: translateX(-200%) rotate(-720deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.roll-in-left {
+  animation: roll-in-left 1.2s ease-out both;
+}
+
 }
 
 /* ✅ Define custom font variable here */

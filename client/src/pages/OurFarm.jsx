@@ -1,54 +1,39 @@
 'use client';
+import { Title, Meta, Link as HeadLink } from 'react-head';
 
-import { useState } from 'react';
-import { Dialog, DialogPanel } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import React from 'react';
-
-const navigation = [
-	{ name: 'Product', href: '#' },
-	{ name: 'Features', href: '#' },
-	{ name: 'Resources', href: '#' },
-	{ name: 'Company', href: '#' },
-];
-const stats = [
-	{ label: 'Transactions every 24 hours', value: '44 million' },
-	{ label: 'Assets under holding', value: '$119 trillion' },
-	{ label: 'New users annually', value: '46,000' },
-];
 const values = [
 	{
-	  name: 'Regenerate the Land',
-	  description:
-		'We farm in a way that gives back more than we take — building soil health, capturing carbon, and increasing biodiversity to create a living legacy.',
+		name: 'Regenerate the Land',
+		description:
+			'We farm in a way that gives back more than we take — building soil health, capturing carbon, and increasing biodiversity to create a living legacy.',
 	},
 	{
-	  name: 'Grow with Purpose',
-	  description:
-		'We produce food that nourishes the body and respects the Earth. From our goats to our orchards, everything is grown with intention and care.',
+		name: 'Grow with Purpose',
+		description:
+			'We produce food that nourishes the body and respects the Earth. From our goats to our orchards, everything is grown with intention and care.',
 	},
 	{
-	  name: 'Protect Future Generations',
-	  description:
-		'We believe every farm should leave the planet better than it found it. Our commitment is to sustainability not just for today, but for tomorrow’s children.',
+		name: 'Protect Future Generations',
+		description:
+			'We believe that we should leave the planet better than we found it. Our commitment is to sustainability not just for today, but for tomorrow’s children.',
 	},
 	{
-	  name: 'Live in Harmony with Nature',
-	  description:
-		'We honor the rhythms of nature — respecting the seasons, the soil, and the animals. Farming with nature, not against it, is the path we walk daily.',
+		name: 'Live in Harmony with Nature',
+		description:
+			'We honor the rhythms of nature — respecting the seasons, the soil, and the animals. Farming with nature, not against it, is the path we walk daily.',
 	},
 	{
-	  name: 'Stewardship Over Ownership',
-	  description:
-		'The land doesn’t belong to us — we belong to it. We care for our farm as a sacred trust, with humility, accountability, and deep respect.',
+		name: 'Stewardship Over Ownership',
+		description:
+			'The land doesn’t belong to us — we belong to it. We care for our farm as a sacred trust, with humility, accountability, and deep respect.',
 	},
 	{
-	  name: 'Beauty Has Purpose',
-	  description:
-		'We believe beauty in farming is more than visual — it’s an expression of health, balance, and the deep joy that comes from working with living things.',
+		name: 'Beauty Has Purpose',
+		description:
+			'We believe beauty in farming is more than visual — it’s an expression of health, balance, and the deep joy that comes from working with living things.',
 	},
-  ];
-  
+];
+
 const team = [
 	{
 		name: 'Michael Foster',
@@ -152,261 +137,266 @@ const footerNavigation = {
 };
 
 export default function OurFarm() {
-	// const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
 	return (
-		<div
-		className="relative min-h-screen bg-cover bg-center bg-fixed"
-		style={{
-			backgroundImage: "url('/images/rolling_hills.jpg')",
-		}}
-	>
-  {/* Combined dark + gradient overlay */}
-  <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/70 via-black/30 to-transparent" />
-			<main className="relative z-10 min-h-screen">
-				{/* Hero section */}
-				<div className='relative isolate -z-10'>
+		<>
+			{/* SEO Metadata */}
+			<Title>About Our Farm | Blueberry Dairy</Title>
+			<Meta
+				name='description'
+				content="Discover Blueberry Dairy's regenerative farming practices, Nigerian Dwarf dairy goats, and commitment to healthy food and a cleaner planet."
+			/>
+			<HeadLink rel='canonical' href='https://blueberrydairy.com/our-farm' />
+			<div
+				className='relative min-h-screen bg-cover bg-center bg-fixed'
+				style={{
+					backgroundImage: "url('/images/rolling_hills.jpg')",
+				}}
+			>
+				{/* Combined dark + gradient overlay */}
+				<div className='absolute inset-0 z-0 bg-gradient-to-b from-black/70 via-black/30 to-transparent' />
+				<main className='relative z-10 min-h-screen'>
+					{/* Hero section */}
+					<div className='relative isolate -z-10'>
+						<div className='overflow-hidden'>
+							<div className='mx-auto max-w-7xl px-8 pt-36 pb-32 sm:pt-60 lg:px-8 lg:pt-32'>
+								<div className='mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center'>
+									<div className='relative w-full lg:max-w-xl lg:shrink-0 xl:max-w-2xl'>
+										<h1 className='text-5xl font-semibold tracking-tight text-pretty text-white sm:text-7xl'>
+											Healthy Food From Healthy Soil!
+										</h1>
+										<p className='mt-8 text-lg font-medium text-pretty text-white sm:max-w-md sm:text-xl/8 lg:max-w-none'>
+											At Blueberry Dairy and Hickory Cove Orchards, we believe
+											in producing wholesome food the way nature intended. From
+											our organically grown apples and blueberries to our
+											pasture-raised Nigerian Dwarf dairy goats, everything we
+											do is centered on sustainability, integrity, and health.
+										</p>
+									</div>
+									<div className='mt-14 flex justify-end gap-6 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0'>
+										<div className='ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80'>
+											<div className='relative'>
+												<img
+													alt=''
+													src='/images/blueberrieslg.jpg'
+													className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
+												/>
+												<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
+											</div>
+										</div>
+										<div className='mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36'>
+											<div className='relative'>
+												<img
+													alt=''
+													src='/images/house.jpg'
+													className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
+												/>
+												<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
+											</div>
+											<div className='relative'>
+												<img
+													alt=''
+													src='/images/pond3.jpg'
+													className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
+												/>
+												<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
+											</div>
+										</div>
+										<div className='w-44 flex-none space-y-8 pt-32 sm:pt-0 p-4'>
+											<div className='relative'>
+												<img
+													alt=''
+													src='/images/apple1.jpg'
+													className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
+												/>
+												<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
+											</div>
+											<div className='relative'>
+												<img
+													alt=''
+													src='/images/milk1.jpg'
+													className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
+												/>
+												<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-
-					<div className='overflow-hidden'>
-						<div className='mx-auto max-w-7xl px-8 pt-36 pb-32 sm:pt-60 lg:px-8 lg:pt-32'>
-							<div className='mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center'>
-								<div className='relative w-full lg:max-w-xl lg:shrink-0 xl:max-w-2xl'>
-									<h1 className='text-5xl font-semibold tracking-tight text-pretty text-white sm:text-7xl'>
-										Healthy Food From Healthy Soil!
-									</h1>
-									<p className='mt-8 text-lg font-medium text-pretty text-white sm:max-w-md sm:text-xl/8 lg:max-w-none'>
-										At Blueberry Dairy and Hickory Cove Orchards, we believe in
-										producing wholesome food the way nature intended. From our
-										organically grown apples and blueberries to our
-										pasture-raised Nigerian Dwarf dairy goats, everything we do
-										is centered on sustainability, integrity, and health.
+					{/* Content section */}
+					<div className='mx-auto -mt-12 max-w-7xl px-6 sm:mt-0 lg:px-8 xl:-mt-8'>
+						<div className='mx-auto max-w-2xl lg:mx-0 lg:max-w-none'>
+							<h2 className='text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl'>
+								Our mission
+							</h2>
+							<div className='mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row'>
+								<div className='lg:w-full lg:max-w-2xl lg:flex-auto'>
+									<p className='text-xl/8 text-white'>
+										At Blueberry Dairy and Hickory Cove Orchards, our mission is
+										to nourish people and planet through regenerative
+										agriculture. We’re committed to producing wholesome,
+										nutrient-dense food while preserving the natural beauty and
+										health of our land. Every practice we follow is rooted in
+										sustainability, stewardship, and a desire to leave the Earth
+										better than we found it — for our children, our community,
+										and all future generations.
 									</p>
 								</div>
-								<div className='mt-14 flex justify-end gap-6 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0'>
-									<div className='ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80'>
-										<div className='relative'>
-											<img
-												alt=''
-												src='/images/blueberrieslg.jpg'
-												className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
-											/>
-											<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
-										</div>
-									</div>
-									<div className='mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36'>
-										<div className='relative'>
-											<img
-												alt=''
-												src='/images/house.jpg'
-												className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
-											/>
-											<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
-										</div>
-										<div className='relative'>
-											<img
-												alt=''
-												src='/images/pond3.jpg'
-												className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
-											/>
-											<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
-										</div>
-									</div>
-									<div className='w-44 flex-none space-y-8 pt-32 sm:pt-0 p-4'>
-										<div className='relative'>
-											<img
-												alt=''
-												src='/images/Ada.jpg'
-												className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
-											/>
-											<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
-										</div>
-										<div className='relative'>
-											<img
-												alt=''
-												src='https://images.unsplash.com/photo-1670272505284-8faba1c31f7d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&h=528&q=80'
-												className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
-											/>
-											<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
-										</div>
-									</div>
-								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
-				{/* Content section */}
-				<div className='mx-auto -mt-12 max-w-7xl px-6 sm:mt-0 lg:px-8 xl:-mt-8'>
-					<div className='mx-auto max-w-2xl lg:mx-0 lg:max-w-none'>
-						<h2 className='text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl'>
-							Our mission
-						</h2>
-						<div className='mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row'>
-							<div className='lg:w-full lg:max-w-2xl lg:flex-auto'>
-								<p className='text-xl/8 text-white'>
-								At Blueberry Dairy and Hickory Cove Orchards, our mission is to nourish people and planet through regenerative agriculture. We’re committed to producing wholesome, nutrient-dense food while preserving the natural beauty and health of our land. Every practice we follow is rooted in sustainability, stewardship, and a desire to leave the Earth better than we found it — for our children, our community, and all future generations.
-								</p>
+					{/* Image section */}
 
-							</div>
-							
+					{/* Values section */}
+					<div className='mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8'>
+						<div className='mx-auto max-w-2xl lg:mx-0'>
+							<h2 className='text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl'>
+								Our values
+							</h2>
+							<h3 className="text-lg text-white italic mt-2">
+								A life rooted in reverence for the land, guided by purpose, and lived in harmony with nature.
+							</h3>
 						</div>
+						<dl className='mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 text-base/7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3'>
+							{values.map((value) => (
+								<div key={value.name}>
+									<dt className='font-semibold text-white'>{value.name}</dt>
+									<dd className='mt-1 text-white'>{value.description}</dd>
+								</div>
+							))}
+						</dl>
 					</div>
-				</div>
 
-				{/* Image section */}
+					{/* Logo cloud */}
+					<div className='relative isolate -z-10 mt-32 sm:mt-48'></div>
 
-
-				{/* Values section */}
-				<div className='mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8'>
-					<div className='mx-auto max-w-2xl lg:mx-0'>
-						<h2 className='text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl'>
-							Our values
-						</h2>
-						<p className='mt-6 text-lg/8 text-white'>
-							Lorem ipsum dolor sit amet consect adipisicing elit. Possimus
-							magnam voluptatum cupiditate veritatis in accusamus quisquam.
-						</p>
+					{/* Team section */}
+					<div className='mx-auto mt-32 max-w-7xl px-6 sm:mt-48 lg:px-8'>
+						<div className='mx-auto max-w-2xl lg:mx-0'>
+							<h2 className='text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl'>
+								Our team
+							</h2>
+							<p className='mt-6 text-lg/8 text-white'>
+								We’re a dynamic group of individuals who are passionate about
+								what we do and dedicated to delivering the best results for our
+								clients.
+							</p>
+						</div>
+						<ul
+							role='list'
+							className='mx-auto mt-20 grid max-w-2xl grid-cols-2 gap-x-8 gap-y-16 text-center sm:grid-cols-3 md:grid-cols-4 lg:mx-0 lg:max-w-none lg:grid-cols-5 xl:grid-cols-6'
+						>
+							{team.map((person) => (
+								<li key={person.name}>
+									<img
+										alt=''
+										src={person.imageUrl}
+										className='mx-auto size-24 rounded-full'
+									/>
+									<h3 className='mt-6 text-base/7 font-semibold tracking-tight text-white'>
+										{person.name}
+									</h3>
+									<p className='text-sm/6 text-white'>{person.role}</p>
+								</li>
+							))}
+						</ul>
 					</div>
-					<dl className='mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 text-base/7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3'>
-						{values.map((value) => (
-							<div key={value.name}>
-								<dt className='font-semibold text-white'>{value.name}</dt>
-								<dd className='mt-1 text-white'>{value.description}</dd>
-							</div>
-						))}
-					</dl>
-				</div>
 
-				{/* Logo cloud */}
-				<div className='relative isolate -z-10 mt-32 sm:mt-48'>
+					{/* Blog section */}
+					<div className='mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8'>
+						<div className='mx-auto max-w-2xl lg:mx-0 lg:max-w-none'>
+							<h2 className='text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl'>
+								From the blog
+							</h2>
+							<p className='mt-2 text-lg/8 text-white'>
+								Learn how to grow your business with our expert advice.
+							</p>
+						</div>
+						<div className='mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3'>
+							{blogPosts.map((post) => (
+								<article
+									key={post.id}
+									className='relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pt-80 pb-8 sm:pt-48 lg:pt-80'
+								>
+									<img
+										alt=''
+										src={post.imageUrl}
+										className='absolute inset-0 -z-10 size-full object-cover'
+									/>
+									<div className='absolute inset-0 -z-10 bg-linear-to-t from-gray-900 via-gray-900/40' />
+									<div className='absolute inset-0 -z-10 rounded-2xl ring-1 ring-gray-900/10 ring-inset' />
 
-					
-				</div>
-
-				{/* Team section */}
-				<div className='mx-auto mt-32 max-w-7xl px-6 sm:mt-48 lg:px-8'>
-					<div className='mx-auto max-w-2xl lg:mx-0'>
-						<h2 className='text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl'>
-							Our team
-						</h2>
-						<p className='mt-6 text-lg/8 text-white'>
-							We’re a dynamic group of individuals who are passionate about what
-							we do and dedicated to delivering the best results for our
-							clients.
-						</p>
-					</div>
-					<ul
-						role='list'
-						className='mx-auto mt-20 grid max-w-2xl grid-cols-2 gap-x-8 gap-y-16 text-center sm:grid-cols-3 md:grid-cols-4 lg:mx-0 lg:max-w-none lg:grid-cols-5 xl:grid-cols-6'
-					>
-						{team.map((person) => (
-							<li key={person.name}>
-								<img
-									alt=''
-									src={person.imageUrl}
-									className='mx-auto size-24 rounded-full'
-								/>
-								<h3 className='mt-6 text-base/7 font-semibold tracking-tight text-white'>
-									{person.name}
-								</h3>
-								<p className='text-sm/6 text-white'>{person.role}</p>
-							</li>
-						))}
-					</ul>
-				</div>
-
-				{/* Blog section */}
-				<div className='mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8'>
-					<div className='mx-auto max-w-2xl lg:mx-0 lg:max-w-none'>
-						<h2 className='text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl'>
-							From the blog
-						</h2>
-						<p className='mt-2 text-lg/8 text-white'>
-							Learn how to grow your business with our expert advice.
-						</p>
-					</div>
-					<div className='mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3'>
-						{blogPosts.map((post) => (
-							<article
-								key={post.id}
-								className='relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pt-80 pb-8 sm:pt-48 lg:pt-80'
-							>
-								<img
-									alt=''
-									src={post.imageUrl}
-									className='absolute inset-0 -z-10 size-full object-cover'
-								/>
-								<div className='absolute inset-0 -z-10 bg-linear-to-t from-gray-900 via-gray-900/40' />
-								<div className='absolute inset-0 -z-10 rounded-2xl ring-1 ring-gray-900/10 ring-inset' />
-
-								<div className='flex flex-wrap items-center gap-y-1 overflow-hidden text-sm/6 text-gray-300'>
-									<time dateTime={post.datetime} className='mr-8'>
-										{post.date}
-									</time>
-									<div className='-ml-4 flex items-center gap-x-4'>
-										<svg
-											viewBox='0 0 2 2'
-											className='-ml-0.5 size-0.5 flex-none fill-white/50'
-										>
-											<circle r={1} cx={1} cy={1} />
-										</svg>
-										<div className='flex gap-x-2.5'>
-											<img
-												alt=''
-												src={post.author.imageUrl}
-												className='size-6 flex-none rounded-full bg-white/10'
-											/>
-											{post.author.name}
+									<div className='flex flex-wrap items-center gap-y-1 overflow-hidden text-sm/6 text-gray-300'>
+										<time dateTime={post.datetime} className='mr-8'>
+											{post.date}
+										</time>
+										<div className='-ml-4 flex items-center gap-x-4'>
+											<svg
+												viewBox='0 0 2 2'
+												className='-ml-0.5 size-0.5 flex-none fill-white/50'
+											>
+												<circle r={1} cx={1} cy={1} />
+											</svg>
+											<div className='flex gap-x-2.5'>
+												<img
+													alt=''
+													src={post.author.imageUrl}
+													className='size-6 flex-none rounded-full bg-white/10'
+												/>
+												{post.author.name}
+											</div>
 										</div>
 									</div>
-								</div>
-								<h3 className='mt-3 text-lg/6 font-semibold text-white'>
-									<a href={post.href}>
-										<span className='absolute inset-0' />
-										{post.title}
-									</a>
-								</h3>
-							</article>
-						))}
+									<h3 className='mt-3 text-lg/6 font-semibold text-white'>
+										<a href={post.href}>
+											<span className='absolute inset-0' />
+											{post.title}
+										</a>
+									</h3>
+								</article>
+							))}
+						</div>
 					</div>
-				</div>
-			</main>
+				</main>
 
-			{/* Footer */}
-			<footer className='relative z-10'>
-				<div className='mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8'>
-					<nav
-						aria-label='Footer'
-						className='-mb-6 flex flex-wrap justify-center gap-x-12 gap-y-3 text-sm/6'
-					>
-						{footerNavigation.main.map((item) => (
-							<a
-								key={item.name}
-								href={item.href}
-								className='text-white hover:text-white'
-							>
-								{item.name}
-							</a>
-						))}
-					</nav>
-					<div className='mt-16 flex justify-center gap-x-10'>
-						{footerNavigation.social.map((item) => (
-							<a
-								key={item.name}
-								href={item.href}
-								className='text-white hover:text-gray-800'
-							>
-								<span className='sr-only'>{item.name}</span>
-								<item.icon aria-hidden='true' className='size-6' />
-							</a>
-						))}
+				{/* Footer */}
+				<footer className='relative z-10'>
+					<div className='mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8'>
+						<nav
+							aria-label='Footer'
+							className='-mb-6 flex flex-wrap justify-center gap-x-12 gap-y-3 text-sm/6'
+						>
+							{footerNavigation.main.map((item) => (
+								<a
+									key={item.name}
+									href={item.href}
+									className='text-white hover:text-white'
+								>
+									{item.name}
+								</a>
+							))}
+						</nav>
+						<div className='mt-16 flex justify-center gap-x-10'>
+							{footerNavigation.social.map((item) => (
+								<a
+									key={item.name}
+									href={item.href}
+									className='text-white hover:text-gray-800'
+								>
+									<span className='sr-only'>{item.name}</span>
+									<item.icon aria-hidden='true' className='size-6' />
+								</a>
+							))}
+						</div>
+						<p className='mt-10 text-center text-sm/6 text-white'>
+							&copy; 2024 Your Company, Inc. All rights reserved.
+						</p>
 					</div>
-					<p className='mt-10 text-center text-sm/6 text-white'>
-						&copy; 2024 Your Company, Inc. All rights reserved.
-					</p>
-				</div>
-			</footer>
-		</div>
+				</footer>
+			</div>
+		</>
 	);
 }
