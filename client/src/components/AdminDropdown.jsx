@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+// @ts-nocheck
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const AdminDropdown = () => {
+const AdminDropdown = ({scrolled}) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef();
 
@@ -20,7 +21,11 @@ const AdminDropdown = () => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="text-white text-xl font-semibold px-4 py-2 hover:text-yellow-200"
+        className={`text-2xl font-semibold px-4 py-2 transition-colors duration-300 ${
+          scrolled
+            ? 'text-stone-800 hover:text-stone-950'
+            : 'text-white hover:text-yellow-200'
+        }`}
       >
         Admin
       </button>

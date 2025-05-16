@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
@@ -64,9 +65,13 @@ const StickyNavbar = () => {
 								<NavLink
 									to={item.href}
 									className={({ isActive }) =>
-										`text-2xl font-semibold opacity-0 transition-all duration-200 transform hover:scale-105 active:scale-95 fade-in-up ${
+										`text-2xl font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
 											isActive
-												? 'text-stone-950 underline'
+												? scrolled
+													? 'text-stone-900 underline'
+													: 'text-white underline'
+												: scrolled
+												? 'text-stone-700 hover:text-stone-900'
 												: 'text-white hover:text-gray-300'
 										}`
 									}
@@ -79,7 +84,8 @@ const StickyNavbar = () => {
 					</ul>
 
 					<div className='flex items-center space-x-6'>
-						{isAdmin && <AdminDropdown />}
+						{isAdmin && <AdminDropdown scrolled={scrolled} />}
+
 						<UserGreeting />
 						<AuthButton />
 						<Link to='/cart' className='relative'>
