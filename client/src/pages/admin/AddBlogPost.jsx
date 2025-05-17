@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import BlogEditor from '../../components/BlogEditor.jsx';
+import {useState} from 'react';
+import BlogEditor from './BlogEditor.jsx';
+
 import axiosInstance from '../../api/axios.js';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../contexts/UserContext.jsx';
@@ -38,7 +39,7 @@ const AddBlogPost = () => {
 
 				imageUrl = uploadRes.data.imageUrl; // assuming backend returns { imageUrl: '/uploads/filename.jpg' }
 			}
-
+			console.log('📝 Blog content before submit:', content);
 			// 2. Submit blog post
 			await axiosInstance.post(
 				'/blog',
@@ -102,14 +103,7 @@ const AddBlogPost = () => {
 				)}
 			</div>
 
-			{/* <BlogEditor content={content} onChange={setContent} /> */}
-			<textarea
-				value={content}
-				onChange={(e) => setContent(e.target.value)}
-				placeholder='Post Content'
-				required
-				className='w-full mb-4 p-3 border border-gray-300 rounded'
-			></textarea>
+			<BlogEditor content={content} onChange={setContent} />
 
 			<button
 				type='submit'

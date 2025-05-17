@@ -27,7 +27,16 @@ const BlogPost = () => {
 		<div className='max-w-3xl mx-auto px-6 py-12'>
 			<h1 className='text-4xl font-bold mb-4'>{post.title}</h1>
 			<p className='text-gray-600 mb-8'>By {post.author?.name}</p>
-			<img src={post.image} alt={post.title} className='w-full mb-6 rounded' />
+			<img
+				src={
+					post.image
+						? `${import.meta.env.VITE_MEDIA_BASE_URL}${post.image}`
+						: '/images/placeholder.jpg'
+				}
+				alt={post.title}
+				className='w-full rounded-xl shadow-md'
+			/>
+
 			<div
 				className='prose max-w-none'
 				dangerouslySetInnerHTML={{ __html: post.content }}
