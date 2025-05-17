@@ -1,1 +1,6 @@
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51364.11933782449!2d-83.14769963294222!3d36.42715677235585!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x885b083950932e01%3A0x744c741dad1699f7!2s154%20Pressmens%20Home%20Rd%2C%20Rogersville%2C%20TN%2037857!5e0!3m2!1sen!2sus!4v1747415815227!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<p className="text-sm mt-4 text-center text-gray-700">
+  Don’t have an account?{' '}
+  <Link to="/register" className="text-indigo-600 hover:underline font-semibold">
+    Register here
+  </Link>
+</p>

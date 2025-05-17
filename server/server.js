@@ -50,6 +50,9 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/orders', orderRoutes);
+
+
+
 // Error handler
 app.use(errorHandler);
 

@@ -10,6 +10,8 @@ router.get('/', getAllPosts);
 //Get single post by id
 router.get('/:id', getPostById);
 
+
+
 //Protected Routes
 //Create new post
 router.post('/', protect, adminProtect, createPost)

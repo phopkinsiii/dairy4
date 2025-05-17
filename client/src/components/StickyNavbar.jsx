@@ -68,8 +68,8 @@ const StickyNavbar = () => {
 										`text-2xl font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
 											isActive
 												? scrolled
-													? 'text-stone-900 underline'
-													: 'text-white underline'
+													? 'text-violet-900 text-3xl'
+													: 'text-gray-700'
 												: scrolled
 												? 'text-stone-700 hover:text-stone-900'
 												: 'text-white hover:text-gray-300'

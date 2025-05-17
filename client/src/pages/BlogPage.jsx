@@ -30,6 +30,7 @@ const BlogPage = () => {
 				content='Check out our latest blog posts and get updates on our joys, trials, and discoveries at Hickory Cove Orchards and Blueberry Dairy.'
 			/>
 			<HeadLink rel='canonical' href='https://blueberrydairy.com/blog' />
+
 			<div className='bg-white py-24 sm:py-32'>
 				<div className='mx-auto max-w-7xl px-6 lg:px-8'>
 					<div className='mx-auto max-w-2xl lg:max-w-4xl'>
@@ -46,10 +47,10 @@ const BlogPage = () => {
 									key={post._id}
 									className='relative isolate flex flex-col gap-8 lg:flex-row'
 								>
-									{/* Image Section */}
-									<div className='relative w-full max-w-xs lg:w-64'>
+									{/* Image Section wrapped in Link */}
+									<Link to={`/blog/${post._id}`} className='relative w-full max-w-xs lg:w-64 block'>
 										<img
-											alt=''
+											alt={post.title}
 											src={
 												post.image
 													? `http://localhost:5000${post.image}`
@@ -58,7 +59,7 @@ const BlogPage = () => {
 											className='w-full h-full rounded-2xl bg-gray-50'
 										/>
 										<div className='absolute inset-0 rounded-2xl ring-1 ring-gray-900/10 ring-inset' />
-									</div>
+									</Link>
 
 									{/* Content Section */}
 									<div>

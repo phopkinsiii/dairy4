@@ -153,7 +153,7 @@ export default function OurFarm() {
 				}}
 			>
 				{/* Combined dark + gradient overlay */}
-				<div className='absolute inset-0 z-0 bg-gradient-to-b from-black/70 via-black/30 to-transparent' />
+				<div className='absolute inset-0 z-0 bg-gradient-to-b from-black/90 via-black/70 to-black/50' />
 				<main className='relative z-10 min-h-screen'>
 					{/* Hero section */}
 					<div className='relative isolate -z-10'>
@@ -256,8 +256,9 @@ export default function OurFarm() {
 							<h2 className='text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl'>
 								Our values
 							</h2>
-							<h3 className="text-lg text-white italic mt-2">
-								A life rooted in reverence for the land, guided by purpose, and lived in harmony with nature.
+							<h3 className='text-lg text-white italic mt-2'>
+								A life rooted in reverence for the land, guided by purpose, and
+								lived in harmony with nature.
 							</h3>
 						</div>
 						<dl className='mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 text-base/7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3'>
@@ -273,36 +274,92 @@ export default function OurFarm() {
 					{/* Logo cloud */}
 					<div className='relative isolate -z-10 mt-32 sm:mt-48'></div>
 
-					{/* Team section */}
-					<div className='mx-auto mt-32 max-w-7xl px-6 sm:mt-48 lg:px-8'>
-						<div className='mx-auto max-w-2xl lg:mx-0'>
-							<h2 className='text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl'>
-								Our team
-							</h2>
-							<p className='mt-6 text-lg/8 text-white'>
-								We’re a dynamic group of individuals who are passionate about
-								what we do and dedicated to delivering the best results for our
-								clients.
-							</p>
-						</div>
-						<ul
-							role='list'
-							className='mx-auto mt-20 grid max-w-2xl grid-cols-2 gap-x-8 gap-y-16 text-center sm:grid-cols-3 md:grid-cols-4 lg:mx-0 lg:max-w-none lg:grid-cols-5 xl:grid-cols-6'
-						>
-							{team.map((person) => (
-								<li key={person.name}>
-									<img
-										alt=''
-										src={person.imageUrl}
-										className='mx-auto size-24 rounded-full'
-									/>
-									<h3 className='mt-6 text-base/7 font-semibold tracking-tight text-white'>
-										{person.name}
-									</h3>
-									<p className='text-sm/6 text-white'>{person.role}</p>
-								</li>
-							))}
-						</ul>
+					{/* Farm Story Section */}
+					<div className='mx-auto mt-32 max-w-4xl px-6 text-white text-start'>
+						<h2 className='text-4xl font-semibold tracking-tight text-white sm:text-5xl mb-8'>
+							Our Farm Story
+						</h2>
+
+						<p className='text-pretty text-white text-lg text-start mb-6'>
+							When we retired from busy careers in medicine in 2015, it was a
+							wonderful opportunity to pursue a lifelong dream of full-time
+							farming. Both of us are inveterate gardeners and looked forward to
+							the less stressful life on a small farm in the country.
+						</p>
+
+						<p className='text-pretty text-white text-lg mb-6'>
+							The idea of operating a commercial sized orchard and integrated
+							farm evolved gradually, starting with a few apple trees expanding
+							to three orchards with over 100 apple and pear trees, and a
+							one-acre blueberry orchard.
+						</p>
+
+						<p className='text-pretty text-white text-lg mb-6'>
+							Along with a love of growing things, we both have an abiding love
+							and respect for animals. We started with a small flock of chickens
+							which grew to over eighty hens and a small commercial egg
+							business. In 2021 we added Nigerian Dwarf dairy goats with two
+							bucks and two does, with plans to grow the herd gradually over
+							several years.
+						</p>
+
+						<p className='text-pretty text-white text-lg mb-6'>
+							Farming hasn't turned out to be quite as stress free as we had
+							naively hoped. There are certainly challenges, especially for
+							novice farmers. We anticipated surprises from weather and the many
+							unknowns of the land itself, but there were some things we hadn't
+							even considered.
+							<a
+								href='/images/deer_and_apples.webp'
+								target='_blank'
+								rel='noopener noreferrer'
+								className='block float-right w-64 max-w-full ml-6 mb-4'
+							>
+								<img
+									src='/images/deer_and_apples.webp'
+									alt='Deer near apple trees at Blueberry Dairy'
+									className='rounded shadow-md hover:opacity-90 transition'
+								/>
+								<span className='sr-only'>Click to view full-size image</span>
+							</a>
+							The deer in the photo at the bottom of the page are beautiful,
+							frequent visitors on our farm, but when they chewed all the
+							branches from our two-year-old apple trees, we had to add the wire
+							cages to keep them off. A year or two later, when the trees were
+							large enough to survive the deer browsing, and finally produce
+							their first crop, bears broke several large branches to get the
+							few half-ripe apples. Because they had no respect whatsoever for
+							the wire cages, we installed an electric fence around the orchard.
+							That worked well until a storm blew a tree down across the
+							fence-line and flattened a whole row of fence. Any farmer knows
+							that stories like this are common and just part of the business.
+							It's been a wild, fascinating learning experience, which is part
+							of the fun!
+						</p>
+
+						<p className='text-pretty text-white text-lg mb-6'>
+							With all the challenges of farming in general, we frequently ask
+							ourselves, "why add the complication of growing organic?" The
+							answer isn't always easy to put into words. We believe that
+							organic agricultural practices produce healthier, more nutritious
+							food, and are better for people and the environment. We also like
+							the idea of building healthy soil to produce healthy plants. That
+							healthy soil will be part of our legacy to future generations.
+							Agricultural land is disappearing at an alarming rate in America.
+							What remains is rapidly becoming eroded by petrochemical
+							industrial agricultural practices. It took eons to build that
+							soil, it won't come back overnight, at least not without some
+							help.
+						</p>
+
+						<p className='text-pretty text-white text-lg'>
+							Despite all the challenges, or maybe because of them, we both love
+							the opportunity to grow and raise healthy, chemical-free food for
+							the local market and do our part to support a healthy ecosystem.
+							We also thoroughly enjoy the chance to meet folks of like mind who
+							appreciate the value of locally grown food and organic
+							agriculture.
+						</p>
 					</div>
 
 					{/* Blog section */}

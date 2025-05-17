@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUserContext } from '../contexts/UserContext';
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useUserContext } from '../contexts/UserContext.jsx';
 import { loginUser } from '../services/authService';
 import Logo from '../components/Logo.jsx';
 
@@ -96,6 +96,15 @@ const Login = () => {
 							Sign in
 						</button>
 					</form>
+					<p className='text-sm mt-4 text-center text-gray-700'>
+						Don’t have an account?{' '}
+						<Link
+							to='/register'
+							className='text-indigo-600 hover:underline font-semibold'
+						>
+							Register here
+						</Link>
+					</p>
 				</div>
 			</div>
 

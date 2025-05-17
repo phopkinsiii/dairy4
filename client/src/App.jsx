@@ -1,7 +1,6 @@
 // @ts-nocheck
 //Tools and Packages
 
-
 import { Routes, Route, Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,10 +23,10 @@ import AddBlogPost from './pages/admin/AddBlogPost.jsx';
 import EditProduct from './pages/admin/EditProduct.jsx';
 import Checkout from './pages/Checkout.jsx';
 import Confirmation from './pages/Confirmation.jsx';
+import BlogPost from './pages/BlogPost.jsx';
+import Register from './pages/Register.jsx';
 
 function App() {
-
-
 	return (
 		<>
 			<ToastContainer
@@ -41,7 +40,7 @@ function App() {
 				pauseOnHover
 				className='p-4'
 			/>
-			<NavbarLayout >
+			<NavbarLayout>
 				<Routes>
 					<Route path='/' element={<Home />} />
 					<Route path='/products' element={<ProductList />} />
@@ -49,6 +48,7 @@ function App() {
 					<Route path='/our-farm' element={<OurFarm />} />
 					<Route path='/contact' element={<Contact />} />
 					<Route path='/login' element={<Login />} />
+					<Route path='/register' element={<Register />} />
 					<Route
 						path='/manage-products'
 						element={
@@ -60,14 +60,15 @@ function App() {
 					<Route
 						path='/add-product'
 						element={
-							<AdminRoute >
+							<AdminRoute>
 								<AddProduct />
 							</AdminRoute>
 						}
 					/>
-					<Route path="/admin/edit-product/:id"
+					<Route
+						path='/admin/edit-product/:id'
 						element={
-							<AdminRoute >
+							<AdminRoute>
 								<EditProduct />
 							</AdminRoute>
 						}
@@ -75,7 +76,7 @@ function App() {
 					<Route
 						path='/add-blog'
 						element={
-							<AdminRoute >
+							<AdminRoute>
 								<AddBlogPost />
 							</AdminRoute>
 						}
@@ -83,6 +84,7 @@ function App() {
 					<Route path='/blog' element={<BlogPage />} />
 					<Route path='/checkout' element={<Checkout />} />
 					<Route path='/confirmation' element={<Confirmation />} />
+					<Route path='/blog/:id' element={<BlogPost />} />
 
 					{/* <Route path='/product/:id' element={<ProductDetails />} />
           <Route path='/admin' element={<AdminDashboard />} /> */}

@@ -1,20 +1,21 @@
 import axiosInstance from '../api/axios.js';
 
 //Register User
+
 export const registerUser = async (userData, dispatch) => {
-	try {
-		dispatch({ type: 'SET_LOADING', payload: true });
-		const response = await axiosInstance.post('/register', userData);
-		dispatch({ type: 'LOGIN_SUCCESS', payload: response.data });
-		return response.data;
-	} catch (error) {
-		dispatch({
-			type: 'SET_ERROR',
-			payload: error.response?.data?.message || 'Registration failed.',
-		});
-		throw error;
-	}
+  try {
+    dispatch({ type: 'AUTH_REQUEST' });
+
+    const response = await axiosInstance.post('/users/register', userData); // ✅ FIXED
+
+    dispatch({ type: 'LOGIN_SUCCESS', payload: response.data });
+    return response.data;
+  } catch (error) {
+    dispatch({ type: 'AUTH_FAILURE', payload: error.message });
+    throw error;
+  }
 };
+
 
 //Login User
 export const loginUser = async (credentials, dispatch) => {
