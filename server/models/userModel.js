@@ -18,10 +18,11 @@ const userSchema = new Schema(
 //Hash Password before saving model. Must use this keyword and anonymous (not arrow ) function
 
 userSchema.pre('save', async function (next) {
-	if (!this.isModified('password')) {
-		return next();
-	}
+	if (!this.isModified('password')) return next();
+	console.log('🔐 Pre-save hook: hashing password...');
 	this.password = await bcrypt.hash(this.password, 10);
+	next();
 });
+
 const User = mongoose.model('User', userSchema);
 export default User;

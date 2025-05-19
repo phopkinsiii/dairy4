@@ -34,30 +34,42 @@ export const loginUser = async (credentials, dispatch) => {
 };
 
 //Request Password Reset
-export const resetPassword = async (resetToken, newPassword, dispatch) => {
-	try {
-		dispatch({ type: 'SET_LOADING', payload: true });
-		await axiosInstance.post('/reset-password', { resetToken, newPassword });
-		dispatch({ type: 'SET_LOADING', payload: false });
-	} catch (error) {
-		dispatch({ type: 'SET_ERROR', payload: error.response?.data?.message });
-		throw error;
-	}
-};
 
-//Reset Password
 export const requestPasswordReset = async (email, dispatch) => {
+	dispatch({ type: 'SET_LOADING', payload: true });
 	try {
-		dispatch({ type: 'SET_LOADING', payload: true });
-		await axiosInstance.post('/request-reset', { email });
+		const { data } = await axiosInstance.post('/users/request-password-reset', {
+			email,
+		});
+		dispatch({ type: 'FORGOT_PASSWORD_SUCCESS' });
+		return data;
 	} catch (error) {
 		dispatch({
 			type: 'SET_ERROR',
-			payload: error.response?.data?.message || 'Request Failed',
+			payload: error.response?.data?.message || 'Failed to send reset link',
 		});
 		throw error;
 	}
 };
+
+export const resetPassword = async (resetToken, newPassword, dispatch) => {
+	dispatch({ type: 'SET_LOADING', payload: true });
+	try {
+		const { data } = await axiosInstance.post('/users/reset-password', {
+			resetToken,
+			newPassword,
+		});
+		dispatch({ type: 'RESET_PASSWORD_SUCCESS' });
+		return data;
+	} catch (error) {
+		dispatch({
+			type: 'SET_ERROR',
+			payload: error.response?.data?.message || 'Failed to reset password',
+		});
+		throw error;
+	}
+};
+
 
 //Set Admin Role (protected)
 export const setAdminRole = async (userId, dispatch) => {

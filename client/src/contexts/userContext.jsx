@@ -29,6 +29,13 @@ const userReducer = (state, action) => {
 			return { ...state, loading: action.payload };
 		case 'SET_ERROR':
 			return { ...state, error: action.payload, loading: false };
+		case 'RESET_REQUEST_START':
+			return { ...state, loading: true, error: null };
+		case 'RESET_REQUEST_SUCCESS':
+			return { ...state, loading: false, error: null };
+		case 'RESET_REQUEST_FAILURE':
+			return { ...state, loading: false, error: action.payload };
+
 		default:
 			return state;
 	}

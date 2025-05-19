@@ -87,6 +87,15 @@ const Login = () => {
 									Show Password
 								</label>
 							</div>
+							<div className='mt-2 text-right'>
+	<Link
+		to='/forgot-password'
+		className='text-sm text-indigo-600 hover:underline'
+	>
+		Forgot your password?
+	</Link>
+</div>
+
 						</div>
 
 						<button

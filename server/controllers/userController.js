@@ -4,7 +4,11 @@ import jwt from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 import bcrypt from 'bcryptjs';
-// import { sendEmail } from '../utils/sendEmail.js';
+import {
+	sendOrderConfirmationEmail,
+	sendPasswordResetEmail,
+} from '../utils/sendEmail.js';
+import validator from 'validator'
 
 const generateToken = (id, role) => {
 	return jwt.sign({ id, role }, process.env.JWT_SECRET, {
@@ -14,13 +18,13 @@ const generateToken = (id, role) => {
 
 export const registerUser = async (req, res, next) => {
 	try {
-	const { name, email, password, role } = req.body;
-	const userRole = role && role === 'admin' ? 'admin' : 'user';
+		const { name, email, password, role } = req.body;
+		const userRole = role && role === 'admin' ? 'admin' : 'user';
 
-	if (!name || !email || !password) {
-		return res.status(400).json({ message: 'All fields are required.' });
-	}
-	
+		if (!name || !email || !password) {
+			return res.status(400).json({ message: 'All fields are required.' });
+		}
+
 		const userExists = await User.findOne({ email });
 		if (userExists) {
 			return res.status(400).json({ message: 'That email is already in use' });
@@ -36,8 +40,10 @@ export const registerUser = async (req, res, next) => {
 				role: user.role,
 				token,
 				createdAt: user.createdAt,
-			})
-		} else {res.status(400).json({message: 'Invalid User Data'})}
+			});
+		} else {
+			res.status(400).json({ message: 'Invalid User Data' });
+		}
 	} catch (error) {
 		next(error);
 	}
@@ -54,6 +60,9 @@ export const loginUser = async (req, res, next) => {
 			res.status(404).json({ message: 'User not found' });
 		}
 		//verify password
+		console.log('🔍 Comparing passwords...');
+		console.log('🟡 Input:', password);
+		console.log('🔵 Stored:', user.password);
 		const isPasswordCorrect = await bcrypt.compare(password, user.password);
 		if (!isPasswordCorrect) {
 			return res.status(400).json({ message: 'Incorrect Email or Password' });
@@ -77,60 +86,80 @@ export const loginUser = async (req, res, next) => {
 	}
 };
 
-// export const requestPasswordReset = async (req, res) => {
-// 	const { email } = req.body;
+export const requestPasswordReset = async (req, res) => {
+	const { email } = req.body;
 
-// 	try {
-// 		const user = await User.findOne({ email });
-// 		if (!user) {
-// 			return res.status(404).json({ message: 'User not found' });
-// 		}
-// 		//Generate a reset token
-// 		const resetToken = nanoid();
-// 		user.resetToken = resetToken;
-// 		user.resetTokenExpires = dayjs().add(1, 'hour').toDate(); //Token expires one hour
-// 		await user.save();
+	try {
+		const user = await User.findOne({ email });
+		if (!user) {
+			return res.status(404).json({ message: 'User not found' });
+		}
+		//Generate a reset token
+		const resetToken = nanoid();
+		user.resetToken = resetToken;
+		user.resetTokenExpires = dayjs().add(1, 'hour').toDate(); //Token expires one hour
+		await user.save();
 
-// 		//Email Content
-// 		const resetURL = `http://localhost:5173/reset-password?token=${resetToken}`;
-// 		const message = `Hello ${user.name} \n\nYou requested a password reset. Click the link below to reset your password:\n\n${resetURL}\n\nIf you did not request this, please contact us immediately.`;
+		//Email Content
+		const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+		const resetURL = `${frontendUrl}/reset-password?token=${resetToken}`;
 
-// 		//Send the email.
-// 		await sendEmail(user.email, 'Password Reset Request', message);
+		const message = `Hello ${user.name} \n\nYou requested a password reset. Click the link below to reset your password:\n\n${resetURL}\n\nIf you did not request this, please contact us immediately.`;
 
-// 		res
-// 			.status(200)
-// 			.json({ message: 'Password reset link sent to your email.' });
-// 	} catch (error) {
-// 		res.status(500).json({ message: 'Server Error', error: error.message });
-// 	}
-// };
+		//Send the email.
+		//debug log
+		console.log('➡️ Preparing to send password reset email...');
+		console.log('🔍 User object:', user);
+
+		await sendPasswordResetEmail({
+			to: user.email,
+			name: user.name,
+			resetURL,
+		});
+
+		console.log('✅ Password reset email function executed');
+		res
+			.status(200)
+			.json({ message: 'Password reset link sent to your email.' });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error: error.message });
+	}
+};
 
 //Reset password
-// export const resetPassword = async (req, res) => {
-// 	const { resetToken, newPassword } = req.body;
+export const resetPassword = async (req, res) => {
+	const { resetToken, newPassword } = req.body;
+	if (!validator.isStrongPassword(newPassword)) {
+		return res
+			.status(400)
+			.json({ message: 'Password is not strong enough.' });
+	}
+	try {
+		const user = await User.findOne({
+			resetToken,
+			resetTokenExpires: { $gt: new Date() },
+		});
 
-// 	try {
-// 		const user = await User.findOne({
-// 			resetToken,
-// 			resetTokenExpires: { $gt: new Date() },
-// 		});
+		if (!user) {
+			return res
+				.status(400)
+				.json({ message: 'Invalid or expired reset request' });
+		}
 
-// 		if (!user) {
-// 			return res
-// 				.status(400)
-// 				.json({ message: 'Invalid or expired reset request' });
-// 		}
-// 		//Update the password
-// 		user.password = await bcrypt.hash(newPassword, 10);
-// 		user.resetToken = undefined;
-// 		user.resetTokenExpires = undefined;
-// 		await user.save();
-// 		res.status(200).json({ message: 'Password updated successfully.' });
-// 	} catch (error) {
-// 		res.status(500).json({ message: 'Server Error', error: error.message });
-// 	}
-// };
+		// ✅ Assign plain text password — schema will hash it
+		user.password = newPassword;
+
+		// ✅ Clear the reset token fields
+		user.resetToken = undefined;
+		user.resetTokenExpires = undefined;
+
+		await user.save(); // ✅ This will trigger the pre('save') hook to hash password
+
+		res.status(200).json({ message: 'Password updated successfully.' });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error: error.message });
+	}
+};
 
 //set Admin role
 export const setAdminRole = async (req, res, next) => {

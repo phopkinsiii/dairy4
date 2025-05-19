@@ -15,6 +15,7 @@ import contactRoutes from './routes/contactRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import checkoutRoutes from './routes/checkoutRoutes.js'
 import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
@@ -50,6 +51,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/checkout', checkoutRoutes)
 
 
 
