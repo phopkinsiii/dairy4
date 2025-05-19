@@ -30,6 +30,7 @@ export const loginUser = async (credentials, dispatch) => {
 			type: 'SET_ERROR',
 			payload: error.response?.data?.message || 'Request Failed',
 		});
+		throw error;
 	}
 };
 

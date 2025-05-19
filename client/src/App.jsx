@@ -27,6 +27,7 @@ import BlogPost from './pages/BlogPost.jsx';
 import Register from './pages/Register.jsx';
 import ResetPassword from './components/ResetPassword.jsx';
 import ForgotPassword from './components/ForgotPassword.jsx';
+import Accessibility from './pages/Accessibility.jsx';
 
 function App() {
 	return (
@@ -89,6 +90,7 @@ function App() {
 					<Route path='/blog/:id' element={<BlogPost />} />
 					<Route path='reset-password' element={<ResetPassword />} />
 					<Route path='forgot-password' element={<ForgotPassword />} />
+					<Route path='/accessibility' element={<Accessibility />} />
 
 					{/* <Route path='/product/:id' element={<ProductDetails />} />
           <Route path='/admin' element={<AdminDashboard />} /> */}

@@ -36,7 +36,11 @@ const Login = () => {
 				{/* Left: Form */}
 				<div className='w-1/2 bg-gray-900 text-white p-10 flex flex-col justify-center'>
 					<h2 className='text-3xl font-bold mb-6'>Sign in to your account</h2>
-					{error && <p className='text-red-500 mb-4 text-sm'>{error}</p>}
+					{error && (
+	<div className="mb-4 p-3 bg-red-100 text-red-700 border border-red-300 rounded text-sm">
+		{error}
+	</div>
+)}
 
 					<form onSubmit={handleSubmit} className='space-y-6'>
 						<div>

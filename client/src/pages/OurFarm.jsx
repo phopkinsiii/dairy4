@@ -68,7 +68,7 @@ const footerNavigation = {
 		{ name: 'Blog', href: '#' },
 		{ name: 'Products', href: '/products' },
 		{ name: 'Contact Us', href: '/contact' },
-		{ name: 'Accessibility', href: '#' },
+		{ name: 'Accessibility', href: '/accessibility' },
 		{ name: 'Partners', href: '#' },
 	],
 	social: [
@@ -161,10 +161,10 @@ export default function OurFarm() {
 							<div className='mx-auto max-w-7xl px-8 pt-36 pb-32 sm:pt-60 lg:px-8 lg:pt-32'>
 								<div className='mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center'>
 									<div className='relative w-full lg:max-w-xl lg:shrink-0 xl:max-w-2xl'>
-										<h1 className='text-5xl font-semibold tracking-tight text-pretty text-white sm:text-7xl'>
+										<h1 className='text-5xl font-semibold tracking-tight  text-white sm:text-7xl'>
 											Healthy Food From Healthy Soil!
 										</h1>
-										<p className='mt-8 text-lg font-medium text-pretty text-white sm:max-w-md sm:text-xl/8 lg:max-w-none'>
+										<p className='mt-8 text-lg font-medium  text-white sm:max-w-md sm:text-xl/8 lg:max-w-none'>
 											At Blueberry Dairy and Hickory Cove Orchards, we believe
 											in producing wholesome food the way nature intended. From
 											our organically grown apples and blueberries to our
@@ -228,7 +228,7 @@ export default function OurFarm() {
 					{/* Content section */}
 					<div className='mx-auto -mt-12 max-w-7xl px-6 sm:mt-0 lg:px-8 xl:-mt-8'>
 						<div className='mx-auto max-w-2xl lg:mx-0 lg:max-w-none'>
-							<h2 className='text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl'>
+							<h2 className='text-4xl font-semibold tracking-tight  text-white sm:text-5xl'>
 								Our mission
 							</h2>
 							<div className='mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row'>
@@ -253,7 +253,7 @@ export default function OurFarm() {
 					{/* Values section */}
 					<div className='mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8'>
 						<div className='mx-auto max-w-2xl lg:mx-0'>
-							<h2 className='text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl'>
+							<h2 className='text-4xl font-semibold tracking-tight  text-white sm:text-5xl'>
 								Our values
 							</h2>
 							<h3 className='text-lg text-white italic mt-2'>
@@ -275,26 +275,26 @@ export default function OurFarm() {
 					<div className='relative isolate -z-10 mt-32 sm:mt-48'></div>
 
 					{/* Farm Story Section */}
-					<div className='mx-auto mt-32 max-w-4xl px-6 text-white text-start'>
+					<div className='mx-auto mt-32 max-w-7xl px-6 text-white text-start'>
 						<h2 className='text-4xl font-semibold tracking-tight text-white sm:text-5xl mb-8'>
 							Our Farm Story
 						</h2>
 
-						<p className='text-pretty text-white text-lg text-start mb-6'>
+						<p className=' text-white text-lg text-start mb-6'>
 							When we retired from busy careers in medicine in 2015, it was a
 							wonderful opportunity to pursue a lifelong dream of full-time
 							farming. Both of us are inveterate gardeners and looked forward to
 							the less stressful life on a small farm in the country.
 						</p>
 
-						<p className='text-pretty text-white text-lg mb-6'>
+						<p className='text-white text-lg leading-relaxed mb-6'>
 							The idea of operating a commercial sized orchard and integrated
 							farm evolved gradually, starting with a few apple trees expanding
 							to three orchards with over 100 apple and pear trees, and a
 							one-acre blueberry orchard.
 						</p>
 
-						<p className='text-pretty text-white text-lg mb-6'>
+						<p className='text-white text-lg leading-relaxed mb-6'>
 							Along with a love of growing things, we both have an abiding love
 							and respect for animals. We started with a small flock of chickens
 							which grew to over eighty hens and a small commercial egg
@@ -303,7 +303,7 @@ export default function OurFarm() {
 							several years.
 						</p>
 
-						<p className='text-pretty text-white text-lg mb-6'>
+						<p className='text-white text-lg leading-relaxed mb-6'>
 							Farming hasn't turned out to be quite as stress free as we had
 							naively hoped. There are certainly challenges, especially for
 							novice farmers. We anticipated surprises from weather and the many
@@ -337,7 +337,7 @@ export default function OurFarm() {
 							of the fun!
 						</p>
 
-						<p className='text-pretty text-white text-lg mb-6'>
+						<p className='text-white text-lg leading-relaxed mb-6'>
 							With all the challenges of farming in general, we frequently ask
 							ourselves, "why add the complication of growing organic?" The
 							answer isn't always easy to put into words. We believe that
@@ -352,7 +352,7 @@ export default function OurFarm() {
 							help.
 						</p>
 
-						<p className='text-pretty text-white text-lg'>
+						<p className=' text-white text-lg'>
 							Despite all the challenges, or maybe because of them, we both love
 							the opportunity to grow and raise healthy, chemical-free food for
 							the local market and do our part to support a healthy ecosystem.
@@ -362,61 +362,21 @@ export default function OurFarm() {
 						</p>
 					</div>
 
-					{/* Blog section */}
-					<div className='mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8'>
-						<div className='mx-auto max-w-2xl lg:mx-0 lg:max-w-none'>
-							<h2 className='text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl'>
-								From the blog
-							</h2>
-							<p className='mt-2 text-lg/8 text-white'>
-								Learn how to grow your business with our expert advice.
-							</p>
-						</div>
-						<div className='mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3'>
-							{blogPosts.map((post) => (
-								<article
-									key={post.id}
-									className='relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pt-80 pb-8 sm:pt-48 lg:pt-80'
-								>
-									<img
-										alt=''
-										src={post.imageUrl}
-										className='absolute inset-0 -z-10 size-full object-cover'
-									/>
-									<div className='absolute inset-0 -z-10 bg-linear-to-t from-gray-900 via-gray-900/40' />
-									<div className='absolute inset-0 -z-10 rounded-2xl ring-1 ring-gray-900/10 ring-inset' />
+					
+					{/* Inspiration Section */}
+{/* Inspiration Section */}
+<div className="mx-auto mt-32 max-w-4xl px-6 sm:mt-40 lg:px-8 text-center relative z-10">
+	<blockquote className="text-2xl sm:text-3xl md:text-4xl italic font-light leading-relaxed text-white">
+		“&nbsp;We don’t inherit the earth from our ancestors — we borrow it from our children.&nbsp;”
+	</blockquote>
+	<p className="mt-4 text-gray-400 text-base italic">— Native American Proverb</p>
+	<p className="mt-6 text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
+		At Blueberry Dairy and Hickory Cove Orchards, we believe farming is an act of hope —
+		a way to leave the world better than we found it.
+	</p>
+</div>
 
-									<div className='flex flex-wrap items-center gap-y-1 overflow-hidden text-sm/6 text-gray-300'>
-										<time dateTime={post.datetime} className='mr-8'>
-											{post.date}
-										</time>
-										<div className='-ml-4 flex items-center gap-x-4'>
-											<svg
-												viewBox='0 0 2 2'
-												className='-ml-0.5 size-0.5 flex-none fill-white/50'
-											>
-												<circle r={1} cx={1} cy={1} />
-											</svg>
-											<div className='flex gap-x-2.5'>
-												<img
-													alt=''
-													src={post.author.imageUrl}
-													className='size-6 flex-none rounded-full bg-white/10'
-												/>
-												{post.author.name}
-											</div>
-										</div>
-									</div>
-									<h3 className='mt-3 text-lg/6 font-semibold text-white'>
-										<a href={post.href}>
-											<span className='absolute inset-0' />
-											{post.title}
-										</a>
-									</h3>
-								</article>
-							))}
-						</div>
-					</div>
+
 				</main>
 
 				{/* Footer */}
@@ -449,7 +409,7 @@ export default function OurFarm() {
 							))}
 						</div>
 						<p className='mt-10 text-center text-sm/6 text-white'>
-							&copy; 2024 Your Company, Inc. All rights reserved.
+							&copy; 2024 Blueberry Dairy and Hickory Cove Orchards, Inc. All rights reserved.
 						</p>
 					</div>
 				</footer>

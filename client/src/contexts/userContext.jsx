@@ -35,6 +35,8 @@ const userReducer = (state, action) => {
 			return { ...state, loading: false, error: null };
 		case 'RESET_REQUEST_FAILURE':
 			return { ...state, loading: false, error: action.payload };
+case 'AUTH_REQUEST':
+	return { ...state, loading: true, error: null };
 
 		default:
 			return state;
