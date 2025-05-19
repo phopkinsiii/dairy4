@@ -9,17 +9,14 @@ import {
 	sendPasswordResetEmail,
 } from '../utils/sendEmail.js';
 import validator from 'validator'
+import generateToken from '../utils/generateToken.js';
+import createUserResponse from '../utils/createUserResponse.js';
 
-const generateToken = (id, role) => {
-	return jwt.sign({ id, role }, process.env.JWT_SECRET, {
-		expiresIn: '30d',
-	});
-};
+//Register User
 
 export const registerUser = async (req, res, next) => {
 	try {
-		const { name, email, password, role } = req.body;
-		const userRole = role && role === 'admin' ? 'admin' : 'user';
+		const { name, email, password } = req.body;
 
 		if (!name || !email || !password) {
 			return res.status(400).json({ message: 'All fields are required.' });
@@ -29,18 +26,12 @@ export const registerUser = async (req, res, next) => {
 		if (userExists) {
 			return res.status(400).json({ message: 'That email is already in use' });
 		}
-		const user = await User.create({ name, email, password, role: userRole });
+
+		const user = await User.create({ name, email, password });
 
 		if (user) {
-			const token = generateToken(user._id, user.role);
-			res.status(201).json({
-				_id: user._id,
-				name: user.name,
-				email: user.email,
-				role: user.role,
-				token,
-				createdAt: user.createdAt,
-			});
+			user.token = generateToken(user._id, user.role); // Add token dynamically
+			res.status(201).json(createUserResponse(user));
 		} else {
 			res.status(400).json({ message: 'Invalid User Data' });
 		}
@@ -49,42 +40,31 @@ export const registerUser = async (req, res, next) => {
 	}
 };
 
-// login user function
+
+
+// Login user function
 
 export const loginUser = async (req, res, next) => {
 	const { email, password } = req.body;
+
 	try {
-		//check if user exists
 		const user = await User.findOne({ email });
 		if (!user) {
-			res.status(404).json({ message: 'User not found' });
+			return res.status(404).json({ message: 'User not found' });
 		}
-		//verify password
-		console.log('🔍 Comparing passwords...');
-		console.log('🟡 Input:', password);
-		console.log('🔵 Stored:', user.password);
+
 		const isPasswordCorrect = await bcrypt.compare(password, user.password);
 		if (!isPasswordCorrect) {
 			return res.status(400).json({ message: 'Incorrect Email or Password' });
 		}
-		//generate JWT token
-		const token = jwt.sign(
-			{ id: user._id, role: user.role },
-			process.env.JWT_SECRET,
-			{ expiresIn: '30d' }
-		);
-		//send response
-		res.status(200).json({
-			id: user._id,
-			name: user.name,
-			email: user.email,
-			role: user.role,
-			token,
-		});
+
+		user.token = generateToken(user._id, user.role);
+		res.status(200).json(createUserResponse(user));
 	} catch (error) {
 		next(error);
 	}
 };
+
 
 export const requestPasswordReset = async (req, res) => {
 	const { email } = req.body;

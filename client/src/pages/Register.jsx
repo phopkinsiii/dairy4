@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 
 import { useUserContext } from '../contexts/UserContext';
 import { registerUser } from '../services/authService';
+import DarkPageLayout from '../components/layouts/DarkPageLayout';
 
 const Register = () => {
 	const navigate = useNavigate();
@@ -47,8 +48,9 @@ const Register = () => {
 	};
 
 	return (
-		<div className='max-w-lg mx-auto p-6 bg-white shadow-md rounded-md'>
-			<h2 className='text-2xl font-bold mb-4 text-gray-800'>Register</h2>
+		<DarkPageLayout>
+		<div className='max-w-lg mx-auto p-6 bg-gray-800 shadow-md rounded-md'>
+			<h2 className='text-2xl font-bold mb-4 text-gray-300'>Register</h2>
 
 			{state.loading && <p>Loading...</p>}
 			{error && <p className='text-red-500'>{error}</p>}
@@ -56,7 +58,7 @@ const Register = () => {
 			<form onSubmit={handleSubmit} className='space-y-4'>
 				<input
 					type='text'
-					className='w-full p-3 border border-gray-300 rounded-md'
+					className='w-full p-3 border border-white rounded-md'
 					name='name'
 					placeholder='Name'
 					value={formData.name}
@@ -65,7 +67,7 @@ const Register = () => {
 				/>
 				<input
 					type='email'
-					className='w-full p-3 border border-gray-300 rounded-md'
+					className='w-full p-3 border border-white rounded-md'
 					name='email'
 					placeholder='Email'
 					value={formData.email}
@@ -74,7 +76,7 @@ const Register = () => {
 				/>
 				<input
 					type={showPassword ? 'text' : 'password'}
-					className='w-full p-3 border border-gray-300 rounded-md'
+					className='w-full p-3 border border-white rounded-md'
 					name='password'
 					placeholder='Password'
 					value={formData.password}
@@ -82,7 +84,7 @@ const Register = () => {
 					required
 				/>
 
-				<label className='inline-flex items-center text-sm text-gray-700'>
+				<label className='inline-flex items-center text-sm text-gray-200'>
 					<input
 						type='checkbox'
 						checked={showPassword}
@@ -100,6 +102,7 @@ const Register = () => {
 				</button>
 			</form>
 		</div>
+		</DarkPageLayout>
 	);
 };
 

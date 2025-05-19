@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useUserContext } from '../contexts/UserContext.jsx';
 import { loginUser } from '../services/authService';
 import Logo from '../components/Logo.jsx';
+import DarkPageLayout from '../components/layouts/DarkPageLayout.jsx';
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -30,21 +31,16 @@ const Login = () => {
 	};
 
 	return (
-		<div className='flex min-h-screen'>
-			{/* Left: Form */}
-			<div className='w-1/2 flex items-center justify-center px-8 bg-gray-50'>
-				<div className='max-w-md w-full'>
-					<h2 className='text-3xl font-bold text-gray-800 mb-6'>
-						Sign in to your account
-					</h2>
+		<DarkPageLayout>
+			<div className='flex w-full max-w-6xl shadow-lg rounded-lg overflow-hidden gap-62'>
+				{/* Left: Form */}
+				<div className='w-1/2 bg-gray-900 text-white p-10 flex flex-col justify-center'>
+					<h2 className='text-3xl font-bold mb-6'>Sign in to your account</h2>
 					{error && <p className='text-red-500 mb-4 text-sm'>{error}</p>}
 
 					<form onSubmit={handleSubmit} className='space-y-6'>
 						<div>
-							<label
-								htmlFor='email'
-								className='block text-lg font-medium text-gray-700'
-							>
+							<label htmlFor='email' className='block text-lg font-medium'>
 								Email address
 							</label>
 							<input
@@ -53,24 +49,21 @@ const Login = () => {
 								value={credentials.email}
 								onChange={handleChange}
 								required
-								className='mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-base'
+								className='mt-1 w-full px-4 py-3 border border-gray-700 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'
 							/>
 						</div>
 
 						<div>
-							<label
-								htmlFor='password'
-								className='block text-lg font-medium text-gray-700'
-							>
+							<label htmlFor='password' className='block text-lg font-medium'>
 								Password
 							</label>
 							<input
-								type={showPassword ? 'text' : 'password'} // 👈 Toggle here
+								type={showPassword ? 'text' : 'password'}
 								name='password'
 								value={credentials.password}
 								onChange={handleChange}
 								required
-								className='mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-base'
+								className='mt-1 w-full px-4 py-3 border border-gray-700 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'
 							/>
 							<div className='mt-2 flex items-center space-x-2'>
 								<input
@@ -82,20 +75,19 @@ const Login = () => {
 								/>
 								<label
 									htmlFor='show-password'
-									className='text-sm text-gray-600'
+									className='text-sm text-gray-300'
 								>
 									Show Password
 								</label>
 							</div>
 							<div className='mt-2 text-right'>
-	<Link
-		to='/forgot-password'
-		className='text-sm text-indigo-600 hover:underline'
-	>
-		Forgot your password?
-	</Link>
-</div>
-
+								<Link
+									to='/forgot-password'
+									className='text-sm text-indigo-400 hover:underline'
+								>
+									Forgot your password?
+								</Link>
+							</div>
 						</div>
 
 						<button
@@ -105,23 +97,24 @@ const Login = () => {
 							Sign in
 						</button>
 					</form>
-					<p className='text-sm mt-4 text-center text-gray-700'>
+
+					<p className='text-sm mt-4 text-center text-gray-300'>
 						Don’t have an account?{' '}
 						<Link
 							to='/register'
-							className='text-indigo-600 hover:underline font-semibold'
+							className='text-indigo-400 hover:underline font-semibold'
 						>
 							Register here
 						</Link>
 					</p>
 				</div>
-			</div>
 
-			{/* Right: Logo */}
-			<div className='w-1/2 flex items-center justify-center bg-gradient-to-br from-green-100 to-gray-200'>
-				<Logo />
+				{/* Right: Logo Section with light background */}
+				<div className='w-1/2 flex items-center justify-center bg-gray-300'>
+					<Logo />
+				</div>
 			</div>
-		</div>
+		</DarkPageLayout>
 	);
 };
 
