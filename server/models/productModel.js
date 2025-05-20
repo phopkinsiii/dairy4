@@ -5,7 +5,17 @@ const productSchema = new Schema(
 	{
 		name: { type: String, required: true },
 		description: { type: String, required: true },
-		price: { type: Number, required: true },
+		priceOptions: [
+  {
+    size: {
+      type: String,
+      enum: ['pint', 'quart', 'half-gallon', 'gallon', 'package', 'each', 'lb'],
+      required: true,
+    },
+    price: { type: Number, required: true },
+  },
+],
+
 		imageSrc: { type: String, required: true },
 		imageAlt: { type: String },
 		category: {
@@ -13,7 +23,7 @@ const productSchema = new Schema(
 			enum: ['blueberries', 'apples', 'dairy', 'goats'],
 			required: true,
 		},
-		stock: {type: Number},
+		stock: { type: Number },
 		createdBy: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',

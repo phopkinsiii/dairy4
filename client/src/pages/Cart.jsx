@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {Link} from 'react-router-dom'
 import { useCartContext } from '../contexts/CartContext';
 import { XMarkIcon } from '@heroicons/react/24/outline';
@@ -39,7 +40,7 @@ const Cart = () => {
               {cartItems.map((product, idx) => (
                 <li key={product._id || product.id} className="flex py-6 sm:py-10">
                   <img
-                    src={product.imageSrc}
+                     src={`${import.meta.env.VITE_MEDIA_BASE_URL}${product.imageSrc}`} 
                     alt={product.imageAlt || product.name}
                     className="h-24 w-24 sm:h-48 sm:w-48 object-cover rounded-md"
                   />

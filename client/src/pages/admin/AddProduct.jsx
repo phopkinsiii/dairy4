@@ -11,16 +11,34 @@ const AddProduct = () => {
   const [product, setProduct] = useState({
     name: '',
     description: '',
-    price: '',
     category: 'blueberries',
-    imageSrc: '',
     imageAlt: '',
+    stock: 0,
+    priceOptions: [{ size: '', price: '' }],
   });
 
+  const [imageFile, setImageFile] = useState(null);
   const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
+  };
+
+  const handlePriceOptionChange = (index, field, value) => {
+    const updatedOptions = [...product.priceOptions];
+    updatedOptions[index][field] = value;
+    setProduct({ ...product, priceOptions: updatedOptions });
+  };
+
+  const addPriceOption = () => {
+    setProduct({
+      ...product,
+      priceOptions: [...product.priceOptions, { size: '', price: '' }],
+    });
+  };
+
+  const handleImageChange = (e) => {
+    setImageFile(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -30,13 +48,33 @@ const AddProduct = () => {
     try {
       const token = state.user?.token;
 
-      const response = await axiosInstance.post('/products', product, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      let imageSrc = '';
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append('image', imageFile);
+
+        const uploadRes = await axiosInstance.post('/uploads', formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+		 console.log('🖼️ Uploaded image response:', uploadRes.data); // <== add this
+        imageSrc = uploadRes.data.imageUrl;
+
+      }
+
+      const productData = {
+        ...product,
+        imageSrc,
+        priceOptions: product.priceOptions.map((opt) => ({
+          size: opt.size,
+          price: Number(opt.price),
+        })),
+      };
+
+      const res = await axiosInstance.post('/products', productData, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      alert(`✅ Product created: ${response.data.newProduct.name}`);
+      alert(`✅ Product created: ${res.data.newProduct.name}`);
       navigate('/manage-products');
     } catch (error) {
       console.error('❌ Product creation error:', error);
@@ -45,69 +83,64 @@ const AddProduct = () => {
   };
 
   return (
-    <div className='max-w-lg mx-auto p-6 bg-white shadow-md'>
+    <div className='max-w-xl mx-auto p-6 bg-white shadow-md'>
       <h2 className='text-2xl font-bold text-gray-800 mb-4'>Add New Product</h2>
       {error && <p className='text-red-500 mb-4'>{error}</p>}
 
-      <form
-        onSubmit={handleSubmit}
-        className='space-y-4 bg-white p-6 shadow-lg rounded-lg'
-      >
-        <InputField
-          label="Product Name"
-          name="name"
-          value={product.name}
-          onChange={handleChange}
-        />
+      <form onSubmit={handleSubmit} className='space-y-4'>
+        <InputField label='Product Name' name='name' value={product.name} onChange={handleChange} />
+        <InputField label='Description' name='description' value={product.description} onChange={handleChange} />
+        <InputField label='Alt Text' name='imageAlt' value={product.imageAlt} onChange={handleChange} />
+        <InputField label='Stock Quantity' name='stock' type='number' value={product.stock} onChange={handleChange} />
 
-        <InputField
-          label="Product Description"
-          name="description"
-          value={product.description}
-          onChange={handleChange}
-        />
-
-        <InputField
-          label="Price"
-          name="price"
-          type="number"
-          value={product.price}
-          onChange={handleChange}
-        />
-
-        <div className='mb-4'>
-          <label className='block text-gray-700 font-medium mb-1'>Category</label>
-          <select
-            name='category'
-            className='w-full rounded-lg border border-gray-300 bg-gray-100 px-3 py-2 text-sm text-gray-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'
-            value={product.category}
-            onChange={handleChange}
-          >
+        <div>
+          <label className='block mb-1 font-medium'>Category</label>
+          <select name='category' value={product.category} onChange={handleChange} className='w-full border px-3 py-2 rounded'>
             <option value='blueberries'>Blueberries</option>
             <option value='apples'>Apples</option>
-            <option value='dairy'>Dairy Products</option>
-            <option value='goats'>Goats for Sale</option>
+            <option value='dairy'>Dairy</option>
+            <option value='goats'>Goats</option>
           </select>
         </div>
 
-        <InputField
-          label="Image URL"
-          name="imageSrc"
-          value={product.imageSrc}
-          onChange={handleChange}
-        />
+        <div>
+          <label className='block mb-1 font-medium'>Product Image</label>
+          <input type='file' accept='image/*' onChange={handleImageChange} />
+        </div>
 
-        <InputField
-          label="Alternate Image Text"
-          name="imageAlt"
-          value={product.imageAlt}
-          onChange={handleChange}
-        />
+        <div>
+          <label className='block mb-2 font-medium'>Price Options</label>
+          {product.priceOptions.map((opt, index) => (
+            <div key={index} className='flex gap-2 mb-2'>
+              <select
+                value={opt.size}
+                onChange={(e) => handlePriceOptionChange(index, 'size', e.target.value)}
+                className='border px-2 py-1 rounded w-1/2'
+              >
+                <option value=''>Select Size</option>
+                <option value='pint'>Pint</option>
+                <option value='quart'>Quart</option>
+                <option value='half-gallon'>Half Gallon</option>
+                <option value='gallon'>Gallon</option>
+                <option value='package'>Package</option>
+                <option value='each'>Each</option>
+                <option value='lb'>Pound (lb)</option>
+              </select>
+              <input
+                type='number'
+                placeholder='Price'
+                value={opt.price}
+                onChange={(e) => handlePriceOptionChange(index, 'price', e.target.value)}
+                className='border px-2 py-1 rounded w-1/2'
+              />
+            </div>
+          ))}
+          <button type='button' onClick={addPriceOption} className='text-sm text-blue-600 hover:underline'>
+            + Add another price option
+          </button>
+        </div>
 
-        <button
-          type='submit'
-          className='w-full rounded-lg bg-indigo-600 px-4 py-2 text-white font-medium hover:bg-indigo-700 transition-all'
-        >
+        <button type='submit' className='w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700'>
           Add Product
         </button>
       </form>
@@ -116,8 +149,8 @@ const AddProduct = () => {
 };
 
 const InputField = ({ label, name, value, onChange, type = 'text' }) => (
-  <div className='mb-4'>
-    <label htmlFor={name} className='block text-gray-700 font-medium mb-1'>
+  <div>
+    <label htmlFor={name} className='block font-medium mb-1'>
       {label}
     </label>
     <input
@@ -125,7 +158,7 @@ const InputField = ({ label, name, value, onChange, type = 'text' }) => (
       name={name}
       value={value}
       onChange={onChange}
-      className='w-full rounded-lg border border-gray-300 bg-gray-100 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500'
+      className='w-full border px-3 py-2 rounded'
       required
     />
   </div>

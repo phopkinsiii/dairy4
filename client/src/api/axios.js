@@ -12,5 +12,6 @@ const axiosInstance = axios.create({
 	baseURL,
 	withCredentials: true,
 });
+console.log('📦 Axios is using baseURL:', baseURL);
 
 export default axiosInstance;

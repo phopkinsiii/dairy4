@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/pages/Checkout.jsx
 import { useCartContext } from '../contexts/CartContext.jsx';
 import { useNavigate } from 'react-router-dom';
@@ -74,8 +75,8 @@ export default function Checkout() {
 					{cartItems.map((product) => (
 						<li key={product._id} className='flex space-x-6 py-6'>
 							<img
-								src={product.imageSrc}
-								alt={product.name}
+								src={`${import.meta.env.VITE_MEDIA_BASE_URL}${product.imageSrc}`} 
+								 alt={product.imageAlt || 'Product Image'}
 								className='w-32 h-32 rounded-md object-cover bg-gray-200'
 							/>
 							<div className='flex flex-col justify-between space-y-2 text-sm sm:text-base'>

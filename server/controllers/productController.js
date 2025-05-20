@@ -48,28 +48,26 @@ export const getSingleProduct = async (req, res, next) => {
 
 //Protected, Admin Only Routes
 export const createProduct = async (req, res, next) => {
-	try {
-		const { name, description, price, imageSrc,category, imageAlt, stock } = req.body;
+  try {
+    const { name, description, priceOptions, imageSrc, category, imageAlt, stock } = req.body;
 
-		console.log("Received Request Body:", req.body); // 🔹 Debug log
+    const newProduct = await Product.create({
+      name,
+      description,
+      priceOptions,
+      category,
+      imageSrc,
+      imageAlt,
+      stock,
+      createdBy: req.user._id,
+    });
 
-
-		const newProduct = await Product.create({
-			name,
-			description,
-			price,
-			category,
-			imageSrc,
-			stock,
-			createdBy: req.user._id,
-		});
-		console.log("Saved Product:", newProduct); // 🔹 Debug log
-
-		res.status(201).json({ message: 'Product Created', newProduct });
-	} catch (error) {
-		next(error);
-	}
+    res.status(201).json({ message: 'Product Created', newProduct });
+  } catch (error) {
+    next(error);
+  }
 };
+
 
 //Update Product
 export const updateProduct = async (req, res, next) => {
@@ -80,7 +78,8 @@ export const updateProduct = async (req, res, next) => {
 				.status(400)
 				.json({ message: 'That is not a valid product id' });
 		}
-		const product = await Product.findByIdAndUpdate(id);
+		const product = await Product.findById(id);
+
 		if (!product) {
 			return res.status(404).json({ message: 'Product not found' });
 		}

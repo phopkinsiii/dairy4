@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -7,6 +8,8 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 
+// Debug the loaded environment variable
+console.log('✅ CLIENT_URL from .env:', process.env.CLIENT_URL);
 
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
@@ -15,53 +18,76 @@ import contactRoutes from './routes/contactRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
-import checkoutRoutes from './routes/checkoutRoutes.js'
+import checkoutRoutes from './routes/checkoutRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 
-// Resolve __dirname in ES module scope
+// ✅ Set allowed origins from .env or fallback
+const allowedOrigins = [process.env.CLIENT_URL || 'http://localhost:5173'];
+
+// ✅ Resolve __dirname (for ES modules)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const allowedOrigins = ['http://localhost:5173']; // Add your deployed domain later too
 
-// ✅ Ensure uploads directory exists
+// ✅ Ensure /uploads directory exists
 const uploadsDir = path.join(__dirname, '/uploads');
 if (!fs.existsSync(uploadsDir)) {
 	fs.mkdirSync(uploadsDir);
 }
 
-// Middleware
+// ✅ CORS middleware (with origin logging for debugging)
 app.use(
 	cors({
-		origin: allowedOrigins,
+		origin: function (origin, callback) {
+			console.log('🔍 Incoming origin:', origin);
+
+			if (!origin || allowedOrigins.includes(origin)) {
+				callback(null, true);
+			} else {
+				console.warn('❌ CORS Rejected origin:', origin);
+				callback(new Error('Not allowed by CORS'));
+			}
+		},
 		credentials: true,
 	})
-); //be sure to add real domain name after deployment.
+);
+
+// Middleware
 app.use(morgan('dev'));
 app.use(express.json());
 
-// ✅ Serve static files from /uploads
-app.use('/uploads', express.static(uploadsDir));
+// ✅ Serve static files (uploads)
+app.use(
+	'/uploads',
+	(req, res, next) => {
+		res.header('Access-Control-Allow-Origin', process.env.CLIENT_URL || '*');
+		res.header(
+			'Access-Control-Allow-Headers',
+			'Origin, X-Requested-With, Content-Type, Accept'
+		);
+		next();
+	},
+	express.static(uploadsDir)
+);
 
-// Routes
+// ✅ Routes
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/checkout', checkoutRoutes)
+app.use('/api/checkout', checkoutRoutes);
 
-
-
-// Error handler
+// ✅ Error handler
 app.use(errorHandler);
 
-// Connect to DB and start server
+// ✅ Connect to DB and start server
 connectDB();
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5050;
+
 app.listen(port, () => {
-	console.log(`Listening on port: ${port}`);
+	console.log(`✅ Server listening on port ${port}`);
 });

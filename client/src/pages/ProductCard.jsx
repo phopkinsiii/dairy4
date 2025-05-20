@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useCartContext } from '../contexts/CartContext.jsx';
 import { toast } from 'react-toastify';
 
@@ -31,8 +32,9 @@ const ProductCard = ({ product }) => {
 			style={{ fontFamily: 'Poppins, sans-serif' }}
 		>
 			<img
-				src={product.imageSrc}
-				alt={product.imageAlt || 'Product'}
+				src={`${import.meta.env.VITE_MEDIA_BASE_URL}${product.imageSrc}`}
+				alt={product.imageAlt || 'Product image'}
+				crossOrigin='anonymous'
 				className='w-full h-64 object-cover rounded-t-lg'
 			/>
 
@@ -41,9 +43,20 @@ const ProductCard = ({ product }) => {
 					{product.name}
 				</h3>
 				<p className='text-gray-700 text-sm flex-grow'>{product.description}</p>
-				<p className='mt-2 text-lg font-bold text-green-700'>
-					${product.price?.toFixed(2)}
-				</p>
+				<div className='mt-2 space-y-1'>
+{product.priceOptions?.length > 0 ? (
+  product.priceOptions.map((option, index) => (
+    <p key={index} className='text-green-700 font-semibold text-sm'>
+      ${option.price.toFixed(2)} per {option.size}
+    </p>
+  ))
+) : (
+  <p className='text-green-700 font-semibold text-sm'>
+    ${product.price?.toFixed(2)}
+  </p>
+)}
+
+				</div>
 
 				<button
 					onClick={handleAddToCart}

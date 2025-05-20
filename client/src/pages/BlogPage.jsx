@@ -51,11 +51,8 @@ const BlogPage = () => {
 									<Link to={`/blog/${post._id}`} className='relative w-full max-w-xs lg:w-64 block'>
 										<img
 											alt={post.title}
-											src={
-												post.image
-													? `http://localhost:5000${post.image}`
-													: '/images/placeholder.jpg'
-											}
+										src={`${import.meta.env.VITE_MEDIA_BASE_URL}${post.image}`}
+		
 											className='w-full h-full rounded-2xl bg-gray-50'
 										/>
 										<div className='absolute inset-0 rounded-2xl ring-1 ring-gray-900/10 ring-inset' />
