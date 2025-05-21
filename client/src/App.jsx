@@ -28,6 +28,9 @@ import Register from './pages/Register.jsx';
 import ResetPassword from './components/ResetPassword.jsx';
 import ForgotPassword from './components/ForgotPassword.jsx';
 import Accessibility from './pages/Accessibility.jsx';
+import ManagePosts from './pages/admin/ManagePosts.jsx';
+import AccessDenied from './components/AccessDenied.jsx';
+import UpdateBlog from './pages/admin/UpdateBlog.jsx';
 
 function App() {
 	return (
@@ -91,9 +94,23 @@ function App() {
 					<Route path='reset-password' element={<ResetPassword />} />
 					<Route path='forgot-password' element={<ForgotPassword />} />
 					<Route path='/accessibility' element={<Accessibility />} />
-
-					{/* <Route path='/product/:id' element={<ProductDetails />} />
-          <Route path='/admin' element={<AdminDashboard />} /> */}
+					<Route
+						path='/manage-posts'
+						element={
+							<AdminRoute>
+								<ManagePosts />
+							</AdminRoute>
+						}
+					/>
+					<Route
+						path='/admin/edit-blog/:id'
+						element={
+							<AdminRoute>
+								<UpdateBlog />
+							</AdminRoute>
+						}
+					/>
+					<Route path='access-denied' element={<AccessDenied />} />
 				</Routes>
 			</NavbarLayout>
 		</>
