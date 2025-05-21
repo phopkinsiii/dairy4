@@ -8,30 +8,32 @@ const ProductCard = ({ product }) => {
 	const [selectedIndex, setSelectedIndex] = useState(0); // Default to first option
 
 	const selectedOption = product.priceOptions?.[selectedIndex];
-	const handleAddToCart = () => {
-		if (!selectedOption) return;
 
-		dispatch({
-			type: 'ADD_ITEM',
-			payload: {
-				...product,
-				quantity: 1,
-				price: selectedOption.price, // ✅ used for subtotal
-				selectedSize: selectedOption.size, // ✅ used for display/grouping
-			},
-		});
+const handleAddToCart = () => {
+	if (!selectedOption) return;
 
-		toast.success(`${product.name} added to cart!`, {
-			position: 'bottom-right',
-			autoClose: 1200,
-			hideProgressBar: true,
-			closeOnClick: true,
-			pauseOnHover: false,
-			draggable: false,
-			theme: 'light',
-			className: 'text-sm px-3 py-2 rounded shadow-md border border-green-200',
-		});
-	};
+	dispatch({
+		type: 'ADD_ITEM',
+		payload: {
+			...product,
+			quantity: 1,
+			price: selectedOption.price,             // ✅ still needed for quick access
+			selectedSize: selectedOption.size,       // ✅ still needed for cart display
+			selectedOption,                          // ✅ critical for Stripe checkout
+		},
+	});
+
+	toast.success(`${product.name} added to cart!`, {
+		position: 'bottom-right',
+		autoClose: 1200,
+		hideProgressBar: true,
+		closeOnClick: true,
+		pauseOnHover: false,
+		draggable: false,
+		theme: 'light',
+		className: 'text-sm px-3 py-2 rounded shadow-md border border-green-200',
+	});
+};
 
 	return (
 		<div

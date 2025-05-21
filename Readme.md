@@ -1,44 +1,27 @@
-// @ts-nocheck
-import { useCartContext } from '../contexts/CartContext';
-import { useUserContext } from '../contexts/UserContext';
-import axiosInstance from '../api/axios';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+const handleClick = async () => {
+	if (!form || !cartItems?.length) return;
 
-const PayNowButton = ({ pickupDetails }) => {
-  const { cartItems } = useCartContext();
-  const { state: userState } = useUserContext();
-  const navigate = useNavigate();
+	try {
+		setLoading(true);
+		const stripe = await stripePromise;
 
-  const handleCheckout = async () => {
-    try {
-      const response = await axiosInstance.post('/checkout/create-session', {
-        items: cartItems,
-        customer: {
-          name: pickupDetails.name,
-          email: userState.user?.email || 'guest@example.com',
-        },
-        pickup: {
-          location: pickupDetails.location,
-          dateTime: pickupDetails.dateTime,
-        },
-      });
+		// 🧾 Debug log to inspect cart item structure
+		console.log('🧾 Cart items being sent to Stripe:', cartItems);
 
-      window.location.href = response.data.url;
-    } catch (err) {
-      console.error('❌ Stripe checkout error:', err);
-      toast.error('Failed to start checkout. Please try again.');
-    }
-  };
+		// Create checkout session
+		const response = await axiosInstance.post('/checkout/create-session', {
+			form,
+			cartItems,
+		});
 
-  return (
-    <button
-      onClick={handleCheckout}
-      className='w-full bg-green-600 text-white font-medium py-3 px-4 rounded-md hover:bg-green-700 transition'
-    >
-      Pay Now
-    </button>
-  );
+		const sessionId = response.data?.id;
+		if (!stripe || !sessionId) throw new Error('Stripe setup failed');
+
+		const { error } = await stripe.redirectToCheckout({ sessionId });
+		if (error) console.error('Stripe redirect error:', error.message);
+	} catch (err) {
+		console.error('Error starting checkout:', err);
+	} finally {
+		setLoading(false);
+	}
 };
-
-export default PayNowButton;
