@@ -2,6 +2,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+const dropdownLinks = [
+  { label: 'Add Product', path: '/add-product' },
+  { label: 'Add Blog Post', path: '/add-blog' },
+  { label: 'Manage Products', path: '/manage-products' },
+  { label: 'Manage Blog Posts', path: '/manage-posts' },
+  { label: 'Update Inventory', path: '/inventory' },
+];
+
+
 const AdminDropdown = ({scrolled}) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef();
@@ -33,38 +42,18 @@ const AdminDropdown = ({scrolled}) => {
       {open && (
         <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
           <ul className="py-1 text-base font-poppins text-gray-800">
-            <li>
-              <Link
-                to="/add-product"
-                className="block px-4 py-2 hover:bg-indigo-100"
-              >
-                Add Product
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/add-blog"
-                className="block px-4 py-2 hover:bg-indigo-100"
-              >
-                Add Blog Post
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/manage-products"
-                className="block px-4 py-2 hover:bg-indigo-100"
-              >
-                Manage Products
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/manage-posts"
-                className="block px-4 py-2 hover:bg-indigo-100"
-              >
-                Manage Blog Posts
-              </Link>
-            </li>
+          {dropdownLinks.map((link) => (
+  <li key={link.path}>
+    <Link
+      to={link.path}
+      onClick={() => setOpen(false)}
+      className="block px-4 py-2 hover:bg-indigo-100"
+    >
+      {link.label}
+    </Link>
+  </li>
+))}
+
           </ul>
         </div>
       )}

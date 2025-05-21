@@ -1,7 +1,12 @@
-<BlogEditor
-  content={formData.content}
-  setContent={(content) => {
-    setFormData({ ...formData, content });
-    setIsChanged(content !== initialData?.content);
-  }}
-/>
+dispatch({
+  type: 'ADD_ITEM',
+  payload: {
+    ...product,
+    selectedOption: {
+      size: 'gallon', // replace with actual selected value from form or dropdown
+      price: 10,
+    },
+    quantity: 1,
+  },
+});
+

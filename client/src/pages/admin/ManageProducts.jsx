@@ -51,7 +51,7 @@ const ManageProducts = () => {
 						<div className='flex justify-between mt-4'>
 							<button
 								onClick={() => handleEdit(product._id)}
-								className='bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-1 rounded'
+								className='bg-indigo-800 hover:bg-yellow-600 text-white px-4 py-1 rounded'
 							>
 								Edit
 							</button>
