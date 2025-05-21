@@ -1,27 +1,21 @@
 // @ts-nocheck
-// src/pages/BlogPost.jsx
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import axiosInstance from '../api/axios.js';
+import { useBlogContext } from '../contexts/BlogContext';
 
 const BlogPost = () => {
 	const { id } = useParams();
-	const [post, setPost] = useState(null);
+	const { state, fetchPostById } = useBlogContext();
+	const { singlePost: post, loading, error } = state;
+
 
 	useEffect(() => {
-		const fetchPost = async () => {
-			try {
-				const response = await axiosInstance.get(`/blog/${id}`);
-				setPost(response.data);
-			} catch (error) {
-				console.error('Error fetching blog post:', error);
-			}
-		};
+		if (id) fetchPostById(id);
+	}, [id, fetchPostById]);
 
-		fetchPost();
-	}, [id]);
-
-	if (!post) return <div className='p-10 text-lg'>Loading post...</div>;
+	if (loading || !post) return <div className='p-10 text-lg'>Loading post...</div>;
+	if (error) return <div className='p-10 text-red-600'>{error}</div>;
+	if (!post) return null;
 
 	return (
 		<div className='max-w-3xl mx-auto px-6 py-12'>

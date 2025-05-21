@@ -10,24 +10,25 @@ import { ContactProvider } from './contexts/ContactContext.jsx';
 import { UserProvider } from './contexts/UserContext.jsx';
 import { NavbarProvider } from './contexts/NavbarContext.jsx';
 import { HeadProvider } from 'react-head'; // ✅ Import
+import { BlogProvider } from './contexts/BlogContext.jsx';
 createRoot(document.getElementById('root')).render(
 	<StrictMode>
 		<HeadProvider>
-		<CartProvider>
-		<ProductProvider>
-			
-				<ContactProvider>
-					<UserProvider>
-						<BrowserRouter>
-							<NavbarProvider>
-								<App />
-							</NavbarProvider>
-						</BrowserRouter>
-					</UserProvider>
-				</ContactProvider>
-			
-		</ProductProvider>
-		</CartProvider>
+			<CartProvider>
+				<ProductProvider>
+					<BlogProvider>
+						<ContactProvider>
+							<UserProvider>
+								<BrowserRouter>
+									<NavbarProvider>
+										<App />
+									</NavbarProvider>
+								</BrowserRouter>
+							</UserProvider>
+						</ContactProvider>
+					</BlogProvider>
+				</ProductProvider>
+			</CartProvider>
 		</HeadProvider>
 	</StrictMode>
 );
