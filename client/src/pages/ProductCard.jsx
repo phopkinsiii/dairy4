@@ -1,29 +1,39 @@
 // @ts-nocheck
+import { useState } from 'react';
 import { useCartContext } from '../contexts/CartContext.jsx';
 import { toast } from 'react-toastify';
 
 const ProductCard = ({ product }) => {
 	const { dispatch } = useCartContext();
+	const [selectedIndex, setSelectedIndex] = useState(0); // Default to first option
+
+	const selectedOption = product.priceOptions?.[selectedIndex];
 
 	const handleAddToCart = () => {
+		if (!selectedOption) return;
+
 		dispatch({
 			type: 'ADD_ITEM',
 			payload: {
 				...product,
 				quantity: 1,
+				selectedOption, // 👈 critical for identifying size/price
 			},
 		});
 
-		toast.success(`${product.name} added to cart!`, {
-			position: 'bottom-right',
-			autoClose: 1200,
-			hideProgressBar: true,
-			closeOnClick: true,
-			pauseOnHover: false,
-			draggable: false,
-			theme: 'light',
-			className: 'text-sm px-3 py-2 rounded shadow-md border border-green-200',
-		});
+		toast.success(
+			`${product.name} (${selectedOption.size}) added to cart!`,
+			{
+				position: 'bottom-right',
+				autoClose: 1200,
+				hideProgressBar: true,
+				closeOnClick: true,
+				pauseOnHover: false,
+				draggable: false,
+				theme: 'light',
+				className: 'text-sm px-3 py-2 rounded shadow-md border border-green-200',
+			}
+		);
 	};
 
 	return (
@@ -43,20 +53,26 @@ const ProductCard = ({ product }) => {
 					{product.name}
 				</h3>
 				<p className='text-gray-700 text-sm flex-grow'>{product.description}</p>
-				<div className='mt-2 space-y-1'>
-{product.priceOptions?.length > 0 ? (
-  product.priceOptions.map((option, index) => (
-    <p key={index} className='text-green-700 font-semibold text-sm'>
-      ${option.price.toFixed(2)} per {option.size}
-    </p>
-  ))
-) : (
-  <p className='text-green-700 font-semibold text-sm'>
-    ${product.price?.toFixed(2)}
-  </p>
-)}
 
-				</div>
+				{/* Option selector */}
+				{product.priceOptions?.length > 0 && (
+					<div className='mt-3'>
+						<label className='block text-sm text-gray-600 mb-1'>
+							Select size:
+						</label>
+						<select
+							value={selectedIndex}
+							onChange={(e) => setSelectedIndex(Number(e.target.value))}
+							className='w-full border border-gray-300 rounded px-2 py-1 text-sm'
+						>
+							{product.priceOptions.map((option, index) => (
+								<option key={index} value={index}>
+									${option.price.toFixed(2)} per {option.size}
+								</option>
+							))}
+						</select>
+					</div>
+				)}
 
 				<button
 					onClick={handleAddToCart}
