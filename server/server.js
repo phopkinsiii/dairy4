@@ -80,6 +80,7 @@ app.use('/api/uploads', uploadRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/checkout', checkoutRoutes);
 
+
 // ✅ Error handler
 app.use(errorHandler);
 
