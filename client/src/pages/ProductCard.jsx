@@ -8,7 +8,6 @@ const ProductCard = ({ product }) => {
 	const [selectedIndex, setSelectedIndex] = useState(0); // Default to first option
 
 	const selectedOption = product.priceOptions?.[selectedIndex];
-
 	const handleAddToCart = () => {
 		if (!selectedOption) return;
 
@@ -17,23 +16,21 @@ const ProductCard = ({ product }) => {
 			payload: {
 				...product,
 				quantity: 1,
-				selectedOption, // 👈 critical for identifying size/price
+				price: selectedOption.price, // ✅ used for subtotal
+				selectedSize: selectedOption.size, // ✅ used for display/grouping
 			},
 		});
 
-		toast.success(
-			`${product.name} (${selectedOption.size}) added to cart!`,
-			{
-				position: 'bottom-right',
-				autoClose: 1200,
-				hideProgressBar: true,
-				closeOnClick: true,
-				pauseOnHover: false,
-				draggable: false,
-				theme: 'light',
-				className: 'text-sm px-3 py-2 rounded shadow-md border border-green-200',
-			}
-		);
+		toast.success(`${product.name} added to cart!`, {
+			position: 'bottom-right',
+			autoClose: 1200,
+			hideProgressBar: true,
+			closeOnClick: true,
+			pauseOnHover: false,
+			draggable: false,
+			theme: 'light',
+			className: 'text-sm px-3 py-2 rounded shadow-md border border-green-200',
+		});
 	};
 
 	return (

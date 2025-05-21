@@ -11,7 +11,8 @@ import { useCartContext } from '../contexts/CartContext';
 const StickyNavbar = () => {
 	const { state: userState } = useUserContext();
 	const { cartItems } = useCartContext();
-	const cartItemCount = cartItems?.length || 0;
+	const cartItemCount = cartItems?.reduce((sum, item) => sum + (item.quantity || 1), 0);
+
 	const isAdmin = userState.user?.role === 'admin';
 	const location = useLocation();
 

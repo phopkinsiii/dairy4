@@ -1,36 +1,27 @@
-export const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
-  const hasInitialized = useRef(false);
+price: selectedOption.price, // ✅ critical for subtotal
+selectedSize: selectedOption.size,
+const handleAddToCart = () => {
+  if (!selectedOption) return;
 
-  useEffect(() => {
-    if (!hasInitialized.current) {
-      const stored = localStorage.getItem('cart');
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored);
-          dispatch({ type: 'SET_CART', payload: parsed });
-        } catch (err) {
-          console.error('❌ Failed to parse cart:', err);
-        }
-      }
-      hasInitialized.current = true;
-    }
-  }, []);
+  dispatch({
+    type: 'ADD_ITEM',
+    payload: {
+      ...product,
+      quantity: 1,
+      price: selectedOption.price,          // ✅ used for subtotal
+      selectedSize: selectedOption.size,    // ✅ used for display/grouping
+    },
+  });
 
-  useEffect(() => {
-    if (hasInitialized.current) {
-      localStorage.setItem('cart', JSON.stringify(state.cartItems));
-    }
-  }, [state.cartItems]);
-
-  const subtotal = state.cartItems.reduce(
-    (acc, item) => acc + (item.price || 0) * (item.quantity || 1),
-    0
-  );
-
-  return (
-    <CartContext.Provider value={{ ...state, dispatch, subtotal }}>
-      {children}
-    </CartContext.Provider>
-  );
+  toast.success(`${product.name} added to cart!`, {
+    position: 'bottom-right',
+    autoClose: 1200,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: false,
+    theme: 'light',
+    className: 'text-sm px-3 py-2 rounded shadow-md border border-green-200',
+  });
 };
+
