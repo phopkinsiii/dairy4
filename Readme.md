@@ -1,28 +1,50 @@
-import Order from '../models/orderModel.js';
-
 if (event.type === 'checkout.session.completed') {
   const session = event.data.object;
 
-  console.log('✅ Payment succeeded:', session.id);
+  console.log('✅ Stripe Webhook: checkout.session.completed received');
+  console.log('📦 Session metadata:', session.metadata);
 
-  // Optional: Parse metadata if you passed extra data via session
-  const metadata = session.metadata ? JSON.parse(session.metadata.orderData || '{}') : {};
+  let cartItems = [];
 
-  // Create and save the order
+  try {
+    cartItems = JSON.parse(session.metadata.cart || '[]');
+    console.log('🧾 Parsed cartItems:', cartItems); // <== This should show all items
+  } catch (err) {
+    console.error('❌ Error parsing cart items:', err.message);
+  }
+
   const newOrder = new Order({
     guest: true,
-    name: metadata.name || '',
-    email: session.customer_email || '',
-    cartItems: metadata.cartItems || [],
-    pickupName: metadata.pickupName || '',
-    pickupLocation: metadata.pickupLocation || 'Farm',
-    pickupTime: metadata.pickupTime || new Date(),
+    name: session.metadata.name || '',
+    email: session.customer_email || session.metadata.email || '',
+    cartItems: cartItems.map((item) => ({
+      productId: item.productId,
+      name: item.name,
+      quantity: item.quantity,
+      price: item.price,
+      size: item.selectedSize,
+    })),
+    pickupName: session.metadata.pickupName || '',
+    pickupLocation: session.metadata.pickupLocation || 'Farm',
+    pickupTime: new Date(session.metadata.pickupTime),
+    stripeSessionId: session.id,
   });
 
   try {
     await newOrder.save();
-    console.log('📝 Order saved to MongoDB:', newOrder._id);
+    console.log('📝 Order saved:', newOrder._id);
   } catch (err) {
     console.error('❌ Failed to save order:', err.message);
   }
 }
+
+cartItems: [
+  {
+    productId: String,
+    name: { type: String, required: true },
+    quantity: { type: Number, required: true },
+    price: { type: Number, required: true },
+    size: String,
+    image: String,
+  },
+],

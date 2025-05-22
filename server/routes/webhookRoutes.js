@@ -1,3 +1,4 @@
+// @ts-nocheck
 // routes/webhookRoutes.js
 import express from 'express';
 import Stripe from 'stripe';
@@ -11,56 +12,76 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Use raw body parser ONLY for this route
 router.post(
-  '/',
-  express.raw({ type: 'application/json' }),
-  async (req, res) => {
-    const sig = req.headers['stripe-signature'];
+	'/',
+	express.raw({ type: 'application/json' }),
+	async (req, res) => {
+		const sig = req.headers['stripe-signature'];
 
-    let event;
+		let event;
 
-    try {
-      event = stripe.webhooks.constructEvent(
-        req.body,
-        sig,
-        process.env.STRIPE_WEBHOOK_SECRET
-      );
-    } catch (err) {
-      console.error('❌ Webhook signature verification failed:', err.message);
-      return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
+		try {
+			event = stripe.webhooks.constructEvent(
+				req.body,
+				sig,
+				process.env.STRIPE_WEBHOOK_SECRET
+			);
+		} catch (err) {
+			console.error('❌ Webhook signature verification failed:', err.message);
+			return res.status(400).send(`Webhook Error: ${err.message}`);
+		}
 
-    // ✅ Handle the event
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;
+		// ✅ Handle the event
+		if (event.type === 'checkout.session.completed') {
+			const session = event.data.object;
 
-      console.log('✅ Payment succeeded:', session.id);
+			console.log('✅ Payment succeeded:', session.id);
 
-      const metadata = session.metadata
-        ? JSON.parse(session.metadata.orderData || '{}')
-        : {};
+			const metadata = session.metadata || {};
+			let cartItems = [];
 
-      const newOrder = new Order({
-        guest: true,
-        name: metadata.name || '',
-        email: session.customer_email || '',
-        cartItems: metadata.cartItems || [],
-        pickupName: metadata.pickupName || '',
-        pickupLocation: metadata.pickupLocation || 'Farm',
-        pickupTime: metadata.pickupTime || new Date(),
-      });
+			try {
+				console.log('🛍️ Raw metadata.cart:', metadata.cart);
 
-      try {
-        await newOrder.save();
-        console.log('📝 Order saved to MongoDB:', newOrder._id);
-      } catch (err) {
-        console.error('❌ Failed to save order:', err.message);
-      }
-    } else {
-      console.log(`ℹ️ Unhandled event type: ${event.type}`);
-    }
+				cartItems = JSON.parse(session.metadata.cart || '[]');
+				console.log('🧾 Parsed cartItems from metadata:', cartItems);
+			} catch (err) {
+				console.error('❌ Failed to parse cartItems:', err.message);
+			}
 
-    res.status(200).json({ received: true });
-  }
+			const newOrder = new Order({
+				guest: true,
+				name: session.metadata.name || '',
+				email: session.customer_email || '',
+				cartItems: cartItems.map((item) => ({
+					productId: item.productId,
+					name: item.name,
+					quantity: item.quantity,
+					price: item.price,
+					size: item.selectedSize,
+				})),
+				pickupName: session.metadata.pickupName || '',
+				pickupLocation: session.metadata.pickupLocation || 'Farm',
+				pickupTime: new Date(session.metadata.pickupTime),
+				stripeSessionId: session.id,
+			});
+
+			try {
+				await newOrder.save();
+				console.log('📝 Order saved to MongoDB:', newOrder._id);
+			} catch (err) {
+				console.error(
+					'🧨 Order save failed:',
+					newOrder,
+					'\nError:',
+					err.message
+				);
+			}
+		} else {
+			console.log(`ℹ️ Unhandled event type: ${event.type}`);
+		}
+
+		res.status(200).json({ received: true });
+	}
 );
 
 export default router;
