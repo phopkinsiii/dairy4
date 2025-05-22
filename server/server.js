@@ -19,9 +19,11 @@ import blogRoutes from './routes/blogRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import checkoutRoutes from './routes/checkoutRoutes.js';
+import webhookRoutes from './routes/webhookRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
+app.use('/webhook', webhookRoutes);
 
 // ✅ Set allowed origins from .env or fallback
 const allowedOrigins = [process.env.CLIENT_URL || 'http://localhost:5173'];
@@ -79,6 +81,7 @@ app.use('/api/blog', blogRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/checkout', checkoutRoutes);
+
 
 
 // ✅ Error handler

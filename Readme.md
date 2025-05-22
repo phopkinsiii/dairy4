@@ -1,27 +1,28 @@
-const handleClick = async () => {
-	if (!form || !cartItems?.length) return;
+import Order from '../models/orderModel.js';
 
-	try {
-		setLoading(true);
-		const stripe = await stripePromise;
+if (event.type === 'checkout.session.completed') {
+  const session = event.data.object;
 
-		// 🧾 Debug log to inspect cart item structure
-		console.log('🧾 Cart items being sent to Stripe:', cartItems);
+  console.log('✅ Payment succeeded:', session.id);
 
-		// Create checkout session
-		const response = await axiosInstance.post('/checkout/create-session', {
-			form,
-			cartItems,
-		});
+  // Optional: Parse metadata if you passed extra data via session
+  const metadata = session.metadata ? JSON.parse(session.metadata.orderData || '{}') : {};
 
-		const sessionId = response.data?.id;
-		if (!stripe || !sessionId) throw new Error('Stripe setup failed');
+  // Create and save the order
+  const newOrder = new Order({
+    guest: true,
+    name: metadata.name || '',
+    email: session.customer_email || '',
+    cartItems: metadata.cartItems || [],
+    pickupName: metadata.pickupName || '',
+    pickupLocation: metadata.pickupLocation || 'Farm',
+    pickupTime: metadata.pickupTime || new Date(),
+  });
 
-		const { error } = await stripe.redirectToCheckout({ sessionId });
-		if (error) console.error('Stripe redirect error:', error.message);
-	} catch (err) {
-		console.error('Error starting checkout:', err);
-	} finally {
-		setLoading(false);
-	}
-};
+  try {
+    await newOrder.save();
+    console.log('📝 Order saved to MongoDB:', newOrder._id);
+  } catch (err) {
+    console.error('❌ Failed to save order:', err.message);
+  }
+}
