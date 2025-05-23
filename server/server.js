@@ -23,7 +23,7 @@ import webhookRoutes from './routes/webhookRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
-app.use('/webhook', webhookRoutes);
+
 
 // ✅ Set allowed origins from .env or fallback
 const allowedOrigins = [process.env.CLIENT_URL || 'http://localhost:5173'];
@@ -57,6 +57,7 @@ app.use(
 
 // Middleware
 app.use(morgan('dev'));
+app.use('/webhook', express.raw({ type: 'application/json' }), webhookRoutes);
 app.use(express.json());
 
 // ✅ Serve static files (uploads)
