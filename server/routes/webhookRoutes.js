@@ -4,6 +4,7 @@ import express from 'express';
 import Stripe from 'stripe';
 import dotenv from 'dotenv';
 import Order from '../models/orderModel.js';
+import { sendOrderConfirmationEmail } from '../utils/sendEmail.js';
 
 dotenv.config();
 
@@ -75,6 +76,43 @@ router.post(
 					'\nError:',
 					err.message
 				);
+			}
+			// ✅ Now comes the email logic (in a separate try/catch)
+			if (session.customer_email) {
+				try {
+					await sendOrderConfirmationEmail({
+						to: session.customer_email,
+						subject: 'Your Blueberry Dairy Order Confirmation',
+						name: newOrder.name,
+						cartItems: newOrder.cartItems,
+						pickupName: newOrder.pickupName,
+						pickupLocation: newOrder.pickupLocation,
+						pickupTime: newOrder.pickupTime.toLocaleString(),
+					});
+					console.log('📧 Confirmation email sent to customer');
+				} catch (err) {
+					console.error(
+						'❌ Failed to send confirmation email to customer:',
+						err.message
+					);
+				}
+			}
+
+			// ✅ Optional: admin email notification
+			try {
+				await sendOrderConfirmationEmail({
+					to: process.env.ADMIN_EMAIL,
+					subject: 'New Blueberry Dairy Order',
+					name: newOrder.name,
+					cartItems: newOrder.cartItems,
+					pickupName: newOrder.pickupName,
+					pickupLocation: newOrder.pickupLocation,
+					pickupTime: newOrder.pickupTime.toLocaleString(),
+					isAdminCopy: true,
+				});
+				console.log('📧 Admin notification sent');
+			} catch (err) {
+				console.error('❌ Failed to send admin notification:', err.message);
 			}
 		} else {
 			console.log(`ℹ️ Unhandled event type: ${event.type}`);

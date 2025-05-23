@@ -1,5 +1,5 @@
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from 'dotenv';
+dotenv.config();
 import { Resend } from 'resend';
 
 /**
@@ -84,7 +84,6 @@ export const sendOrderConfirmationEmail = async ({
 //Send password reset email
 // @ts-nocheck
 
-
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Send password reset email
@@ -125,5 +124,3 @@ export const sendPasswordResetEmail = async ({ to, name, resetURL }) => {
 		throw new Error('Email sending failed');
 	}
 };
-
-

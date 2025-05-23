@@ -33,7 +33,7 @@ router.post('/create-session', async (req, res) => {
 				}))
 			),
 		};
-console.log('🧠 Metadata sent to Stripe:', metadata);
+		console.log('🧠 Metadata sent to Stripe:', metadata);
 
 		const lineItems = cartItems.map((item) => ({
 			price_data: {
@@ -56,6 +56,7 @@ console.log('🧠 Metadata sent to Stripe:', metadata);
 			payment_method_types: ['card'],
 			mode: 'payment',
 			line_items: lineItems,
+			customer_email: form.email || '', // ✅ This is what populates session.customer_email
 			metadata, // ✅ Sent to the webhook as `session.metadata`
 			success_url: `${process.env.CLIENT_URL}/confirmation`,
 			cancel_url: `${process.env.CLIENT_URL}/cart`,
