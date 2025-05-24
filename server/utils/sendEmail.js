@@ -1,3 +1,4 @@
+// @ts-nocheck
 import dotenv from 'dotenv';
 dotenv.config();
 import { Resend } from 'resend';
@@ -122,5 +123,94 @@ export const sendPasswordResetEmail = async ({ to, name, resetURL }) => {
 	} catch (error) {
 		console.error('❌ Failed to send password reset email:', error.message);
 		throw new Error('Email sending failed');
+	}
+};
+
+/**
+ * Sends a contact form submission to the admin email.
+ * @param {Object} options
+ * @param {string} options.name - Full name of the sender.
+ * @param {string} options.email - Sender's email address.
+ * @param {string} options.subject - Subject of the message.
+ * @param {string} options.message - Message content.
+ * @param {string} [options.company] - Optional company name.
+ */
+export const sendContactEmail = async ({
+	name,
+	email,
+	subject,
+	message,
+	company,
+}) => {
+	const resend = new Resend(process.env.RESEND_API_KEY);
+
+	const adminHtml = `
+    <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">
+      <h2 style="color: #2c5282;">New Contact Message</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      ${company ? `<p><strong>Company:</strong> ${company}</p>` : ''}
+      <p><strong>Subject:</strong> ${subject}</p>
+      <p><strong>Message:</strong></p>
+      <p style="white-space: pre-wrap;">${message}</p>
+    </div>
+  `;
+
+const autoReplyHtml = `
+  <div style="font-family: 'Georgia', serif; max-width: 600px; margin: auto; color: #3d3d3d; background: #f8f5f2; border: 1px solid #ddd; padding: 24px; border-radius: 8px;">
+    <h2 style="color: #2e4a28; font-size: 26px;">Thank you for reaching out to Blueberry Dairy!</h2>
+
+    <p style="font-size: 16px; line-height: 1.6;">
+      Hi <strong>${name}</strong>,
+    </p>
+
+    <p style="font-size: 16px; line-height: 1.6;">
+      We’ve received your message and will get back to you shortly.
+    </p>
+
+    <p style="font-size: 16px; line-height: 1.6;">Here’s a copy of your submission:</p>
+
+    <div style="background: #fff; padding: 16px; border: 1px solid #ccc; border-radius: 6px; margin-top: 12px;">
+      <p><strong>Subject:</strong> ${subject}</p>
+      <p style="white-space: pre-wrap;"><strong>Message:</strong><br/>${message}</p>
+    </div>
+
+    <p style="font-size: 15px; line-height: 1.6; margin-top: 20px;">
+      In the meantime, feel free to explore our <a href="https://blueberrydairy.com/products" style="color: #4f46e5; text-decoration: none;">products</a> or learn more <a href="https://blueberrydairy.com/our-farm" style="color: #4f46e5; text-decoration: none;">about our farm</a>.
+    </p>
+
+    <p style="margin-top: 24px; font-size: 14px; color: #666;">
+      With gratitude,<br/>
+      <strong>Blueberry Dairy</strong><br/>
+      <em>Local. Regenerative. Real.</em>
+    </p>
+  </div>
+`;
+
+
+	try {
+		// Send to admin
+		const adminResponse = await resend.emails.send({
+			from: 'Blueberry Dairy <contact@blueberrydairy.com>',
+			to: process.env.ADMIN_EMAIL,
+			reply_to: email,
+			subject: `Contact Form: ${subject}`,
+			html: adminHtml,
+		});
+		console.log(`📧 Contact email sent to admin:`, adminResponse);
+
+		// Auto-reply to sender
+		const userResponse = await resend.emails.send({
+			from: 'Blueberry Dairy <contact@blueberrydairy.com>',
+			to: email,
+			subject: 'We’ve received your message',
+			html: autoReplyHtml,
+		});
+		console.log(`📧 Auto-reply sent to customer:`, userResponse);
+
+		return { adminResponse, userResponse };
+	} catch (error) {
+		console.error('❌ Failed to send contact emails:', error);
+		throw new Error(`Failed to send contact emails: ${error.message}`);
 	}
 };

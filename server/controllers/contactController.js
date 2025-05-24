@@ -1,9 +1,10 @@
 import Contact from '../models/contactModel.js';
+import { sendContactEmail } from '../utils/sendEmail.js';
+
 
 export const createContact = async (req, res) => {
 	try {
-		const { firstName, lastName, email, company, subject, message, createdAt } =
-			req.body;
+		const { firstName, lastName, email, company, subject, message } = req.body;
 
 		if (!firstName || !lastName || !email || !subject || !message) {
 			return res.status(400).json({ message: 'Please enter required fields' });
@@ -13,18 +14,32 @@ export const createContact = async (req, res) => {
 			firstName,
 			lastName,
 			email,
+			company,
 			subject,
 			message,
 		});
+
 		await newContact.save();
-		res
-			.status(201)
-			.json({ message: 'Contact form submitted!', contact: newContact });
+
+		// ✅ Forward contact email to admin
+		await sendContactEmail({
+			name: `${firstName} ${lastName}`,
+			email,
+			subject,
+			message,
+			company,
+		});
+
+		res.status(201).json({
+			message: 'Contact form submitted and emailed!',
+			contact: newContact,
+		});
 	} catch (error) {
 		console.error('Error creating contact: ', error);
 		res.status(500).json({ message: 'Server Error. Please try again later.' });
 	}
 };
+
 
 export const getAllContacts = async (req, res) => {
 	try {
