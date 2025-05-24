@@ -58,7 +58,7 @@ router.post('/create-session', async (req, res) => {
 			line_items: lineItems,
 			customer_email: form.email || '', // ✅ This is what populates session.customer_email
 			metadata, // ✅ Sent to the webhook as `session.metadata`
-			success_url: `${process.env.CLIENT_URL}/confirmation`,
+			success_url: `${process.env.CLIENT_URL}/confirmation?session_id={CHECKOUT_SESSION_ID}`,
 			cancel_url: `${process.env.CLIENT_URL}/cart`,
 		});
 

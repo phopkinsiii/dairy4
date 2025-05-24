@@ -2,31 +2,39 @@
 // src/pages/Confirmation.jsx
 
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useCartContext } from '../contexts/CartContext';
+import axiosInstance from '../api/axios.js';
 
 export default function Confirmation() {
 	const navigate = useNavigate();
+	const [searchParams] = useSearchParams();
+	const sessionId = searchParams.get('session_id');
+	const { dispatch } = useCartContext();
 	const [order, setOrder] = useState(null);
 
 	useEffect(() => {
-		try {
-			const stored = localStorage.getItem('latestOrder');
-			if (!stored) {
-				navigate('/');
-				return;
-			}
-
-			const parsed = JSON.parse(stored);
-			setOrder(parsed);
-		} catch (err) {
-			console.error('❌ Failed to parse order from localStorage:', err);
+		if (!sessionId) {
 			navigate('/');
+			return;
 		}
-	}, [navigate]);
+		const fetchOrder = async () => {
+			try {
+				const { data } = await axiosInstance.get(
+					`/orders/session/${sessionId}`
+				);
+				setOrder(data);
+				dispatch({ type: 'CLEAR_CART' });
+			} catch (error) {
+				console.error('❌ Failed to fetch order:', error);
+			}
+		};
+		fetchOrder();
+	}, [navigate, sessionId, dispatch]);
 
 	if (!order) return null;
 
-	const { pickupName, pickupLocation, pickupTime } = order.order || {};
+	const { pickupName, pickupLocation, pickupTime } = order || {};
 
 	const formattedTime = pickupTime
 		? new Date(pickupTime).toLocaleString(undefined, {

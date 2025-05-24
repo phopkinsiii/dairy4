@@ -66,3 +66,17 @@ export const createOrder = asyncHandler(async (req, res) => {
     adminEmailResult,
   });
 });
+
+export const getOrderBySessionId = async (req, res) => {
+  try {
+    const {sessionId} = req.params;
+    const order = await Order.findOne({stripeSessionId: sessionId})
+
+    if(!order) {
+      return res.status(404).json({message: 'Order not found'})
+    }
+    res.json(order);
+  } catch (error) {
+    console.error('❌ Error in getOrderBySessionId:', error.message)
+  }
+}
