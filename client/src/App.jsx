@@ -31,6 +31,7 @@ import Accessibility from './pages/Accessibility.jsx';
 import ManagePosts from './pages/admin/ManagePosts.jsx';
 import AccessDenied from './components/AccessDenied.jsx';
 import UpdateBlog from './pages/admin/UpdateBlog.jsx';
+import AdminOrders from './pages/admin/AdminOrders.jsx'; 
 
 function App() {
 	return (
@@ -110,6 +111,7 @@ function App() {
 							</AdminRoute>
 						}
 					/>
+					<Route path='/admin-orders' element={<AdminOrders />} />
 					<Route path='access-denied' element={<AccessDenied />} />
 				</Routes>
 			</NavbarLayout>

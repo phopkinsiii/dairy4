@@ -14,4 +14,13 @@ const axiosInstance = axios.create({
 });
 console.log('📦 Axios is using baseURL:', baseURL);
 
+axiosInstance.interceptors.request.use((config) => {
+	const storedUser = JSON.parse(localStorage.getItem('user'));
+	const token = storedUser?.token;
+	if (token) {
+		config.headers.Authorization = `Bearer ${token}`;
+	}
+	return config;
+});
+
 export default axiosInstance;
