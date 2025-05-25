@@ -2,6 +2,7 @@
 
 import { useContactContext } from '../contexts/ContactContext';
 import Spinner from '../components/Spinner';
+import { validateContactForm } from '../utils/validators';
 
 import { Title, Meta, Link as HeadLink } from 'react-head';
 
@@ -27,6 +28,14 @@ export default function Contact() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const formData = { firstName, lastName, email, company, subject, message };
+
+		// ✅ Run frontend validation
+		const error = validateContactForm(formData);
+		if (error) {
+			dispatch({ type: 'SUBMIT_FAILURE', payload: error });
+			return;
+		}
+
 		await submitContactForm(formData);
 	};
 	// ✅ Show spinner while submitting
@@ -125,7 +134,7 @@ export default function Contact() {
 							<button
 								type='button'
 								onClick={() => dispatch({ type: 'RESET_FORM' })}
-								className='text-sm text-gray-500 hover:text-gray-700 underline'
+								className='bg-red-500 text-white px-6 py-3 rounded font-semibold hover:bg-indigo-500 transition duration-200'
 							>
 								Clear Form
 							</button>

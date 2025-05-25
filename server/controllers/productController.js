@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 export const getAllProducts = async (req, res, next) => {
 	try {
 		const page = Number(req.query.page) || 1; //Default page size
-		const pageSize = Number(req.query.pageSize) || 10
+		const pageSize = Number(req.query.pageSize) || 10;
 
 		//Calculate the number of products to skip for the current page
 		const skip = (page - 1) * pageSize;
@@ -49,31 +49,54 @@ export const getSingleProduct = async (req, res, next) => {
 };
 
 //Protected, Admin Only Routes
+// @desc   Create a new product
+// @route  POST /api/products
+// @access Admin
 export const createProduct = async (req, res, next) => {
-	  const error = validateProductData(req.body);
-  if (error) {
-    return res.status(400).json({ message: error });
-  }
-  try {
-    const { name, description, priceOptions, imageSrc, category, imageAlt, stock } = req.body;
+	try {
+		// ✅ Validate request body
+		const error = validateProductData(req.body);
+		if (error) {
+			return res.status(400).json({ message: error });
+		}
 
-    const newProduct = await Product.create({
-      name,
-      description,
-      priceOptions,
-      category,
-      imageSrc,
-      imageAlt,
-      stock,
-      createdBy: req.user._id,
-    });
+		const {
+			name,
+			description,
+			priceOptions,
+			imageSrc,
+			category,
+			imageAlt,
+			stock,
+		} = req.body;
 
-    res.status(201).json({ message: 'Product Created', newProduct });
-  } catch (error) {
-    next(error);
-  }
+		// ✅ Check for existing product with the same name
+		const existingProduct = await Product.findOne({ name });
+		if (existingProduct) {
+			return res
+				.status(400)
+				.json({ message: 'A product with this name already exists.' });
+		}
+
+		// ✅ Create the product
+		const newProduct = await Product.create({
+			name,
+			description,
+			priceOptions,
+			category,
+			imageSrc,
+			imageAlt,
+			stock,
+			createdBy: req.user._id,
+		});
+
+		res
+			.status(201)
+			.json({ message: 'Product created successfully.', newProduct });
+	} catch (error) {
+		next(error);
+	}
 };
-
 
 //Update Product
 export const updateProduct = async (req, res, next) => {
