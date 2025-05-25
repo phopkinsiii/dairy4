@@ -1,15 +1,16 @@
-<div className="flex flex-wrap gap-4 justify-end mb-4">
-	<button
-		onClick={() => setShowFulfilled((prev) => !prev)}
-		className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
-	>
-		{showFulfilled ? 'Hide Fulfilled Orders' : 'Show Fulfilled Orders'}
-	</button>
+<div className="flex justify-between items-center mt-6">
+  <button
+    type="button"
+    onClick={() => dispatch({ type: 'RESET_FORM' })}
+    className="text-sm text-gray-500 hover:text-gray-700 underline"
+  >
+    Clear Form
+  </button>
 
-	<button
-		onClick={() => setShowDateFilter((prev) => !prev)}
-		className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition"
-	>
-		{showDateFilter ? 'Hide Date Filter' : 'Filter by Date'}
-	</button>
+  <button
+    type="submit"
+    className="bg-indigo-600 text-white px-6 py-3 rounded font-semibold hover:bg-indigo-500 transition duration-200"
+  >
+    {loading ? 'Sending...' : 'Send Message'}
+  </button>
 </div>

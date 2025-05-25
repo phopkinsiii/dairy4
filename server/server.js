@@ -24,7 +24,6 @@ import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 
-
 // ✅ Set allowed origins from .env or fallback
 const allowedOrigins = [process.env.CLIENT_URL || 'http://localhost:5173'];
 
@@ -77,13 +76,11 @@ app.use(
 // ✅ Routes
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/contact', contactRoutes);
+app.use('/api/contacts', contactRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/checkout', checkoutRoutes);
-
-
 
 // ✅ Error handler
 app.use(errorHandler);

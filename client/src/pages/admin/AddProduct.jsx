@@ -1,8 +1,10 @@
 // src/pages/admin/AddProduct.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axios';
 import { useUserContext } from '../../contexts/UserContext';
+
+
 
 const AddProduct = () => {
   const { state } = useUserContext();

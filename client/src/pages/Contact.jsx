@@ -1,11 +1,23 @@
 // @ts-nocheck
-import React from 'react';
+
 import { useContactContext } from '../contexts/ContactContext';
+import Spinner from '../components/Spinner';
+
 import { Title, Meta, Link as HeadLink } from 'react-head';
 
 export default function Contact() {
 	const { state, dispatch, submitContactForm } = useContactContext();
-	const { firstName, lastName, email, company, subject, message, loading } = state;
+	const {
+		firstName,
+		lastName,
+		email,
+		company,
+		subject,
+		message,
+		loading,
+		successMessage,
+		errorMessage,
+	} = state;
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -15,121 +27,114 @@ export default function Contact() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const formData = { firstName, lastName, email, company, subject, message };
-		dispatch({
-			type: 'SUBMIT_SUCCESS',
-			payload: 'Your message has been sent successfully. Thank you!',
-		});
-		try {
-			await submitContactForm(formData);
-		} catch (error) {
-			console.error('Your message failed to submit. Please try again!', error);
-		}
+		await submitContactForm(formData);
 	};
+	// ✅ Show spinner while submitting
+	if (loading) return <Spinner />;
 
 	return (
 		<>
-			{/* SEO Metadata */}
 			<Title>Contact Us | Blueberry Dairy</Title>
-			<Meta name="description" content="Contact Blueberry Dairy about raw goat milk, blueberries, farm pickups, and local deliveries." />
-			<HeadLink rel="canonical" href="https://blueberrydairy.com/contact" />
+			<Meta
+				name='description'
+				content="Have questions about our raw goat milk, farm pickups, or local deliveries? Contact Blueberry Dairy — we'd love to hear from you!"
+			/>
+			<HeadLink rel='canonical' href='https://blueberrydairy.com/contact' />
 
 			<div
-				className="min-h-screen flex items-center justify-center px-4 py-16 bg-cover bg-center"
+				className='bg-cover bg-center min-h-screen flex items-center justify-center px-6 py-20'
 				style={{
-					backgroundImage: "url('/images/blueberriesxl.jpg')",
-					fontFamily: "'Lora', serif",
+					backgroundImage: `url('/images/blueberriesxl.jpg')`,
+					fontFamily: `'Lora', serif`,
 				}}
 			>
-				{/* Transparent Glass Card */}
-				<div className="bg-white/20 backdrop-blur-md shadow-xl rounded-xl p-10 max-w-4xl w-full border border-white/30">
-					<h2 className="text-4xl font-playfair text-white mb-8 text-center drop-shadow-md">
-						Let us know how we can help you eat healthy!
+				<div className='bg-white/30 backdrop-blur-md p-10 rounded-lg shadow-2xl max-w-3xl w-full'>
+					<h2 className='text-4xl font-bold text-stone-800 mb-6 text-center'>
+						Let’s Connect
 					</h2>
 
-					<form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-white">
-						<div>
-							<label htmlFor="firstName" className="block font-semibold">First Name</label>
+					{successMessage && (
+						<div className='mb-4 p-4 bg-green-100 text-green-800 border border-green-300 rounded text-md text-center'>
+							{successMessage}
+						</div>
+					)}
+
+					{errorMessage && (
+						<div className='mb-4 p-4 bg-red-100 text-red-800 border border-red-300 rounded text-md text-center'>
+							{errorMessage}
+						</div>
+					)}
+
+					<form onSubmit={handleSubmit} className='grid gap-6'>
+						<div className='grid sm:grid-cols-2 gap-6'>
 							<input
-								type="text"
-								id="firstName"
-								name="firstName"
+								type='text'
+								name='firstName'
 								value={firstName}
 								onChange={handleChange}
-								required
-								className="mt-1 w-full px-4 py-2 rounded-md bg-white/60 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+								placeholder='First Name'
+								className='w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
 							/>
-						</div>
-
-						<div>
-							<label htmlFor="lastName" className="block font-semibold">Last Name</label>
 							<input
-								type="text"
-								id="lastName"
-								name="lastName"
+								type='text'
+								name='lastName'
 								value={lastName}
 								onChange={handleChange}
-								required
-								className="mt-1 w-full px-4 py-2 rounded-md bg-white/60 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+								placeholder='Last Name'
+								className='w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
 							/>
 						</div>
 
-						<div className="sm:col-span-2">
-							<label htmlFor="email" className="block font-semibold">Email</label>
-							<input
-								type="email"
-								id="email"
-								name="email"
-								value={email}
-								onChange={handleChange}
-								required
-								className="mt-1 w-full px-4 py-2 rounded-md bg-white/60 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-							/>
-						</div>
+						<input
+							type='email'
+							name='email'
+							value={email}
+							onChange={handleChange}
+							placeholder='Email'
+							className='w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
+						/>
 
-						<div className="sm:col-span-2">
-							<label htmlFor="company" className="block font-semibold">Company (optional)</label>
-							<input
-								type="text"
-								id="company"
-								name="company"
-								value={company}
-								onChange={handleChange}
-								className="mt-1 w-full px-4 py-2 rounded-md bg-white/60 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-							/>
-						</div>
+						<input
+							type='text'
+							name='company'
+							value={company}
+							onChange={handleChange}
+							placeholder='Company (optional)'
+							className='w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
+						/>
 
-						<div className="sm:col-span-2">
-							<label htmlFor="subject" className="block font-semibold">Subject</label>
-							<input
-								type="text"
-								id="subject"
-								name="subject"
-								value={subject}
-								onChange={handleChange}
-								required
-								className="mt-1 w-full px-4 py-2 rounded-md bg-white/60 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-							/>
-						</div>
+						<input
+							type='text'
+							name='subject'
+							value={subject}
+							onChange={handleChange}
+							placeholder='Subject'
+							className='w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
+						/>
 
-						<div className="sm:col-span-2">
-							<label htmlFor="message" className="block font-semibold">Message</label>
-							<textarea
-								id="message"
-								name="message"
-								rows={5}
-								value={message}
-								onChange={handleChange}
-								required
-								className="mt-1 w-full px-4 py-2 rounded-md bg-white/60 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-							></textarea>
-						</div>
+						<textarea
+							name='message'
+							value={message}
+							onChange={handleChange}
+							rows={5}
+							placeholder='Your message...'
+							className='w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none'
+						/>
 
-						<div className="sm:col-span-2 text-right">
+						<div className='flex justify-between items-center mt-6'>
 							<button
-								type="submit"
-								className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-md font-semibold shadow-md"
+								type='button'
+								onClick={() => dispatch({ type: 'RESET_FORM' })}
+								className='text-sm text-gray-500 hover:text-gray-700 underline'
 							>
-								{loading ? 'Sending...' : 'Send Message'}
+								Clear Form
+							</button>
+
+							<button
+								type='submit'
+								className='bg-indigo-600 text-white px-6 py-3 rounded font-semibold hover:bg-indigo-500 transition duration-200'
+							>
+								Send
 							</button>
 						</div>
 					</form>

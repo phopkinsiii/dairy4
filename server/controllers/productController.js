@@ -1,5 +1,7 @@
 // @ts-nocheck
 import Product from '../models/productModel.js';
+import { validateProductData } from '../utils/validators.js';
+
 import mongoose from 'mongoose';
 
 export const getAllProducts = async (req, res, next) => {
@@ -48,6 +50,10 @@ export const getSingleProduct = async (req, res, next) => {
 
 //Protected, Admin Only Routes
 export const createProduct = async (req, res, next) => {
+	  const error = validateProductData(req.body);
+  if (error) {
+    return res.status(400).json({ message: error });
+  }
   try {
     const { name, description, priceOptions, imageSrc, category, imageAlt, stock } = req.body;
 

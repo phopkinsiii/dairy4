@@ -89,3 +89,12 @@ h6 {
 		animation: float 4s ease-in-out infinite;
 	}
 }
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-lora {
+  font-family: 'Lora', serif;
+}
+
