@@ -1,4 +1,4 @@
-// src/components/PopoverMessage.jsx
+// @ts-nocheck
 import { useEffect, useRef } from 'react';
 
 const PopoverMessage = ({ message, onClose }) => {
@@ -36,19 +36,4 @@ const PopoverMessage = ({ message, onClose }) => {
 };
 
 export default PopoverMessage;
-
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: scale(0.95);
-	}
-	to {
-		opacity: 1;
-		transform: scale(1);
-	}
-}
-
-.animate-fade-in {
-	animation: fadeIn 0.25s ease-out forwards;
-}
 
