@@ -33,7 +33,7 @@ const StickyNavbar = () => {
 	];
 
 	return (
-		<nav className='sticky top-0 left-0 w-full z-50'>
+		<nav className='fixed top-0 left-0 w-full z-50'>
 			<div
 				className={`relative transition-all duration-300 ${
 					scrolled ? 'backdrop-blur-md bg-white/20' : 'bg-transparent'

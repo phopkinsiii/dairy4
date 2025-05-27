@@ -16,6 +16,7 @@ router.post(
 	'/',
 	express.raw({ type: 'application/json' }),
 	async (req, res) => {
+		console.log('⚡ Webhook received');
 		const sig = req.headers['stripe-signature'];
 
 		let event;
@@ -51,6 +52,7 @@ router.post(
 
 			const newOrder = new Order({
 				guest: true,
+				user: null,
 				name: session.metadata.name || '',
 				email: session.customer_email || '',
 				cartItems: cartItems.map((item) => ({
@@ -69,13 +71,10 @@ router.post(
 			try {
 				await newOrder.save();
 				console.log('📝 Order saved to MongoDB:', newOrder._id);
+				console.log('🔍 Saved stripeSessionId:', newOrder.stripeSessionId);
 			} catch (err) {
-				console.error(
-					'🧨 Order save failed:',
-					newOrder,
-					'\nError:',
-					err.message
-				);
+				console.error('❌ Order save failed:', err.message);
+				console.error('Full error:', err);
 			}
 			// ✅ Now comes the email logic (in a separate try/catch)
 			if (session.customer_email) {

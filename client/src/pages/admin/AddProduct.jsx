@@ -1,7 +1,11 @@
+// @ts-nocheck
 // src/pages/admin/AddProduct.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axios';
+import axios from 'axios';
+import imageCompression from 'browser-image-compression';
+
 import { useUserContext } from '../../contexts/UserContext';
 
 
@@ -39,9 +43,23 @@ const AddProduct = () => {
     });
   };
 
-  const handleImageChange = (e) => {
-    setImageFile(e.target.files[0]);
-  };
+const handleImageChange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  try {
+    const options = {
+      maxSizeMB: 1,          // Max size (MB)
+      maxWidthOrHeight: 1200, // Resize if needed
+      useWebWorker: true,
+    };
+    const compressedFile = await imageCompression(file, options);
+    setImageFile(compressedFile);
+  } catch (err) {
+    console.error('Image compression failed:', err);
+    setError('Image compression failed. Try a smaller file.');
+  }
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,18 +68,17 @@ const AddProduct = () => {
     try {
       const token = state.user?.token;
 
-      let imageSrc = '';
-      if (imageFile) {
-        const formData = new FormData();
-        formData.append('image', imageFile);
+let imageSrc = '';
+if (imageFile) {
+  const formData = new FormData();
+  formData.append('file', imageFile);
+  formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET); // your preset
 
-        const uploadRes = await axiosInstance.post('/uploads', formData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-		 console.log('🖼️ Uploaded image response:', uploadRes.data); // <== add this
-        imageSrc = uploadRes.data.imageUrl;
+  const uploadRes = await axios.post(import.meta.env.VITE_CLOUDINARY_UPLOAD_URL, formData);
+  console.log('🖼️ Uploaded to Cloudinary:', uploadRes.data);
+  imageSrc = uploadRes.data.secure_url;
+}
 
-      }
 
       const productData = {
         ...product,

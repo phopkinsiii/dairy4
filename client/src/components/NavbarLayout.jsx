@@ -31,7 +31,7 @@ const NavbarLayout = ({ children }) => {
 
 
 			{/* Page content */}
-			<main id="main-content">
+			<main id="main-content" className='pt-24'>
 				{children}
 			</main>
 		</>

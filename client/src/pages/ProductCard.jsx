@@ -1,86 +1,90 @@
-// @ts-nocheck
 import { useState } from 'react';
 import { useCartContext } from '../contexts/CartContext.jsx';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product }) => {
 	const { dispatch } = useCartContext();
-	const [selectedIndex, setSelectedIndex] = useState(0); // Default to first option
-
+	const [selectedIndex, setSelectedIndex] = useState(0);
 	const selectedOption = product.priceOptions?.[selectedIndex];
 
-const handleAddToCart = () => {
-	if (!selectedOption) return;
+	const handleAddToCart = (e) => {
+		e.preventDefault(); // ✅ prevents link click from firing
+		if (!selectedOption) return;
 
-	dispatch({
-		type: 'ADD_ITEM',
-		payload: {
-			...product,
-			quantity: 1,
-			price: selectedOption.price,             // ✅ still needed for quick access
-			selectedSize: selectedOption.size,       // ✅ still needed for cart display
-			selectedOption,                          // ✅ critical for Stripe checkout
-		},
-	});
+		dispatch({
+			type: 'ADD_ITEM',
+			payload: {
+				...product,
+				quantity: 1,
+				price: selectedOption.price,
+				selectedSize: selectedOption.size,
+				selectedOption,
+			},
+		});
 
-	toast.success(`${product.name} added to cart!`, {
-		position: 'bottom-right',
-		autoClose: 1200,
-		hideProgressBar: true,
-		closeOnClick: true,
-		pauseOnHover: false,
-		draggable: false,
-		theme: 'light',
-		className: 'text-sm px-3 py-2 rounded shadow-md border border-green-200',
-	});
-};
+		toast.success(`${product.name} added to cart!`, {
+			position: 'bottom-right',
+			autoClose: 1200,
+			hideProgressBar: true,
+			closeOnClick: true,
+			pauseOnHover: false,
+			draggable: false,
+			theme: 'light',
+			className: 'text-sm px-3 py-2 rounded shadow-md border border-green-200',
+		});
+	};
 
 	return (
-		<div
-			className='bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col'
-			style={{ fontFamily: 'Poppins, sans-serif' }}
-		>
-			<img
-				src={`${import.meta.env.VITE_MEDIA_BASE_URL}${product.imageSrc}`}
-				alt={product.imageAlt || 'Product image'}
-				crossOrigin='anonymous'
-				className='w-full h-64 object-cover rounded-t-lg'
-			/>
+		<Link to={`/products/${product._id}`} className='hover:no-underline'>
+			<div
+				className='bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col'
+				style={{ fontFamily: 'Poppins, sans-serif' }}
+			>
+				<img
+					src={`${import.meta.env.VITE_MEDIA_BASE_URL}${product.imageSrc}`}
+					alt={product.imageAlt || 'Product image'}
+					loading='lazy'
+					crossOrigin='anonymous'
+					className='w-full h-64 object-cover rounded-t-lg'
+				/>
 
-			<div className='flex flex-col flex-grow p-4'>
-				<h3 className='text-xl font-semibold text-gray-900 mb-1'>
-					{product.name}
-				</h3>
-				<p className='text-gray-700 text-sm flex-grow'>{product.description}</p>
+				<div className='flex flex-col flex-grow p-4'>
+					<h3 className='text-xl font-semibold text-gray-900 mb-1'>
+						{product.name}
+					</h3>
+					<p className='text-gray-700 text-sm flex-grow'>
+						{product.description}
+					</p>
 
-				{/* Option selector */}
-				{product.priceOptions?.length > 0 && (
-					<div className='mt-3'>
-						<label className='block text-sm text-gray-600 mb-1'>
-							Select size:
-						</label>
-						<select
-							value={selectedIndex}
-							onChange={(e) => setSelectedIndex(Number(e.target.value))}
-							className='w-full border border-gray-300 rounded px-2 py-1 text-sm'
-						>
-							{product.priceOptions.map((option, index) => (
-								<option key={index} value={index}>
-									${option.price.toFixed(2)} per {option.size}
-								</option>
-							))}
-						</select>
-					</div>
-				)}
+					{product.priceOptions?.length > 0 && (
+						<div className='mt-3'>
+							<label className='block text-sm text-gray-600 mb-1'>
+								Select size:
+							</label>
+							<select
+								value={selectedIndex}
+								onChange={(e) => setSelectedIndex(Number(e.target.value))}
+								className='w-full border border-gray-300 rounded px-2 py-1 text-sm'
+							>
+								{product.priceOptions.map((option, index) => (
+									<option key={index} value={index}>
+										${option.price.toFixed(2)} per {option.size}
+									</option>
+								))}
+							</select>
+						</div>
+					)}
 
-				<button
-					onClick={handleAddToCart}
-					className='mt-4 w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition'
-				>
-					Add to Cart
-				</button>
+					<button
+						onClick={handleAddToCart}
+						className='mt-4 w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition'
+					>
+						Add to Cart
+					</button>
+				</div>
 			</div>
-		</div>
+		</Link>
 	);
 };
 

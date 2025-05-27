@@ -19,7 +19,12 @@ const productReducer = (state, action) => {
 		case 'SET_LOADING':
 			return { ...state, loading: action.payload };
 		case 'SET_PRODUCTS':
-			return { ...state, products: action.payload };
+			return {
+				...state,
+				products: action.payload,
+				loading: false, // ✅ stops re-renders and duplicate fetches
+				error: null,
+			};
 		case 'SET_ERROR':
 			return { ...state, error: action.payload, loading: false };
 		case 'DELETE_PRODUCT':

@@ -34,6 +34,7 @@ import UpdateBlog from './pages/admin/UpdateBlog.jsx';
 import AdminOrders from './pages/admin/AdminOrders.jsx';
 import PrivateRoute from './pages/admin/PrivateRoute.jsx';
 import ManageUsers from './pages/admin/ManageUsers';
+import ProductDetails from './pages/ProductDetails.jsx';
 
 function App() {
 	return (
@@ -53,6 +54,7 @@ function App() {
 				<Routes>
 					<Route path='/' element={<Home />} />
 					<Route path='/products' element={<ProductList />} />
+					<Route path='/products/:id' element={<ProductDetails />} />
 					<Route path='/cart' element={<Cart />} />
 					<Route path='/our-farm' element={<OurFarm />} />
 					<Route path='/contact' element={<Contact />} />
@@ -108,7 +110,7 @@ function App() {
 					/>
 
 					<Route
-						path='/blog/id:'
+						path='/blog/:id'
 						element={
 							<PrivateRoute>
 								<BlogPost />
