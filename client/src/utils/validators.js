@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 export const validateContactForm = ({
 	firstName,
 	lastName,
@@ -5,15 +7,21 @@ export const validateContactForm = ({
 	subject,
 	message,
 }) => {
-	if (!firstName || !lastName || !email || !subject || !message) {
+	if (
+		!firstName?.trim() ||
+		!lastName?.trim() ||
+		!email ||
+		!subject?.trim() ||
+		!message?.trim()
+	) {
 		return 'All fields except company are required.';
 	}
 
-	if (!email.includes('@')) {
-		return 'A valid email is required.';
+	if (!validator.isEmail(email)) {
+		return 'A valid email address is required.';
 	}
 
-	if (message.length < 10) {
+	if (!validator.isLength(message, { min: 10 })) {
 		return 'Message must be at least 10 characters long.';
 	}
 
@@ -47,12 +55,18 @@ export const validateProductForm = ({
 
 // Register field validators
 
-export const validateRegisterData = ({ name, email, password }) => {
-	if (!name.trim()) return 'Name is required.';
-	if (!email.trim()) return 'Email is required.';
+export const validateRegisterData = ({
+	firstName,
+	lastName,
+	email,
+	password,
+}) => {
+	if (!firstName?.trim()) return 'First name is required.';
+	if (!lastName?.trim()) return 'Last name is required.';
+	if (!email?.trim()) return 'Email is required.';
 	if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
 		return 'Please enter a valid email address.';
-	if (!password.trim()) return 'Password is required.';
+	if (!password?.trim()) return 'Password is required.';
 	if (password.length < 8) return 'Password must be at least 8 characters.';
 	if (!/[A-Z]/.test(password))
 		return 'Password must include at least one uppercase letter.';
@@ -63,7 +77,7 @@ export const validateRegisterData = ({ name, email, password }) => {
 	if (!/[^A-Za-z0-9]/.test(password))
 		return 'Password must include at least one special character.';
 
-	return null; // ✅ Passed
+	return null;
 };
 
 export const validateLoginData = ({ email, password }) => {
@@ -78,13 +92,28 @@ export const validateLoginData = ({ email, password }) => {
 	return null;
 };
 
-
 export const validateStrongPassword = (password) => {
-  const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-  if (!pattern.test(password)) {
-    return 'Password must be at least 8 characters and include uppercase, lowercase, number, and symbol.';
-  }
-  return null;
+	if (!password || password.length < 8) {
+		return 'Password must be at least 8 characters long.';
+	}
+
+	if (!/[A-Z]/.test(password)) {
+		return 'Password must include at least one uppercase letter.';
+	}
+
+	if (!/[a-z]/.test(password)) {
+		return 'Password must include at least one lowercase letter.';
+	}
+
+	if (!/\d/.test(password)) {
+		return 'Password must include at least one number.';
+	}
+
+	if (!/[\W_]/.test(password)) {
+		return 'Password must include at least one special character.';
+	}
+
+	return null;
 };
 
 export const getPasswordStrength = (password) => {
@@ -104,4 +133,3 @@ export const getPasswordStrength = (password) => {
 
 	return { checks, strength };
 };
-

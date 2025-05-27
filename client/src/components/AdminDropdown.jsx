@@ -9,6 +9,7 @@ const dropdownLinks = [
   { label: 'Manage Blog Posts', path: '/manage-posts' },
   { label: 'Update Inventory', path: '/inventory' },
    { label: 'View Orders', path: '/admin-orders' },
+   { label: 'Manage Users', path: '/admin/users' },
 ];
 
 

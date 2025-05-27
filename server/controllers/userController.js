@@ -23,11 +23,11 @@ export const registerUser = async (req, res, next) => {
 		console.log('🔍 Register payload:', req.body);
 		const error = validateRegisterData(req.body);
 		if (error) {
-	console.log('❌ Validation error:', error); // <--- ADD THIS
-	return res.status(400).json({ message: error });
-}
+			console.log('❌ Validation error:', error); // <--- ADD THIS
+			return res.status(400).json({ message: error });
+		}
 
-		const { name, email, password } = req.body;
+		const { firstName, lastName, email, password } = req.body;
 
 		const userExists = await User.findOne({ email });
 		if (userExists) {
@@ -35,7 +35,7 @@ export const registerUser = async (req, res, next) => {
 			return res.status(400).json({ message: 'That email is already in use' });
 		}
 
-		const user = await User.create({ name, email, password });
+		const user = await User.create({ firstName, lastName, email, password });
 
 		if (user) {
 			user.token = generateToken(user._id, user.role);
@@ -150,6 +150,28 @@ export const setAdminRole = async (req, res, next) => {
 		res
 			.status(200)
 			.json({ message: 'User has been granted administrative privileges.' });
+	} catch (error) {
+		next(error);
+	}
+};
+
+// ✅ Toggle Admin Role
+
+export const toggleAdminRole = async (req, res, next) => {
+	const { userId } = req.params;
+	try {
+		const user = await User.findById(userId);
+		if (!user) return res.status(404).json({ message: 'User not found' });
+
+		user.role = user.role === 'admin' ? 'user' : 'admin';
+		await user.save();
+
+		const message =
+			user.role === 'admin'
+				? 'User has been promoted to admin.'
+				: 'User has been demoted to user.';
+
+		res.status(200).json({ message, role: user.role });
 	} catch (error) {
 		next(error);
 	}

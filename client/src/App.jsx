@@ -31,7 +31,9 @@ import Accessibility from './pages/Accessibility.jsx';
 import ManagePosts from './pages/admin/ManagePosts.jsx';
 import AccessDenied from './components/AccessDenied.jsx';
 import UpdateBlog from './pages/admin/UpdateBlog.jsx';
-import AdminOrders from './pages/admin/AdminOrders.jsx'; 
+import AdminOrders from './pages/admin/AdminOrders.jsx';
+import PrivateRoute from './pages/admin/PrivateRoute.jsx';
+import ManageUsers from './pages/admin/ManageUsers';
 
 function App() {
 	return (
@@ -88,13 +90,31 @@ function App() {
 							</AdminRoute>
 						}
 					/>
-					<Route path='/blog' element={<BlogPage />} />
+					{/* <Route path='/blog' element={<BlogPage />} /> */}
 					<Route path='/checkout' element={<Checkout />} />
 					<Route path='/confirmation' element={<Confirmation />} />
-					<Route path='/blog/:id' element={<BlogPost />} />
+					{/* <Route path='/blog/:id' element={<BlogPost />} /> */}
 					<Route path='reset-password' element={<ResetPassword />} />
 					<Route path='forgot-password' element={<ForgotPassword />} />
 					<Route path='/accessibility' element={<Accessibility />} />
+
+					<Route
+						path='/blog'
+						element={
+							<PrivateRoute>
+								<BlogPage />
+							</PrivateRoute>
+						}
+					/>
+
+					<Route
+						path='/blog/id:'
+						element={
+							<PrivateRoute>
+								<BlogPost />
+							</PrivateRoute>
+						}
+					/>
 					<Route
 						path='/manage-posts'
 						element={
@@ -108,6 +128,14 @@ function App() {
 						element={
 							<AdminRoute>
 								<UpdateBlog />
+							</AdminRoute>
+						}
+					/>
+					<Route
+						path='/admin/users'
+						element={
+							<AdminRoute>
+								<ManageUsers />
 							</AdminRoute>
 						}
 					/>

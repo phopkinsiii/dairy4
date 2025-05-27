@@ -1,15 +1,13 @@
-
-
-const Logo = () => {
-  return (
-    <div className="flex justify-center items-center h-full">
-      <img
-        src="/images/goat_logo1.png"
-        alt="Blueberry Dairy Logo"
-        className="h-64 w-auto object-contain max-h-[400px] animate-float transition-transform"
-      />
-    </div>
-  );
+const Logo = ({ className = '' }) => {
+	return (
+		<div className='flex justify-center items-center w-full h-full'>
+			<img
+				src='/images/goat_logo1.png'
+				alt='Blueberry Dairy Logo'
+				className={`object-contain animate-float transition-transform ${className}`}
+			/>
+		</div>
+	);
 };
 
 export default Logo;

@@ -21,7 +21,8 @@ const Register = () => {
 	const [showPopover, setShowPopover] = useState(false);
 
 	const [formData, setFormData] = useState({
-		name: '',
+		firstName: '',
+		lastName: '',
 		email: '',
 		password: '',
 	});
@@ -48,9 +49,10 @@ const Register = () => {
 			return;
 		}
 		try {
+			console.log('🔍 formData being submitted:', formData);
 			await registerUser(formData, dispatch);
 			toast.success(
-				`Welcome, ${formData.name}! Your account has been created.`,
+				`Welcome, ${formData.firstName}! Your account has been created.`,
 				{
 					position: 'top-center',
 					autoClose: 3000,
@@ -61,6 +63,7 @@ const Register = () => {
 					theme: 'colored',
 				}
 			);
+
 			navigate('/');
 		} catch (error) {
 			setError(error.response?.data?.message || 'Registration Failed');
@@ -87,12 +90,21 @@ const Register = () => {
 					<input
 						type='text'
 						className='w-full p-3 border border-white rounded-md'
-						name='name'
-						placeholder='Name'
-						value={formData.name}
+						name='firstName'
+						placeholder='First Name'
+						value={formData.firstName}
 						onChange={handleChange}
-						required
 					/>
+
+					<input
+						type='text'
+						className='w-full p-3 border border-white rounded-md'
+						name='lastName'
+						placeholder='Last Name'
+						value={formData.lastName}
+						onChange={handleChange}
+					/>
+
 					<input
 						type='email'
 						className='w-full p-3 border border-white rounded-md'

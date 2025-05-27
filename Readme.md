@@ -1,54 +1,35 @@
-// src/components/PopoverMessage.jsx
-import { useEffect, useRef } from 'react';
+{users
+  .filter((user) => {
+    const first = user.firstName?.toLowerCase() || '';
+    const last = user.lastName?.toLowerCase() || '';
+    const term = searchTerm.toLowerCase();
+    return first.includes(term) || last.includes(term);
+  })
+  .map((user) => (
+    <tr key={user._id} className="border-t">
+      <td className="px-4 py-2">{user.firstName} {user.lastName}</td>
+      <td className="px-4 py-2">{user.email}</td>
+      <td className="px-4 py-2 capitalize">{user.role}</td>
+      <td className="px-4 py-2">
+        {new Date(user.createdAt).toLocaleDateString()}
+      </td>
+      <td className="px-4 py-2">
+        <button
+          onClick={() => {
+            setSelectedUser(user);
+            setConfirmOpen(true);
+          }}
+          className={`px-3 py-1 rounded text-white ${
+            user.role === 'admin'
+              ? 'bg-red-600 hover:bg-red-700'
+              : 'bg-blue-600 hover:bg-blue-700'
+          }`}
+        >
+          {user.role === 'admin' ? 'Demote to User' : 'Promote to Admin'}
+        </button>
+      </td>
+    </tr>
+  ))}
 
-const PopoverMessage = ({ message, onClose }) => {
-	const popoverRef = useRef();
-
-	useEffect(() => {
-		if (popoverRef.current) {
-			popoverRef.current.focus();
-		}
-	}, []);
-
-	return (
-		<div
-			ref={popoverRef}
-			role='alertdialog'
-			aria-modal='true'
-			tabIndex='-1'
-			className='fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm'
-			onClick={onClose}
-		>
-			<div
-				className='bg-white max-w-sm w-full rounded-lg p-6 shadow-lg transform transition-opacity duration-300 ease-out scale-100 animate-fade-in'
-				onClick={(e) => e.stopPropagation()}
-			>
-				<p className='text-gray-800 text-center text-lg'>{message}</p>
-				<button
-					onClick={onClose}
-					className='mt-4 mx-auto block bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-500 transition'
-				>
-					Got it
-				</button>
-			</div>
-		</div>
-	);
-};
-
-export default PopoverMessage;
-
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: scale(0.95);
-	}
-	to {
-		opacity: 1;
-		transform: scale(1);
-	}
-}
-
-.animate-fade-in {
-	animation: fadeIn 0.25s ease-out forwards;
 }
 

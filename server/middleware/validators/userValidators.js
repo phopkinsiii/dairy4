@@ -1,14 +1,21 @@
 import { body } from 'express-validator';
 
 export const registerValidator = [
-  body('name')
+  body('firstName')
     .trim()
-    .notEmpty().withMessage('Name is required'),
+    .notEmpty().withMessage('First name is required'),
+    
+  body('lastName')
+    .trim()
+    .notEmpty().withMessage('Last name is required'),
 
   body('email')
     .isEmail().withMessage('Please enter a valid email address')
     .normalizeEmail(),
 
   body('password')
-    .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    .isStrongPassword().withMessage(
+      'Password must include uppercase, lowercase, number, symbol, and be at least 8 characters.'
+    ),
 ];
+

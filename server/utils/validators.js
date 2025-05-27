@@ -17,8 +17,13 @@ export const validatePassword = (password) => {
 	return null;
 };
 
-
-export const validateContactForm = ({ firstName, lastName, email, subject, message }) => {
+export const validateContactForm = ({
+	firstName,
+	lastName,
+	email,
+	subject,
+	message,
+}) => {
 	if (!firstName || validator.isEmpty(firstName.trim())) {
 		return 'First name is required.';
 	}
@@ -40,16 +45,27 @@ export const validateContactForm = ({ firstName, lastName, email, subject, messa
 	return null;
 };
 
-
 // ✅ Validate Registration Fields
-export const validateRegisterData = ({ name, email, password }) => {
-	if (!name || !email || !password) {
+export const validateRegisterData = ({
+	firstName,
+	lastName,
+	email,
+	password,
+}) => {
+	if (!firstName?.trim() || !lastName?.trim() || !email || !password) {
 		return 'All fields are required.';
 	}
+
+	if (firstName.trim().length < 2 || lastName.trim().length < 2) {
+		return 'First and last name must be at least 2 characters.';
+	}
+
 	const emailError = validateEmail(email);
 	if (emailError) return emailError;
+
 	const passwordError = validatePassword(password);
 	if (passwordError) return passwordError;
+
 	return null;
 };
 
@@ -72,8 +88,19 @@ export const validateResetPassword = ({ resetToken, newPassword }) => {
 };
 
 // ✅ Validate Product Fields
-export const validateProductData = ({ name, description, priceOptions, category }) => {
-	if (!name || !description || !priceOptions || !Array.isArray(priceOptions) || priceOptions.length === 0) {
+export const validateProductData = ({
+	name,
+	description,
+	priceOptions,
+	category,
+}) => {
+	if (
+		!name ||
+		!description ||
+		!priceOptions ||
+		!Array.isArray(priceOptions) ||
+		priceOptions.length === 0
+	) {
 		return 'Name, description, category, and at least one price option are required.';
 	}
 
@@ -89,4 +116,3 @@ export const validateProductData = ({ name, description, priceOptions, category 
 
 	return null;
 };
-

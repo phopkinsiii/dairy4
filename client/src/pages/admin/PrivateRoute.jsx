@@ -6,11 +6,11 @@ const PrivateRoute = ({ children, adminOnly }) => {
 	const role = JSON.parse(localStorage.getItem('role'));
 
 	if (!role) {
-		return <Navigate to='/login' replace />;
+		return <Navigate to='/access-denied' replace />;
 	}
 
 	if (adminOnly && role !== 'admin') {
-		return <Navigate to='/products' replace />;
+		return <Navigate to='/access-denied' replace />;
 	}
 	return children;
 };
