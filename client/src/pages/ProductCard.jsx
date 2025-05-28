@@ -9,7 +9,7 @@ const ProductCard = ({ product }) => {
 	const selectedOption = product.priceOptions?.[selectedIndex];
 
 	const handleAddToCart = (e) => {
-		e.preventDefault(); // ✅ prevents link click from firing
+		e.preventDefault();
 		if (!selectedOption) return;
 
 		dispatch({
@@ -38,7 +38,7 @@ const ProductCard = ({ product }) => {
 	return (
 		<Link to={`/products/${product._id}`} className='hover:no-underline'>
 			<div
-				className='bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col'
+				className='bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col h-[500px]'
 				style={{ fontFamily: 'Poppins, sans-serif' }}
 			>
 				<img
@@ -46,43 +46,54 @@ const ProductCard = ({ product }) => {
 					alt={product.imageAlt || 'Product image'}
 					loading='lazy'
 					crossOrigin='anonymous'
-					className='w-full h-64 object-cover rounded-t-lg'
+					className='w-full h-48 object-cover rounded-t-lg'
 				/>
 
 				<div className='flex flex-col flex-grow p-4'>
-					<h3 className='text-xl font-semibold text-gray-900 mb-1'>
-						{product.name}
-					</h3>
-					<p className='text-gray-700 text-sm flex-grow'>
-						{product.description}
-					</p>
+	<h3 className='text-lg font-semibold text-gray-900 mb-1 line-clamp-2'>
+		{product.name}
+	</h3>
 
-					{product.priceOptions?.length > 0 && (
-						<div className='mt-3'>
-							<label className='block text-sm text-gray-600 mb-1'>
-								Select size:
-							</label>
-							<select
-								value={selectedIndex}
-								onChange={(e) => setSelectedIndex(Number(e.target.value))}
-								className='w-full border border-gray-300 rounded px-2 py-1 text-sm'
-							>
-								{product.priceOptions.map((option, index) => (
-									<option key={index} value={index}>
-										${option.price.toFixed(2)} per {option.size}
-									</option>
-								))}
-							</select>
-						</div>
-					)}
+	<p className='text-gray-700 text-sm line-clamp-3 mb-1'>
+		{product.description}
+	</p>
 
-					<button
-						onClick={handleAddToCart}
-						className='mt-4 w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition'
-					>
-						Add to Cart
-					</button>
-				</div>
+	<Link
+		to={`/products/${product._id}`}
+		className='text-blue-600 text-sm hover:underline mt-1'
+		onClick={(e) => e.stopPropagation()}
+	>
+		Read more
+	</Link>
+
+	{/* Size selector */}
+	{product.priceOptions?.length > 0 && (
+		<div className='mt-3'>
+			<label className='block text-sm text-gray-600 mb-1'>
+				Select size:
+			</label>
+			<select
+				value={selectedIndex}
+				onChange={(e) => setSelectedIndex(Number(e.target.value))}
+				className='w-full border border-gray-300 rounded px-2 py-1 text-sm'
+			>
+				{product.priceOptions.map((option, index) => (
+					<option key={index} value={index}>
+						${option.price.toFixed(2)} per {option.size}
+					</option>
+				))}
+			</select>
+		</div>
+	)}
+
+	<button
+		onClick={handleAddToCart}
+		className='mt-auto w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition'
+	>
+		Add to Cart
+	</button>
+</div>
+
 			</div>
 		</Link>
 	);
