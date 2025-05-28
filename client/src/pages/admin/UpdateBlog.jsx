@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useUserContext } from '../../contexts/UserContext';
 import { useBlogContext } from '../../contexts/BlogContext';
 import BlogEditor from './BlogEditor';
+import axios from 'axios';
 import axiosInstance from '../../api/axios';
 import { toast } from 'react-toastify';
 
@@ -28,12 +29,10 @@ const UpdateBlog = () => {
 	const [isChanged, setIsChanged] = useState(false);
 	const [error, setError] = useState('');
 
-	// Fetch the post data
 	useEffect(() => {
 		if (id) fetchPostById(id);
 	}, [id, fetchPostById]);
 
-	// Populate the form with the post data
 	useEffect(() => {
 		if (post) {
 			if (
@@ -54,7 +53,6 @@ const UpdateBlog = () => {
 				published: typeof published === 'boolean' ? published : true,
 			};
 
-			console.log('💡 Setting formData from post:', initial);
 			setFormData(initial);
 			setInitialData(initial);
 		}
@@ -77,20 +75,31 @@ const UpdateBlog = () => {
 
 	const handleImageUpload = async () => {
 		if (!selectedFile) return;
-
-		const form = new FormData();
-		form.append('image', selectedFile);
 		setUploading(true);
 		try {
-			const res = await axiosInstance.post('/uploads', form);
-			setFormData((prev) => ({
-				...prev,
-				image: res.data.imageUrl,
-			}));
-			setIsChanged(true);
+			const uploadData = new FormData();
+			uploadData.append('file', selectedFile);
+			uploadData.append(
+				'upload_preset',
+				import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+			);
+
+			const uploadRes = await axios.post(
+				import.meta.env.VITE_CLOUDINARY_UPLOAD_URL,
+				uploadData
+			);
+
+			const imageUrl = uploadRes.data.secure_url;
+
+			// ✅ Update image and mark form as changed
+			setFormData((prev) => {
+				const updated = { ...prev, image: imageUrl };
+				setIsChanged(JSON.stringify(updated) !== JSON.stringify(initialData));
+				return updated;
+			});
 			toast.success('Image uploaded successfully');
 		} catch (err) {
-			console.error('Image upload error:', err);
+			console.error('Cloudinary upload error:', err);
 			toast.error('Image upload failed');
 		} finally {
 			setUploading(false);
@@ -169,7 +178,7 @@ const UpdateBlog = () => {
 					</button>
 					{formData.image && (
 						<img
-							src={`${import.meta.env.VITE_MEDIA_BASE_URL}${formData.image}`}
+							src={formData.image}
 							alt='Current blog'
 							className='w-full max-w-xs rounded mt-2'
 						/>

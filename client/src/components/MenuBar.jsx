@@ -1,149 +1,98 @@
 // @ts-nocheck
-import { useCallback } from 'react';
 import {
-	Bold,
-	Italic,
-	Underline,
-	Strikethrough,
-	Heading1,
-	Heading2,
-	Heading3,
-	ListOrdered,
-	ListBullet,
-	AlignLeft,
-	AlignCenter,
-	AlignRight,
-	Link as LinkIcon,
-	Image as ImageIcon,
-} from '@heroicons/react/24/solid';
+	TbBold,
+	TbItalic,
+	TbUnderline,
+	TbStrikethrough,
+	TbH1,
+	TbH2,
+	TbH3,
+	TbListNumbers,
+	TbList,
+	TbAlignLeft,
+	TbAlignCenter,
+	TbAlignRight,
+	TbLink,
+	TbPhotoPlus,
+} from 'react-icons/tb';
+import { useRef } from 'react';
 
 const MenuBar = ({ editor }) => {
+	const fileInputRef = useRef();
+
 	if (!editor) return null;
 
-	const uploadImageToCloudinary = useCallback(async () => {
-		const fileInput = document.createElement('input');
-		fileInput.type = 'file';
-		fileInput.accept = 'image/*';
+	const handleImageUpload = () => fileInputRef.current?.click();
 
-		fileInput.onchange = async () => {
-			const file = fileInput.files[0];
-			if (!file) return;
+	const insertImage = (url) => {
+		editor.chain().focus().setImage({ src: url }).run();
+	};
 
-			const formData = new FormData();
-			formData.append('file', file);
-			formData.append(
-				'upload_preset',
-				import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-			);
+	const uploadImageToCloudinary = async (file) => {
+		const formData = new FormData();
+		formData.append('file', file);
+		formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
 
-			try {
-				const res = await fetch(import.meta.env.VITE_CLOUDINARY_UPLOAD_URL, {
-					method: 'POST',
-					body: formData,
-				});
+		try {
+			const response = await fetch(import.meta.env.VITE_CLOUDINARY_UPLOAD_URL, {
+				method: 'POST',
+				body: formData,
+			});
 
-				const data = await res.json();
-				if (data.secure_url) {
-					editor.chain().focus().setImage({ src: data.secure_url }).run();
-				} else {
-					console.error('Cloudinary upload failed:', data);
-				}
-			} catch (err) {
-				console.error('Image upload error:', err);
-			}
-		};
+			const data = await response.json();
+			if (data.secure_url) insertImage(data.secure_url);
+		} catch (error) {
+			console.error('Cloudinary upload failed:', error);
+		}
+	};
 
-		fileInput.click();
-	}, [editor]);
+	const onFileChange = (e) => {
+		const file = e.target.files?.[0];
+		if (file) uploadImageToCloudinary(file);
+	};
+
+	const iconButton = (Icon, onClick, isActive, label) => (
+		<button
+			type="button"
+			onClick={onClick}
+			title={label}
+			className={`p-2 rounded hover:bg-gray-100 ${
+				isActive ? 'bg-gray-200' : ''
+			}`}
+		>
+			<Icon className="w-5 h-5" />
+		</button>
+	);
 
 	return (
-		<div className='flex flex-wrap gap-2 mb-4 border-b pb-2'>
-			<button
-				onClick={() => editor.chain().focus().toggleBold().run()}
-				title='Bold'
-			>
-				<Bold className='h-5 w-5 text-gray-700' />
-			</button>
-			<button
-				onClick={() => editor.chain().focus().toggleItalic().run()}
-				title='Italic'
-			>
-				<Italic className='h-5 w-5 text-gray-700' />
-			</button>
-			<button
-				onClick={() => editor.chain().focus().toggleUnderline().run()}
-				title='Underline'
-			>
-				<Underline className='h-5 w-5 text-gray-700' />
-			</button>
-			<button
-				onClick={() => editor.chain().focus().toggleStrike().run()}
-				title='Strikethrough'
-			>
-				<Strikethrough className='h-5 w-5 text-gray-700' />
-			</button>
-			<button
-				onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-				title='Heading 1'
-			>
-				<Heading1 className='h-5 w-5 text-gray-700' />
-			</button>
-			<button
-				onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-				title='Heading 2'
-			>
-				<Heading2 className='h-5 w-5 text-gray-700' />
-			</button>
-			<button
-				onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-				title='Heading 3'
-			>
-				<Heading3 className='h-5 w-5 text-gray-700' />
-			</button>
-			<button
-				onClick={() => editor.chain().focus().toggleBulletList().run()}
-				title='Bullet List'
-			>
-				<ListBullet className='h-5 w-5 text-gray-700' />
-			</button>
-			<button
-				onClick={() => editor.chain().focus().toggleOrderedList().run()}
-				title='Ordered List'
-			>
-				<ListOrdered className='h-5 w-5 text-gray-700' />
-			</button>
-			<button
-				onClick={() => editor.chain().focus().setTextAlign('left').run()}
-				title='Align Left'
-			>
-				<AlignLeft className='h-5 w-5 text-gray-700' />
-			</button>
-			<button
-				onClick={() => editor.chain().focus().setTextAlign('center').run()}
-				title='Align Center'
-			>
-				<AlignCenter className='h-5 w-5 text-gray-700' />
-			</button>
-			<button
-				onClick={() => editor.chain().focus().setTextAlign('right').run()}
-				title='Align Right'
-			>
-				<AlignRight className='h-5 w-5 text-gray-700' />
-			</button>
-			<button
-				onClick={() => {
-					const url = window.prompt('Enter URL');
-					if (url) {
-						editor.chain().focus().setLink({ href: url }).run();
-					}
-				}}
-				title='Insert Link'
-			>
-				<LinkIcon className='h-5 w-5 text-gray-700' />
-			</button>
-			<button onClick={uploadImageToCloudinary} title='Upload Image'>
-				<ImageIcon className='h-5 w-5 text-gray-700' />
-			</button>
+		<div className="flex flex-wrap gap-1 mb-4 border border-gray-300 rounded p-2 bg-gray-50">
+			{iconButton(TbBold, () => editor.chain().focus().toggleBold().run(), editor.isActive('bold'), 'Bold')}
+			{iconButton(TbItalic, () => editor.chain().focus().toggleItalic().run(), editor.isActive('italic'), 'Italic')}
+			{iconButton(TbUnderline, () => editor.chain().focus().toggleUnderline().run(), editor.isActive('underline'), 'Underline')}
+			{iconButton(TbStrikethrough, () => editor.chain().focus().toggleStrike().run(), editor.isActive('strike'), 'Strikethrough')}
+			{iconButton(TbH1, () => editor.chain().focus().toggleHeading({ level: 1 }).run(), editor.isActive('heading', { level: 1 }), 'Heading 1')}
+			{iconButton(TbH2, () => editor.chain().focus().toggleHeading({ level: 2 }).run(), editor.isActive('heading', { level: 2 }), 'Heading 2')}
+			{iconButton(TbH3, () => editor.chain().focus().toggleHeading({ level: 3 }).run(), editor.isActive('heading', { level: 3 }), 'Heading 3')}
+			{iconButton(TbListNumbers, () => editor.chain().focus().toggleOrderedList().run(), editor.isActive('orderedList'), 'Ordered List')}
+			{iconButton(TbList, () => editor.chain().focus().toggleBulletList().run(), editor.isActive('bulletList'), 'Bullet List')}
+			{iconButton(TbAlignLeft, () => editor.chain().focus().setTextAlign('left').run(), editor.isActive({ textAlign: 'left' }), 'Align Left')}
+			{iconButton(TbAlignCenter, () => editor.chain().focus().setTextAlign('center').run(), editor.isActive({ textAlign: 'center' }), 'Align Center')}
+			{iconButton(TbAlignRight, () => editor.chain().focus().setTextAlign('right').run(), editor.isActive({ textAlign: 'right' }), 'Align Right')}
+			{iconButton(TbLink, () => {
+				const url = window.prompt('Enter URL');
+				if (url) {
+					editor.chain().focus().setLink({ href: url }).run();
+				}
+			}, editor.isActive('link'), 'Add Link')}
+			{iconButton(TbPhotoPlus, handleImageUpload, false, 'Upload Image')}
+
+			<input
+				type="file"
+				accept="image/*"
+				ref={fileInputRef}
+				style={{ display: 'none' }}
+				onChange={onFileChange}
+			/>
 		</div>
 	);
 };

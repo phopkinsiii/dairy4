@@ -1,5 +1,4 @@
 // @ts-nocheck
-// src/pages/ProductDetails.jsx
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axios';
@@ -59,13 +58,12 @@ const ProductDetails = () => {
 
 	return (
 		<div className='max-w-7xl mx-auto px-4 py-12'>
-<button
-	onClick={() => navigate('/products')}
-	className='my-6 px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition'
->
-	← Back to Products
-</button>
-
+			<button
+				onClick={() => navigate('/products')}
+				className='my-6 px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition'
+			>
+				← Back to Products
+			</button>
 
 			<div className='grid grid-cols-1 md:grid-cols-2 gap-10 items-start'>
 				<img

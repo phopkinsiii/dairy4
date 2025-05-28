@@ -17,7 +17,9 @@ const Home = () => {
 			/>
 			<HeadLink rel='canonical' href='https://blueberrydairy.com/' />
 
-			<ScrollingBanner />
+			
+				<ScrollingBanner />
+			
 			<section
 				className='relative w-full h-[60vh] sm:h-[70vh] bg-cover bg-center flex items-center justify-center text-white'
 				style={{
