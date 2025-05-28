@@ -10,7 +10,6 @@ import ListItem from '@tiptap/extension-list-item';
 import BulletList from '@tiptap/extension-bullet-list';
 import OrderedList from '@tiptap/extension-ordered-list';
 import TextAlign from '@tiptap/extension-text-align';
-
 import MenuBar from '../../components/MenuBar';
 
 const BlogEditor = ({ content, setContent }) => {
@@ -19,7 +18,11 @@ const BlogEditor = ({ content, setContent }) => {
 			StarterKit,
 			Underline,
 			Link.configure({ openOnClick: false }),
-			Image,
+			Image.configure({
+				HTMLAttributes: {
+					class: 'max-w-full h-auto rounded-md my-4',
+				},
+			}),
 			Heading.configure({ levels: [1, 2, 3] }),
 			TextAlign.configure({ types: ['heading', 'paragraph'] }),
 			BulletList,
@@ -34,7 +37,6 @@ const BlogEditor = ({ content, setContent }) => {
 		autofocus: true,
 	});
 
-	// Keep editor in sync with external content prop
 	useEffect(() => {
 		if (editor && content !== editor.getHTML()) {
 			editor.commands.setContent(content, false);

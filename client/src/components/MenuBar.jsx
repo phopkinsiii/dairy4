@@ -1,61 +1,148 @@
+// @ts-nocheck
+import { useCallback } from 'react';
+import {
+	Bold,
+	Italic,
+	Underline,
+	Strikethrough,
+	Heading1,
+	Heading2,
+	Heading3,
+	ListOrdered,
+	ListBullet,
+	AlignLeft,
+	AlignCenter,
+	AlignRight,
+	Link as LinkIcon,
+	Image as ImageIcon,
+} from '@heroicons/react/24/solid';
+
 const MenuBar = ({ editor }) => {
 	if (!editor) return null;
 
+	const uploadImageToCloudinary = useCallback(async () => {
+		const fileInput = document.createElement('input');
+		fileInput.type = 'file';
+		fileInput.accept = 'image/*';
+
+		fileInput.onchange = async () => {
+			const file = fileInput.files[0];
+			if (!file) return;
+
+			const formData = new FormData();
+			formData.append('file', file);
+			formData.append(
+				'upload_preset',
+				import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+			);
+
+			try {
+				const res = await fetch(import.meta.env.VITE_CLOUDINARY_UPLOAD_URL, {
+					method: 'POST',
+					body: formData,
+				});
+
+				const data = await res.json();
+				if (data.secure_url) {
+					editor.chain().focus().setImage({ src: data.secure_url }).run();
+				} else {
+					console.error('Cloudinary upload failed:', data);
+				}
+			} catch (err) {
+				console.error('Image upload error:', err);
+			}
+		};
+
+		fileInput.click();
+	}, [editor]);
+
 	return (
-		<div className='flex flex-wrap gap-2 border border-gray-200 p-2 rounded mb-4 bg-white shadow-sm'>
+		<div className='flex flex-wrap gap-2 mb-4 border-b pb-2'>
 			<button
-				type='button'
 				onClick={() => editor.chain().focus().toggleBold().run()}
-				className={`${
-					editor.isActive('bold') ? 'bg-gray-300' : ''
-				} px-2 py-1 rounded`}
+				title='Bold'
 			>
-				Bold
+				<Bold className='h-5 w-5 text-gray-700' />
 			</button>
 			<button
-				type='button'
 				onClick={() => editor.chain().focus().toggleItalic().run()}
-				className={`${
-					editor.isActive('italic') ? 'bg-gray-300' : ''
-				} px-2 py-1 rounded`}
+				title='Italic'
 			>
-				Italic
+				<Italic className='h-5 w-5 text-gray-700' />
 			</button>
 			<button
-				type='button'
 				onClick={() => editor.chain().focus().toggleUnderline().run()}
-				className={`${
-					editor.isActive('underline') ? 'bg-gray-300' : ''
-				} px-2 py-1 rounded`}
+				title='Underline'
 			>
-				Underline
+				<Underline className='h-5 w-5 text-gray-700' />
 			</button>
 			<button
-				type='button'
+				onClick={() => editor.chain().focus().toggleStrike().run()}
+				title='Strikethrough'
+			>
+				<Strikethrough className='h-5 w-5 text-gray-700' />
+			</button>
+			<button
+				onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+				title='Heading 1'
+			>
+				<Heading1 className='h-5 w-5 text-gray-700' />
+			</button>
+			<button
 				onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-				className={`${
-					editor.isActive('heading', { level: 2 }) ? 'bg-gray-300' : ''
-				} px-2 py-1 rounded`}
+				title='Heading 2'
 			>
-				H2
+				<Heading2 className='h-5 w-5 text-gray-700' />
 			</button>
 			<button
-				type='button'
+				onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+				title='Heading 3'
+			>
+				<Heading3 className='h-5 w-5 text-gray-700' />
+			</button>
+			<button
 				onClick={() => editor.chain().focus().toggleBulletList().run()}
-				className={`${
-					editor.isActive('bulletList') ? 'bg-gray-300' : ''
-				} px-2 py-1 rounded`}
+				title='Bullet List'
 			>
-				• List
+				<ListBullet className='h-5 w-5 text-gray-700' />
 			</button>
 			<button
-				type='button'
-				onClick={() => editor.chain().focus().setParagraph().run()}
-				className={`${
-					editor.isActive('paragraph') ? 'bg-gray-300' : ''
-				} px-2 py-1 rounded`}
+				onClick={() => editor.chain().focus().toggleOrderedList().run()}
+				title='Ordered List'
 			>
-				Paragraph
+				<ListOrdered className='h-5 w-5 text-gray-700' />
+			</button>
+			<button
+				onClick={() => editor.chain().focus().setTextAlign('left').run()}
+				title='Align Left'
+			>
+				<AlignLeft className='h-5 w-5 text-gray-700' />
+			</button>
+			<button
+				onClick={() => editor.chain().focus().setTextAlign('center').run()}
+				title='Align Center'
+			>
+				<AlignCenter className='h-5 w-5 text-gray-700' />
+			</button>
+			<button
+				onClick={() => editor.chain().focus().setTextAlign('right').run()}
+				title='Align Right'
+			>
+				<AlignRight className='h-5 w-5 text-gray-700' />
+			</button>
+			<button
+				onClick={() => {
+					const url = window.prompt('Enter URL');
+					if (url) {
+						editor.chain().focus().setLink({ href: url }).run();
+					}
+				}}
+				title='Insert Link'
+			>
+				<LinkIcon className='h-5 w-5 text-gray-700' />
+			</button>
+			<button onClick={uploadImageToCloudinary} title='Upload Image'>
+				<ImageIcon className='h-5 w-5 text-gray-700' />
 			</button>
 		</div>
 	);
