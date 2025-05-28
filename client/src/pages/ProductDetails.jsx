@@ -61,10 +61,11 @@ const ProductDetails = () => {
 		<div className='max-w-7xl mx-auto px-4 py-12'>
 <button
 	onClick={() => navigate('/products')}
-	className='mt-6 px-4 py-1 border border-blue-300 text-blue-600 rounded hover:bg-blue-50 transition bg-gray-200 mb-2'
+	className='my-6 px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition'
 >
 	← Back to Products
 </button>
+
 
 			<div className='grid grid-cols-1 md:grid-cols-2 gap-10 items-start'>
 				<img

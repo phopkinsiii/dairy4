@@ -1,44 +1,55 @@
-<div className='flex flex-col flex-grow p-4'>
-	<h3 className='text-lg font-semibold text-gray-900 mb-1 line-clamp-2'>
-		{product.name}
-	</h3>
+// @ts-nocheck
+import { useEffect } from 'react';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import Link from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
+import Heading from '@tiptap/extension-heading';
+import ListItem from '@tiptap/extension-list-item';
+import BulletList from '@tiptap/extension-bullet-list';
+import OrderedList from '@tiptap/extension-ordered-list';
+import TextAlign from '@tiptap/extension-text-align';
 
-	<p className='text-gray-700 text-sm line-clamp-3 mb-1'>
-		{product.description}
-	</p>
+import MenuBar from './MenuBar';
 
-	<Link
-		to={`/products/${product._id}`}
-		className='text-blue-600 text-sm hover:underline mt-1'
-		onClick={(e) => e.stopPropagation()}
-	>
-		Read more
-	</Link>
+const BlogEditor = ({ content, setContent }) => {
+	const editor = useEditor({
+		extensions: [
+			StarterKit,
+			Underline,
+			Link.configure({ openOnClick: false }),
+			Image,
+			Heading.configure({ levels: [1, 2, 3] }),
+			TextAlign.configure({ types: ['heading', 'paragraph'] }),
+			BulletList,
+			OrderedList,
+			ListItem,
+		],
+		content: content || '',
+		onUpdate({ editor }) {
+			const html = editor.getHTML();
+			setContent(html);
+		},
+		autofocus: true,
+	});
 
-	{/* Size selector */}
-	{product.priceOptions?.length > 0 && (
-		<div className='mt-3'>
-			<label className='block text-sm text-gray-600 mb-1'>
-				Select size:
-			</label>
-			<select
-				value={selectedIndex}
-				onChange={(e) => setSelectedIndex(Number(e.target.value))}
-				className='w-full border border-gray-300 rounded px-2 py-1 text-sm'
-			>
-				{product.priceOptions.map((option, index) => (
-					<option key={index} value={index}>
-						${option.price.toFixed(2)} per {option.size}
-					</option>
-				))}
-			</select>
+	// Keep editor in sync with external content prop
+	useEffect(() => {
+		if (editor && content !== editor.getHTML()) {
+			editor.commands.setContent(content, false);
+		}
+	}, [content, editor]);
+
+	return (
+		<div className="border border-gray-300 rounded-md p-4 bg-white">
+			{editor && <MenuBar editor={editor} />}
+			<EditorContent
+				editor={editor}
+				className="prose max-w-none min-h-[300px] focus:outline-none"
+			/>
 		</div>
-	)}
+	);
+};
 
-	<button
-		onClick={handleAddToCart}
-		className='mt-auto w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition'
-	>
-		Add to Cart
-	</button>
-</div>
+export default BlogEditor;
