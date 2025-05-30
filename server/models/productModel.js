@@ -23,7 +23,7 @@ const productSchema = new Schema(
 			enum: ['blueberries', 'apples', 'dairy', 'goats'],
 			required: true,
 		},
-		stock: { type: Number },
+		stock: { type: Number, default: 0 },
 		createdBy: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',

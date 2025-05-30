@@ -6,6 +6,7 @@ import {
 	createProduct,
 	updateProduct,
 	deleteProduct,
+	updateProductStock,
 } from '../controllers/productController.js';
 
 import { protect, adminProtect } from '../middleware/authMiddleware.js';
@@ -52,5 +53,6 @@ router.get('/:id', getSingleProduct);
 router.post('/', protect, adminProtect, upload.single('image'), createProduct);
 router.put('/:id', protect, adminProtect, updateProduct);
 router.delete('/:id', protect, adminProtect, deleteProduct);
+router.patch('/:id/stock', protect, adminProtect, updateProductStock);
 
 export default router;
