@@ -1,34 +1,50 @@
-<Route path="/forum" element={<ForumPage />} />
-<Route path="/forum/new" element={<ForumPostForm />} />
-<Route path="/forum/:id" element={<ForumPost />} />
+// components/forum/ForumPostForm.jsx
+import { useState } from 'react';
+import { useForumContext } from '../../contexts/ForumContext';
 
-{userState.user && (
-	<div className="relative group">
-		<button
-			type="button"
-			className={`text-xl font-semibold transition-colors ${
-				scrolled ? 'text-gray-700' : 'text-white'
-			}`}
-		>
-			Forum ▾
-		</button>
-		<ul className="absolute left-0 w-48 mt-2 origin-top bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
-			<li>
-				<Link
-					to="/forum"
-					className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-				>
-					All Posts
-				</Link>
-			</li>
-			<li>
-				<Link
-					to="/forum/new"
-					className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-				>
-					Add Post
-				</Link>
-			</li>
-		</ul>
-	</div>
-)}
+const ForumPostForm = ({ onPostSuccess }) => {
+	const { addPost } = useForumContext();
+	const [title, setTitle] = useState('');
+	const [content, setContent] = useState('');
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		if (!title || !content) return;
+
+		try {
+			await addPost({ title, content });
+			setTitle('');
+			setContent('');
+			onPostSuccess?.(); // ✅ Trigger parent refresh
+		} catch (err) {
+			console.error('Post creation failed:', err.message);
+		}
+	};
+
+	return (
+		<form onSubmit={handleSubmit} className="space-y-4 mb-8">
+			<h2 className="text-xl font-semibold">Create a New Post</h2>
+			<input
+				type="text"
+				value={title}
+				onChange={(e) => setTitle(e.target.value)}
+				className="w-full border p-2 rounded"
+				placeholder="Post title"
+			/>
+			<textarea
+				value={content}
+				onChange={(e) => setContent(e.target.value)}
+				className="w-full border p-2 rounded h-32"
+				placeholder="Your message"
+			/>
+			<button
+				type="submit"
+				className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+			>
+				Post
+			</button>
+		</form>
+	);
+};
+
+export default ForumPostForm;
