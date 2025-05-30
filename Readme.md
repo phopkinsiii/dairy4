@@ -1,36 +1,19 @@
-const handleImageUpload = async () => {
-	if (!selectedFile) return;
-	setUploading(true);
-	try {
-		const uploadData = new FormData();
-		uploadData.append('file', selectedFile);
-		uploadData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+# Blueberry Dairy Farm Website
 
-		const uploadRes = await axios.post(
-			import.meta.env.VITE_CLOUDINARY_UPLOAD_URL,
-			uploadData
-		);
+This is a full-stack MERN application for our organic dairy farm and orchard. It includes:
 
-		const imageUrl = uploadRes.data.secure_url;
+- 🐐 Product listings (raw goat milk, fruit, cheese)
+- 📝 Blog editor and viewer
+- 🛒 E-commerce features (cart, checkout, Stripe payments)
+- 🔐 Authentication with admin privileges
+- 🌐 SEO optimizations and Cloudinary image hosting
 
-		// ✅ Update image and mark form as changed
-		setFormData((prev) => {
-			const updated = { ...prev, image: imageUrl };
-			setIsChanged(JSON.stringify(updated) !== JSON.stringify(initialData));
-			return updated;
-		});
-		toast.success('Image uploaded successfully');
-	} catch (err) {
-		console.error('Cloudinary upload error:', err);
-		toast.error('Image upload failed');
-	} finally {
-		setUploading(false);
-	}
-};
+---
 
-await axiosInstance.put(`/blog/${id}`, formData, {
-	headers: {
-		Authorization: `Bearer ${token}`,
-	},
-});
+## 🚀 Getting Started
 
+### Install dependencies:
+
+```bash
+cd client && npm install
+cd ../server && npm install

@@ -35,6 +35,9 @@ import AdminOrders from './pages/admin/AdminOrders.jsx';
 import PrivateRoute from './pages/admin/PrivateRoute.jsx';
 import ManageUsers from './pages/admin/ManageUsers';
 import ProductDetails from './pages/ProductDetails.jsx';
+import ForumPage from './pages/forum/ForumPage.jsx';
+import ForumPost from './pages/forum/ForumPost.jsx';
+import ForumPostForm from './components/forum/ForumPostForm.jsx';
 
 function App() {
 	return (
@@ -95,28 +98,12 @@ function App() {
 					{/* <Route path='/blog' element={<BlogPage />} /> */}
 					<Route path='/checkout' element={<Checkout />} />
 					<Route path='/confirmation' element={<Confirmation />} />
-					{/* <Route path='/blog/:id' element={<BlogPost />} /> */}
+					<Route path='/blog/:id' element={<BlogPost />} />
 					<Route path='reset-password' element={<ResetPassword />} />
 					<Route path='forgot-password' element={<ForgotPassword />} />
 					<Route path='/accessibility' element={<Accessibility />} />
 
-					<Route
-						path='/blog'
-						element={
-							<PrivateRoute>
-								<BlogPage />
-							</PrivateRoute>
-						}
-					/>
-
-					<Route
-						path='/blog/:id'
-						element={
-							<PrivateRoute>
-								<BlogPost />
-							</PrivateRoute>
-						}
-					/>
+					<Route path='/blog' element={<BlogPage />} />
 					<Route
 						path='/manage-posts'
 						element={
@@ -141,6 +128,9 @@ function App() {
 							</AdminRoute>
 						}
 					/>
+					<Route path='/forum' element={<ForumPage />} />
+					<Route path='/forum/:id' element={<ForumPost />} />
+					<Route path='/forum/new' element={<ForumPostForm />} />
 					<Route path='/admin-orders' element={<AdminOrders />} />
 					<Route path='access-denied' element={<AccessDenied />} />
 				</Routes>

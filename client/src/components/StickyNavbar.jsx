@@ -1,4 +1,4 @@
-// @ts-nocheck
+// src/components/StickyNavbar.jsx
 import React, { useEffect, useState } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
@@ -12,7 +12,6 @@ const StickyNavbar = () => {
 	const { state: userState } = useUserContext();
 	const { cartItems } = useCartContext();
 	const cartItemCount = cartItems?.reduce((sum, item) => sum + (item.quantity || 1), 0);
-
 	const isAdmin = userState.user?.role === 'admin';
 	const location = useLocation();
 
@@ -29,6 +28,7 @@ const StickyNavbar = () => {
 		{ name: 'About', href: '/our-farm' },
 		{ name: 'Products', href: '/products' },
 		{ name: 'Blog', href: '/blog' },
+		{ name: 'Forum', href: '/forum' }, // single Forum link
 		{ name: 'Contact', href: '/contact' },
 	];
 
@@ -39,7 +39,6 @@ const StickyNavbar = () => {
 					scrolled ? 'backdrop-blur-md bg-white/20' : 'bg-transparent'
 				}`}
 			>
-				{/* Background image layer */}
 				<div
 					className="absolute inset-0 z-[-1] bg-[url('/images/navbar-bg.png')] bg-cover bg-center bg-no-repeat"
 					style={{
@@ -48,15 +47,14 @@ const StickyNavbar = () => {
 					}}
 				/>
 
-				{/* Navbar content */}
 				<div className='flex items-center justify-between max-w-7xl mx-auto px-6 py-4 text-xl'>
 					<Link to='/' className='flex items-center'>
 						<img
-							key={location.pathname} // 🌀 Force remount on route change
+							key={location.pathname}
 							src='/images/goat_logo1.png'
 							alt='Blueberry Dairy Logo'
 							className='h-20 w-20 object-contain rounded-full bg-white/60 backdrop-blur-sm p-1 shadow-lg ring-2 ring-amber-950 roll-in-left'
-							style={{ animationDelay: '0.3s' }} // ⏱ Add delay
+							style={{ animationDelay: '0.3s' }}
 						/>
 					</Link>
 
@@ -76,7 +74,7 @@ const StickyNavbar = () => {
 												: 'text-white hover:text-gray-300'
 										}`
 									}
-									style={{ animationDelay: `${index * 100}ms` }} // staggered animation
+									style={{ animationDelay: `${index * 100}ms` }}
 								>
 									{item.name}
 								</NavLink>
@@ -86,7 +84,6 @@ const StickyNavbar = () => {
 
 					<div className='flex items-center space-x-6'>
 						{isAdmin && <AdminDropdown scrolled={scrolled} />}
-
 						<UserGreeting />
 						<AuthButton />
 						<Link to='/cart' className='relative'>

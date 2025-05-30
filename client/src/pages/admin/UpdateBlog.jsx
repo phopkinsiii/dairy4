@@ -35,14 +35,14 @@ const UpdateBlog = () => {
 
 	useEffect(() => {
 		if (post) {
-			if (
-				post.author._id !== userState.user?._id &&
-				userState.user?.role !== 'admin'
-			) {
-				toast.error('Access denied: Only the author can edit this post.');
-				navigate('/manage-posts');
-				return;
-			}
+			// if (
+			// 	post.author._id !== userState.user?._id &&
+			// 	userState.user?.role !== 'admin'
+			// ) {
+			// 	toast.error('Access denied: Only the author can edit this post.');
+			// 	navigate('/manage-posts');
+			// 	return;
+			// }
 
 			const { title, content, tags, image, published } = post;
 			const initial = {

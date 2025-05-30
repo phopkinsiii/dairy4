@@ -21,6 +21,7 @@ import orderRoutes from './routes/orderRoutes.js';
 import checkoutRoutes from './routes/checkoutRoutes.js';
 import webhookRoutes from './routes/webhookRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import forumRoutes from './routes/forumRoutes.js';
 
 const app = express();
 
@@ -78,6 +79,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/blog', blogRoutes);
+app.use('/api/forum', forumRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/checkout', checkoutRoutes);
