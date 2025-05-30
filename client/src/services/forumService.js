@@ -34,3 +34,13 @@ export const deleteReply = async (postId, replyId) => {
 	);
 	return response.data;
 };
+
+export const getSinglePost = async (id) => {
+	try {
+		const response = await axiosInstance.get(`/forum/${id}`);
+		return response.data;
+	} catch (error) {
+		console.error('❌ Error fetching single forum post:', error);
+		throw error;
+	}
+};

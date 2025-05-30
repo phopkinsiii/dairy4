@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+/* className='w-full border-2 border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white placeholder:font-semibold placeholder:text-lg' */
+
 @keyframes fadeIn {
 	from {
 		opacity: 0;

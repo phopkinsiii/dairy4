@@ -38,6 +38,7 @@ import ProductDetails from './pages/ProductDetails.jsx';
 import ForumPage from './pages/forum/ForumPage.jsx';
 import ForumPost from './pages/forum/ForumPost.jsx';
 import ForumPostForm from './components/forum/ForumPostForm.jsx';
+import AddForumPost from './components/forum/AddForumPost.jsx';
 
 function App() {
 	return (
@@ -131,6 +132,14 @@ function App() {
 					<Route path='/forum' element={<ForumPage />} />
 					<Route path='/forum/:id' element={<ForumPost />} />
 					<Route path='/forum/new' element={<ForumPostForm />} />
+					<Route
+						path='/forum/new'
+						element={
+							<PrivateRoute>
+								<AddForumPost />
+							</PrivateRoute>
+						}
+					/>
 					<Route path='/admin-orders' element={<AdminOrders />} />
 					<Route path='access-denied' element={<AccessDenied />} />
 				</Routes>

@@ -1,64 +1,87 @@
+// @ts-nocheck
 // src/pages/ForumPost.jsx
-import { useParams } from 'react-router-dom';
-import { useForumContext } from '../../contexts/ForumContext';
+import { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { useUserContext } from '../../contexts/UserContext';
 import ForumReplyForm from '../../components/forum/ForumReplyForm';
 import Spinner from '../../components/Spinner';
+import { getSinglePost } from '../../services/forumService'; // ✅ Import service directly
 
 const ForumPost = () => {
 	const { id } = useParams();
-	const { posts, loading } = useForumContext();
 	const { state: userState } = useUserContext();
+	const [post, setPost] = useState(null);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
 
-	const post = posts.find((p) => p._id === id);
+	// ✅ Isolated fetch function to refresh post content
+	const fetchPost = async () => {
+		try {
+			setLoading(true);
+			const data = await getSinglePost(id);
+			setPost(data);
+		} catch (err) {
+			setError('Post not found');
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchPost();
+	}, [id]);
 
 	if (loading) return <Spinner />;
-
-	if (!post) {
-		return (
-			<div className='text-center text-red-500 mt-10'>
-				<p>⚠️ Post not found.</p>
-			</div>
-		);
-	}
+	if (error) return <p className='text-red-600'>{error}</p>;
+	if (!post) return <p className='text-gray-600'>Post not found.</p>;
 
 	return (
-		<section className='max-w-4xl mx-auto py-8 px-4 text-pretty'>
-			<h1 className='text-3xl font-bold mb-4'>{post.title}</h1>
-			<p className='text-gray-600 text-sm mb-2'>
-				By {post.author?.name || 'Anonymous'} •{' '}
-				{new Date(post.createdAt).toLocaleString()}
-			</p>
-			<p className='mb-6 text-gray-800 dark:text-gray-100'>{post.content}</p>
+		<section className='min-h-screen bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-100 px-4 py-8'>
+			<div className='max-w-4xl mx-auto space-y-6'>
+				<Link
+					to='/forum'
+					className='inline-block text-blue-600 dark:text-blue-400 hover:underline mb-4'
+				>
+					← Back to Forum
+				</Link>
 
-			<hr className='my-6' />
+				<div className='bg-white dark:bg-gray-800 p-6 rounded shadow'>
+					<h1 className='text-3xl font-bold mb-2'>{post.title}</h1>
+					<p className='text-sm text-gray-500 dark:text-gray-400 mb-4'>
+						By {post.author?.name || 'Anonymous'} •{' '}
+						{new Date(post.createdAt).toLocaleString()}
+					</p>
+					<p className='text-lg whitespace-pre-wrap'>{post.content}</p>
+				</div>
 
-			<h2 className='text-xl font-semibold mb-4'>Replies</h2>
-			<div className='space-y-4'>
-				{post.replies.length === 0 ? (
-					<p className='text-gray-500'>No replies yet.</p>
-				) : (
-					post.replies.map((reply) => (
-						<div
-							key={reply._id}
-							className='border border-gray-200 p-3 rounded bg-gray-50 dark:bg-gray-700'
-						>
-							<p className='text-sm text-gray-600 dark:text-gray-300'>
-								<strong>{reply.author?.name || 'Anonymous'}</strong> –{' '}
-								{new Date(reply.createdAt).toLocaleString()}
-							</p>
-							<p className='mt-1 text-gray-800 dark:text-gray-100'>{reply.content}</p>
-						</div>
-					))
+				<div>
+					<h2 className='text-2xl font-semibold mt-10 mb-4'>Replies</h2>
+					{post.replies?.length > 0 ? (
+						post.replies.map((reply) => (
+							<div
+								key={reply._id}
+								className='bg-white dark:bg-gray-800 p-4 rounded shadow mb-4'
+							>
+								<p>{reply.content}</p>
+								<p className='text-sm text-gray-500 mt-2'>
+									By {reply.author?.name || 'Anonymous'} •{' '}
+									{new Date(reply.createdAt).toLocaleString()}
+								</p>
+							</div>
+						))
+					) : (
+						<p className='text-gray-500 dark:text-gray-400'>
+							No replies yet. Be the first!
+						</p>
+					)}
+				</div>
+
+				{userState.user && (
+					<div className='mt-8'>
+						<ForumReplyForm postId={post._id} onReplySuccess={fetchPost} />
+					</div>
 				)}
 			</div>
-
-			{/* ✅ Show reply form only to logged-in users */}
-			{userState.user && (
-				<div className='mt-6'>
-					<ForumReplyForm postId={post._id} />
-				</div>
-			)}
 		</section>
 	);
 };
