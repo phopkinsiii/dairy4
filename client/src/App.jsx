@@ -39,6 +39,7 @@ import ForumPage from './pages/forum/ForumPage.jsx';
 import ForumPost from './pages/forum/ForumPost.jsx';
 import ForumPostForm from './components/forum/ForumPostForm.jsx';
 import AddForumPost from './components/forum/AddForumPost.jsx';
+import ManageInventory from './pages/admin/ManageInventory.jsx';
 
 function App() {
 	return (
@@ -96,6 +97,15 @@ function App() {
 							</AdminRoute>
 						}
 					/>
+					<Route
+						path='/admin/inventory'
+						element={
+							<AdminRoute>
+								<ManageInventory />
+							</AdminRoute>
+						}
+					/>
+
 					{/* <Route path='/blog' element={<BlogPage />} /> */}
 					<Route path='/checkout' element={<Checkout />} />
 					<Route path='/confirmation' element={<Confirmation />} />

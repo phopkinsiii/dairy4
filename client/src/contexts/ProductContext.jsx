@@ -7,6 +7,7 @@ import React, {
 	useCallback,
 } from 'react';
 import axiosInstance from '../api/axios';
+import { toast } from 'react-toastify';
 
 const initialProductState = {
 	products: [],
@@ -34,6 +35,14 @@ const productReducer = (state, action) => {
 					(product) => product._id !== action.payload
 				),
 			};
+		case 'UPDATE_PRODUCT_STOCK_SUCCESS':
+			return {
+				...state,
+				products: state.products.map((product) =>
+					product._id === action.payload._id ? action.payload : product
+				),
+			};
+
 		default:
 			return state;
 	}
@@ -78,9 +87,34 @@ export const ProductProvider = ({ children }) => {
 		}
 	}, []);
 
+	// inside ProductContext.jsx
+	const updateProductStock = useCallback(async (id, stock) => {
+		try {
+			console.log('Sending update:', { id, amount: stock });
+			const res = await axiosInstance.patch(`/products/${id}/stock`, {
+				amount: stock, // 🔄 Correct field name
+			});
+			dispatch({
+				type: 'UPDATE_PRODUCT_STOCK_SUCCESS',
+				payload: res.data.product,
+			});
+
+			toast.success('Stock updated successfully');
+		} catch (error) {
+			console.error('Update stock error:', error.message);
+			toast.error('Failed to update stock');
+		}
+	}, []);
+
 	return (
 		<ProductContext.Provider
-			value={{ state, dispatch, fetchProducts, deleteProduct }}
+			value={{
+				state,
+				dispatch,
+				fetchProducts,
+				deleteProduct,
+				updateProductStock,
+			}}
 		>
 			{children}
 		</ProductContext.Provider>

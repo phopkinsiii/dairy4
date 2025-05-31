@@ -1,1 +1,3 @@
-<ForumReplyForm postId={post._id} onReplySuccess={fetchPost} />
+dispatch({ type: 'UPDATE_PRODUCT_STOCK_SUCCESS', payload: res.data.product });
+
+
