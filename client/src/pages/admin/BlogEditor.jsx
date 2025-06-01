@@ -42,13 +42,28 @@ const BlogEditor = ({ content, setContent }) => {
 			editor.commands.setContent(content, false);
 		}
 	}, [content, editor]);
-
+	//  className='min-h-screen bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-100 px-4 py-8'
 	return (
-		<div className='border border-gray-300 rounded-md p-4 bg-white'>
+		<div
+			className='border rounded-md p-4 min-h-screen px-4 py-8'
+			style={{
+				backgroundColor: 'var(--bg-color)',
+				color: 'var(--text-color)',
+				borderColor: 'var(--border-color)',
+			}}
+		>
 			{editor && <MenuBar editor={editor} />}
 			<EditorContent
 				editor={editor}
-				className='prose max-w-none min-h-[300px] focus:outline-none'
+				className='editor-content'
+				style={{
+					backgroundColor: 'var(--input-bg)',
+					color: 'var(--text-color)',
+					padding: '1rem',
+					borderRadius: '8px',
+					border: '1px solid var(--border-color)',
+					minHeight: '300px',
+				}}
 			/>
 		</div>
 	);

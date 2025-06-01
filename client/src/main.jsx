@@ -12,26 +12,29 @@ import { NavbarProvider } from './contexts/NavbarContext.jsx';
 import { HeadProvider } from 'react-head'; // ✅ Import
 import { BlogProvider } from './contexts/BlogContext.jsx';
 import { ForumProvider } from './contexts/ForumContext.jsx';
+
 createRoot(document.getElementById('root')).render(
 	<StrictMode>
-		<ForumProvider>
-			<HeadProvider>
-				<CartProvider>
-					<ProductProvider>
-						<BlogProvider>
-							<ContactProvider>
-								<UserProvider>
-									<BrowserRouter>
-										<NavbarProvider>
-											<App />
-										</NavbarProvider>
-									</BrowserRouter>
-								</UserProvider>
-							</ContactProvider>
-						</BlogProvider>
-					</ProductProvider>
-				</CartProvider>
-			</HeadProvider>
-		</ForumProvider>
+		
+			<ForumProvider>
+				<HeadProvider>
+					<CartProvider>
+						<ProductProvider>
+							<BlogProvider>
+								<ContactProvider>
+									<UserProvider>
+										<BrowserRouter>
+											<NavbarProvider>
+												<App />
+											</NavbarProvider>
+										</BrowserRouter>
+									</UserProvider>
+								</ContactProvider>
+							</BlogProvider>
+						</ProductProvider>
+					</CartProvider>
+				</HeadProvider>
+			</ForumProvider>
+		
 	</StrictMode>
 );

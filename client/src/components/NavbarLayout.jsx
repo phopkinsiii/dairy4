@@ -6,12 +6,10 @@ import { useLocation } from 'react-router-dom';
 import { useCartContext } from '../contexts/CartContext';
 
 
-const excludedRoutes = ['/login', '/register'];
 
 const NavbarLayout = ({ children }) => {
 	const { isScrolled } = useNavbarContext();
-	const { state: cartState } = useCartContext();
-	const location = useLocation();
+
 
 
 	return (

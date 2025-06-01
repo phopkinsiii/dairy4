@@ -7,6 +7,8 @@ import { useUserContext } from '../../contexts/UserContext';
 import BlogEditor from './BlogEditor.jsx';
 import ImageUploadWithPreview from '../../components/ImageUploadWithPreview.jsx';
 import rawMilkHTML from '../../content/rawMilkContent';
+import { ThemeProvider } from '../../contexts/ThemeContext';
+import ThemeToggleButton from '../../components/ThemeToggleButton';
 
 const AddBlogPost = () => {
 	const { state } = useUserContext();
@@ -28,7 +30,10 @@ const AddBlogPost = () => {
 			if (imageFile) {
 				const formData = new FormData();
 				formData.append('file', imageFile);
-				formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+				formData.append(
+					'upload_preset',
+					import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+				);
 
 				const uploadRes = await axios.post(
 					import.meta.env.VITE_CLOUDINARY_UPLOAD_URL,
@@ -67,36 +72,44 @@ const AddBlogPost = () => {
 	};
 
 	return (
-		<form
-			onSubmit={handleSubmit}
-			className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md"
-		>
-			<h2 className="text-3xl font-bold mb-6 text-gray-800">
-				Create New Blog Post
-			</h2>
-
-			{error && <p className="text-red-600 mb-4">{error}</p>}
-
-			<input
-				type="text"
-				value={title}
-				onChange={(e) => setTitle(e.target.value)}
-				placeholder="Post Title"
-				required
-				className="w-full mb-4 p-3 border border-gray-300 rounded"
-			/>
-
-			<ImageUploadWithPreview onCompressedImage={setImageFile} />
-
-			<BlogEditor content={content} setContent={setContent} />
-
-			<button
-				type="submit"
-				className="mt-6 px-6 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700"
+		<ThemeProvider>
+			<section
+				className='relative min-h-screen px-4 py-8'
+				style={{
+					backgroundColor: 'var(--bg-color)',
+					color: 'var(--text-color)',
+				}}
 			>
-				Publish
-			</button>
-		</form>
+				<ThemeToggleButton />
+				<form onSubmit={handleSubmit}>
+					<h2 className='text-3xl font-bold mb-6 text-gray-300'>
+						Create New Blog Post
+					</h2>
+					{error && <p className='text-red-600 mb-4'>{error}</p>}
+					<input
+						type='text'
+						value={title}
+						onChange={(e) => setTitle(e.target.value)}
+						placeholder='Post Title'
+						required
+						className='w-full mb-4 p-3 rounded border'
+						style={{
+							backgroundColor: 'var(--input-bg)',
+							color: 'var(--text-color)',
+							borderColor: 'var(--border-color)',
+						}}
+					/>
+					<ImageUploadWithPreview onCompressedImage={setImageFile} />
+					<BlogEditor content={content} setContent={setContent} />
+					<button
+						type='submit'
+						className='mt-6 px-6 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700'
+					>
+						Publish
+					</button>
+				</form>
+			</section>
+		</ThemeProvider>
 	);
 };
 
