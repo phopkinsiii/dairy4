@@ -1,7 +1,7 @@
 // @ts-nocheck
 // src/pages/admin/ManageInventory.jsx
 import { useEffect, useState } from 'react';
-import { useProductContext } from '../../contexts/ProductContext';
+import { useProductContext } from '../../../contexts/ProductContext';
 
 const ManageInventory = () => {
 	const { state, fetchProducts, updateProductStock } = useProductContext();

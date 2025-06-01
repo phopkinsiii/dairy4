@@ -2,14 +2,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // ✅ fixed
-import axiosInstance from '../../api/axios';
-import { useUserContext } from '../../contexts/UserContext';
+import axiosInstance from '../../../api/axios.js';
+import { useUserContext } from '../../../contexts/UserContext.jsx';
 import BlogEditor from './BlogEditor.jsx';
-import ImageUploadWithPreview from '../../components/ImageUploadWithPreview.jsx';
+import ImageUploadWithPreview from '../../../components/ImageUploadWithPreview.jsx';
 // import rawMilkHTML from '../../content/rawMilkContent';
-import simpleBlogTemplate from '../../content/simpleBlogTemplate';
-import { ThemeProvider } from '../../contexts/ThemeContext';
-import ThemeToggleButton from '../../components/ThemeToggleButton';
+import simpleBlogTemplate from '../../../content/simpleBlogTemplate.js';
+import { ThemeProvider } from '../../../contexts/ThemeContext.jsx';
+import ThemeToggleButton from '../../../components/ThemeToggleButton.jsx';
 
 const AddBlogPost = () => {
 	const { state } = useUserContext();

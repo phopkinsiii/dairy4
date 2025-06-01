@@ -1,5 +1,6 @@
+// @ts-nocheck
 import { useState } from 'react';
-import { useCartContext } from '../contexts/CartContext.jsx';
+import { useCartContext } from '../../contexts/CartContext.jsx';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
@@ -36,7 +37,7 @@ const ProductCard = ({ product }) => {
 	};
 
 	return (
-		<Link to={`/products/${product._id}`} className='hover:no-underline'>
+		<section>
 			<div
 				className='bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col h-[500px]'
 				style={{ fontFamily: 'Poppins, sans-serif' }}
@@ -48,24 +49,20 @@ const ProductCard = ({ product }) => {
 					crossOrigin='anonymous'
 					className='w-full h-48 object-cover rounded-t-lg'
 				/>
-
 				<div className='flex flex-col flex-grow p-4'>
 					<h3 className='text-lg font-semibold text-gray-900 mb-1 line-clamp-2'>
 						{product.name}
 					</h3>
-
 					<p className='text-gray-700 text-sm line-clamp-3 mb-1'>
 						{product.description}
 					</p>
-
 					<Link
 						to={`/products/${product._id}`}
-						className='text-blue-600 text-sm hover:underline mt-1'
+						className='text-blue-600 text-md hover:underline mt-1'
 						onClick={(e) => e.stopPropagation()}
 					>
-						Read more
+						Read more ↪
 					</Link>
-
 					{product.priceOptions?.length > 0 && (
 						<div className='mt-3'>
 							<label className='block text-sm text-gray-600 mb-1'>
@@ -84,7 +81,6 @@ const ProductCard = ({ product }) => {
 							</select>
 						</div>
 					)}
-
 					<button
 						onClick={handleAddToCart}
 						className='mt-auto w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition'
@@ -93,7 +89,7 @@ const ProductCard = ({ product }) => {
 					</button>
 				</div>
 			</div>
-		</Link>
+		</section>
 	);
 };
 

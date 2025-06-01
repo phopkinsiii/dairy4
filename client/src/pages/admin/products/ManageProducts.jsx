@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useEffect } from 'react';
-import { useProductContext } from '../../contexts/ProductContext';
+import { useProductContext } from '../../../contexts/ProductContext';
 import { useNavigate } from 'react-router-dom';
 
 const ManageProducts = () => {

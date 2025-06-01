@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useBlogContext } from '../contexts/BlogContext';
+import { useBlogContext } from '../../contexts/BlogContext';
 import { Title, Meta, Link as HeadLink } from 'react-head';
 
 const stripHtml = (html) => html.replace(/<[^>]*>/g, '');

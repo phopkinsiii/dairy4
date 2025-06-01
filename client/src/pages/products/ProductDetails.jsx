@@ -1,10 +1,10 @@
 // @ts-nocheck
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axiosInstance from '../api/axios';
-import { useCartContext } from '../contexts/CartContext';
+import axiosInstance from '../../api/axios';
+import { useCartContext } from '../../contexts/CartContext';
 import { toast } from 'react-toastify';
-import Spinner from '../components/Spinner';
+import Spinner from '../../components/Spinner';
 
 const ProductDetails = () => {
 	const { id } = useParams();

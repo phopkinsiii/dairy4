@@ -1,12 +1,12 @@
 // @ts-nocheck
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCartContext } from '../contexts/CartContext';
-import axiosInstance from '../api/axios';
-import PayNowButton from '../components/PayNowButton';
+import { useCartContext } from '../../contexts/CartContext';
+import axiosInstance from '../../api/axios';
+import PayNowButton from '../../components/PayNowButton';
 import { toast } from 'react-toastify';
 import { Title, Meta, Link as HeadLink } from 'react-head';
-import Spinner from '../components/Spinner';
+import Spinner from '../../components/Spinner';
 
 const Checkout = () => {
 	const { cartItems, dispatch } = useCartContext();

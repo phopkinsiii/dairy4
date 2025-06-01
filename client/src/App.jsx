@@ -6,40 +6,39 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 //Pages and components
-import ProductList from './pages/ProductList';
-import Cart from './pages/Cart';
+import ProductList from './pages/products/ProductList.jsx';
+import Cart from './pages/products/Cart';
 import OurFarm from './pages/OurFarm';
-import Navbar from './components/Navbar';
+// import Navbar from './components/Navbar';
 import Contact from './pages/Contact';
-import ExampleProducts from './pages/ExampleProducts';
 import Login from './pages/Login.jsx';
 import AdminRoute from './pages/admin/AdminRoute.jsx';
-import ManageProducts from './pages/admin/ManageProducts.jsx';
-import AddProduct from './pages/admin/AddProduct.jsx';
+import ManageProducts from './pages/admin/products/ManageProducts.jsx';
+import AddProduct from './pages/admin/products/AddProduct.jsx';
 import Home from './pages/Home.jsx';
-import BlogPage from './pages/BlogPage.jsx';
+import BlogPage from './pages/blog/BlogPage.jsx';
 import NavbarLayout from './components/NavbarLayout.jsx';
-import AddBlogPost from './pages/admin/AddBlogPost.jsx';
-import EditProduct from './pages/admin/EditProduct.jsx';
-import Checkout from './pages/Checkout.jsx';
-import Confirmation from './pages/Confirmation.jsx';
-import BlogPost from './pages/BlogPost.jsx';
+import AddBlogPost from './pages/admin/blog/AddBlogPost.jsx';
+import EditProduct from './pages/admin/products/EditProduct.jsx';
+import Checkout from './pages/products/Checkout.jsx';
+import Confirmation from './pages/products/Confirmation.jsx';
+import BlogPost from './pages/blog/BlogPost.jsx';
 import Register from './pages/Register.jsx';
 import ResetPassword from './components/ResetPassword.jsx';
 import ForgotPassword from './components/ForgotPassword.jsx';
 import Accessibility from './pages/Accessibility.jsx';
-import ManagePosts from './pages/admin/ManagePosts.jsx';
+import ManagePosts from './pages/admin/blog/ManagePosts.jsx';
 import AccessDenied from './components/AccessDenied.jsx';
-import UpdateBlog from './pages/admin/UpdateBlog.jsx';
-import AdminOrders from './pages/admin/AdminOrders.jsx';
+import UpdateBlog from './pages/admin/blog/UpdateBlog.jsx';
+import AdminOrders from './pages/admin/products/AdminOrders.jsx';
 import PrivateRoute from './pages/admin/PrivateRoute.jsx';
 import ManageUsers from './pages/admin/ManageUsers';
-import ProductDetails from './pages/ProductDetails.jsx';
+import ProductDetails from './pages/products/ProductDetails.jsx';
 import ForumPage from './pages/forum/ForumPage.jsx';
 import ForumPost from './pages/forum/ForumPost.jsx';
 import ForumPostForm from './components/forum/ForumPostForm.jsx';
 import AddForumPost from './components/forum/AddForumPost.jsx';
-import ManageInventory from './pages/admin/ManageInventory.jsx';
+import ManageInventory from './pages/admin/products/ManageInventory.jsx';
 
 function App() {
 	return (

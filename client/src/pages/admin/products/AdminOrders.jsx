@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { useEffect, useState } from 'react';
-import axiosInstance from '../../api/axios';
+import axiosInstance from '../../../api/axios';
 import { format } from 'date-fns';
 
 export default function AdminOrders() {

@@ -2,11 +2,11 @@
 // src/pages/admin/AddProduct.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../../api/axios';
+import axiosInstance from '../../../api/axios';
 import axios from 'axios';
 import imageCompression from 'browser-image-compression';
 
-import { useUserContext } from '../../contexts/UserContext';
+import { useUserContext } from '../../../contexts/UserContext';
 
 
 

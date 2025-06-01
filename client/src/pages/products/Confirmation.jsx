@@ -3,8 +3,8 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useCartContext } from '../contexts/CartContext';
-import axiosInstance from '../api/axios.js';
+import { useCartContext } from '../../contexts/CartContext.jsx';
+import axiosInstance from '../../api/axios.js';
 
 export default function Confirmation() {
 	const navigate = useNavigate();

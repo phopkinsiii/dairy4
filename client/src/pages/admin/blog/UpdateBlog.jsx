@@ -1,11 +1,11 @@
 // @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useUserContext } from '../../contexts/UserContext';
-import { useBlogContext } from '../../contexts/BlogContext';
+import { useUserContext } from '../../../contexts/UserContext';
+import { useBlogContext } from '../../../contexts/BlogContext';
 import BlogEditor from './BlogEditor';
 import axios from 'axios';
-import axiosInstance from '../../api/axios';
+import axiosInstance from '../../../api/axios';
 import { toast } from 'react-toastify';
 
 const UpdateBlog = () => {

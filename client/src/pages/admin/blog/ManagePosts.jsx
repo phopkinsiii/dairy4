@@ -2,8 +2,8 @@
 // @ts-nocheck
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useBlogContext } from '../../contexts/BlogContext';
-import { useUserContext } from '../../contexts/UserContext';
+import { useBlogContext } from '../../../contexts/BlogContext';
+import { useUserContext } from '../../../contexts/UserContext';
 
 const ManagePosts = () => {
   const { state, fetchPosts, deletePost } = useBlogContext();

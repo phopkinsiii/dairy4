@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { Link } from 'react-router-dom';
-import { useCartContext } from '../contexts/CartContext';
+import { useCartContext } from '../../contexts/CartContext';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
 const Cart = () => {

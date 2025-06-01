@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Title, Meta, Link as HeadLink } from 'react-head';
-import { useProductContext } from '../contexts/ProductContext';
+import { useProductContext } from '../../contexts/ProductContext.jsx';
 import ProductCard from './ProductCard.jsx';
 
 const ProductList = () => {

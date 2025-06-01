@@ -1,8 +1,8 @@
 // src/pages/BlogPage.jsx
 import { useEffect } from 'react';
-import { useBlogContext } from '../contexts/BlogContext';
-import Spinner from '../components/Spinner';
-import BlogCard from '../components/blog/BlogCard';
+import { useBlogContext } from '../../contexts/BlogContext';
+import Spinner from '../../components/Spinner';
+import BlogCard from '../../components/blog/BlogCard';
 
 const BlogPage = () => {
 	const { state, fetchPosts } = useBlogContext();
