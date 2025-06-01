@@ -6,7 +6,8 @@ import axiosInstance from '../../api/axios';
 import { useUserContext } from '../../contexts/UserContext';
 import BlogEditor from './BlogEditor.jsx';
 import ImageUploadWithPreview from '../../components/ImageUploadWithPreview.jsx';
-import rawMilkHTML from '../../content/rawMilkContent';
+// import rawMilkHTML from '../../content/rawMilkContent';
+import simpleBlogTemplate from '../../content/simpleBlogTemplate';
 import { ThemeProvider } from '../../contexts/ThemeContext';
 import ThemeToggleButton from '../../components/ThemeToggleButton';
 
@@ -15,7 +16,7 @@ const AddBlogPost = () => {
 	const [title, setTitle] = useState('');
 	const [imageFile, setImageFile] = useState(null);
 	const [error, setError] = useState(null);
-	const [content, setContent] = useState(rawMilkHTML);
+	const [content, setContent] = useState(simpleBlogTemplate);
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e) => {

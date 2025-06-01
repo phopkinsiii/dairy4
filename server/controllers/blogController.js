@@ -6,7 +6,7 @@ import Blog from '../models/blogModel.js';
 // @access  Public
 export const getAllPosts = async (req, res, next) => {
 	try {
-		const posts = await Blog.find().populate('author', 'name role image');
+		const posts = await Blog.find().sort({ createdAt: -1 }); // Newest first
 		res.json(posts);
 	} catch (error) {
 		next(error);

@@ -11,31 +11,64 @@ import BulletList from '@tiptap/extension-bullet-list';
 import OrderedList from '@tiptap/extension-ordered-list';
 import TextAlign from '@tiptap/extension-text-align';
 import MenuBar from '../../components/MenuBar';
+import TextStyle from '@tiptap/extension-text-style';
+import Color from '@tiptap/extension-color';
 
 const BlogEditor = ({ content, setContent }) => {
 	const editor = useEditor({
-		extensions: [
-			StarterKit,
-			Underline,
-			Link.configure({ openOnClick: false }),
-			Image.configure({
-				HTMLAttributes: {
-					class: 'max-w-full h-auto rounded-md my-4',
-				},
-			}),
-			Heading.configure({ levels: [1, 2, 3] }),
-			TextAlign.configure({ types: ['heading', 'paragraph'] }),
-			BulletList,
-			OrderedList,
-			ListItem,
-		],
-		content: content || '',
-		onUpdate({ editor }) {
-			const html = editor.getHTML();
-			setContent(html);
+	extensions: [
+		StarterKit,
+		Underline,
+		Link.configure({ openOnClick: false }),
+		Image.configure({
+			HTMLAttributes: {
+				class: 'max-w-full h-auto rounded-md my-4',
+			},
+		}),
+		Heading.configure({ levels: [1, 2, 3] }),
+		TextAlign.configure({ types: ['heading', 'paragraph'] }),
+		BulletList,
+		OrderedList,
+		ListItem,
+	],
+	content: content || '',
+	autofocus: true,
+	onUpdate({ editor }) {
+		const html = editor.getHTML();
+		setContent(html);
+	},
+	editorProps: {
+		handlePaste(view, event) {
+			const clipboardData = event.clipboardData;
+			if (!clipboardData) return false;
+
+			const html = clipboardData.getData('text/html');
+			if (!html) return false;
+
+			event.preventDefault();
+
+			const cleanedHTML = cleanGoogleDocsHTML(html);
+			editor.commands.insertContent(cleanedHTML);
+			return true;
 		},
-		autofocus: true,
+	},
+});
+
+
+const cleanGoogleDocsHTML = (html) => {
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(html, 'text/html');
+
+	// Remove Google Docs junk
+	doc.querySelectorAll('[style]').forEach((el) => el.removeAttribute('style'));
+	doc.querySelectorAll('span').forEach((el) => {
+		if (!el.textContent.trim()) el.remove();
 	});
+	doc.querySelectorAll('meta, style, font, o\\:p').forEach((el) => el.remove());
+
+	return doc.body.innerHTML;
+};
+
 
 	useEffect(() => {
 		if (editor && content !== editor.getHTML()) {
