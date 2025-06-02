@@ -30,6 +30,7 @@ const StickyNavbar = () => {
 		{ name: 'Blog', href: '/blog' },
 		{ name: 'Forum', href: '/forum' }, // single Forum link
 		{ name: 'Contact', href: '/contact' },
+		{ name: 'Our Goats', href: '/goats' },
 	];
 
 	return (

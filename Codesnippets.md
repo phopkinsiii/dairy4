@@ -1,58 +1,49 @@
-import { Link, useNavigate } from 'react-router-dom';
+✅ Pages where SEO metadata is important:
+These are routed pages users may land on directly via search engines or social shares:
+✅  = Done
+🏠 General Pages
+Home.jsx✅ 
 
-const BlogCard = ({ post }) => {
-	const navigate = useNavigate();
+Contact.jsx✅ 
 
-	const handleCardClick = () => {
-		navigate(`/blog/${post._id}`);
-	};
+OurFarm.jsx✅ 
 
-	return (
-		<section
-			onClick={handleCardClick}
-			className='cursor-pointer bg-white rounded-lg shadow-lg p-6 flex flex-col md:flex-row gap-6 hover:shadow-xl transition-shadow'
-		>
-			{post.image && post.image !== '' && (
-				<img
-					src={post.image}
-					alt={post.title}
-					className='w-full md:w-60 h-48 object-cover rounded-lg shadow-sm'
-					loading='lazy'
-				/>
-			)}
+Accessibility.jsx✅ 
 
-			<div className='flex-1 space-y-2'>
-				<h2 className='text-2xl font-semibold text-amber-800'>{post.title}</h2>
+🧀 Products
+ProductList.jsx✅ 
 
-				<div className='flex items-center gap-x-4 text-sm text-gray-600'>
-					<time dateTime={post.createdAt}>
-						Posted: {new Date(post.createdAt).toLocaleDateString()}
-					</time>
-					<span>
-						Updated: {new Date(post.updatedAt).toLocaleDateString()}
-					</span>
-					{post.tags?.length > 0 && (
-						<span className='bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs'>
-							{post.tags[0]}
-						</span>
-					)}
-				</div>
+ProductDetails.jsx ✅ (important to add meta based on the product’s name, category, and description)
 
-				<div
-					className='prose line-clamp-3 text-gray-700'
-					dangerouslySetInnerHTML={{ __html: post.content }}
-				/>
+Checkout.jsx (less important, but still good for branding keywords)
 
-				<Link
-					to={`/blog/${post._id}`}
-					className='inline-block text-blue-600 hover:underline mt-2 text-sm'
-					onClick={(e) => e.stopPropagation()} // 🛑 prevent card click from firing
-				>
-					Read more →
-				</Link>
-			</div>
-		</section>
-	);
-};
+Confirmation.jsx
 
-export default BlogCard;
+✍️ Blog
+BlogPage.jsx
+
+BlogPost.jsx (important — dynamic metadata based on post title/content/author)
+
+🐐 Goats
+OurGoats.jsx (if this exists, not explicitly listed — if GoatList.jsx is the main page, wrap it)
+
+Individual goat detail pages (if you later implement them — useful for goat name, awards, sale status, ADGA registration, etc.)
+
+💬 Forum
+ForumPage.jsx
+
+ForumPost.jsx (use dynamic meta for title, author, and tags)
+
+👤 Auth
+Login.jsx, Register.jsx, ForgotPassword.jsx — SEO not critical, but can include minimal branding metadata
+
+🚫 Components that do not need SEO metadata:
+These are not directly routed or user-facing entry points, and shouldn’t contain SEO metadata like <Title> or <Meta>.
+
+GoatCard.jsx
+
+ProductCard.jsx
+
+BlogCard.jsx
+
+MenuBar.jsx, Spinner.jsx, Logo.jsx, etc.

@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import { Title, Meta, Link as HeadLink } from 'react-head';
 import { useProductContext } from '../../contexts/ProductContext.jsx';
 import ProductCard from './ProductCard.jsx';
+import Spinner from '../../components/Spinner.jsx';
+import SeoHead from '../../components/SeoHead.jsx';
 
 const ProductList = () => {
 	const { state, fetchProducts } = useProductContext();
@@ -12,7 +13,7 @@ const ProductList = () => {
 	}, [fetchProducts]);
 
 	if (loading) {
-		return <div className='text-center py-20 text-xl'>Loading products...</div>;
+		return <Spinner />;
 	}
 
 	if (error) {
@@ -24,12 +25,11 @@ const ProductList = () => {
 	return (
 		<>
 			{/* SEO Metadata */}
-			<Title>Our Farm Products | Blueberry Dairy</Title>
-			<Meta
-				name='description'
-				content='Browse organic farm products including raw goat milk, cheese, yogurt, apples, blueberries, and more from Blueberry Dairy.'
+			<SeoHead
+				title='Our Farm Products | Blueberry Dairy'
+				description='Browse organic farm products including raw goat milk, cheese, yogurt, apples, blueberries, and more from Blueberry Dairy.'
+				url='https://www.blueberrydairy.com/products'
 			/>
-			<HeadLink rel='canonical' href='https://blueberrydairy.com/products' />
 			<div
 				className='bg-gray-100 py-12'
 				style={{ fontFamily: 'Poppins, sans-serif' }}

@@ -12,10 +12,10 @@ import { NavbarProvider } from './contexts/NavbarContext.jsx';
 import { HeadProvider } from 'react-head'; // ✅ Import
 import { BlogProvider } from './contexts/BlogContext.jsx';
 import { ForumProvider } from './contexts/ForumContext.jsx';
-
+import { GoatProvider } from './contexts/GoatContext';
 createRoot(document.getElementById('root')).render(
 	<StrictMode>
-		
+		<GoatProvider>
 			<ForumProvider>
 				<HeadProvider>
 					<CartProvider>
@@ -35,6 +35,6 @@ createRoot(document.getElementById('root')).render(
 					</CartProvider>
 				</HeadProvider>
 			</ForumProvider>
-		
+		</GoatProvider>
 	</StrictMode>
 );

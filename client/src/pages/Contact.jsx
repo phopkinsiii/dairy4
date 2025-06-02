@@ -4,7 +4,7 @@ import { useContactContext } from '../contexts/ContactContext';
 import Spinner from '../components/Spinner';
 import { validateContactForm } from '../utils/validators';
 
-import { Title, Meta, Link as HeadLink } from 'react-head';
+import SeoHead from '../components/SeoHead';
 
 export default function Contact() {
 	const { state, dispatch, submitContactForm } = useContactContext();
@@ -43,13 +43,12 @@ export default function Contact() {
 
 	return (
 		<>
-			<Title>Contact Us | Blueberry Dairy</Title>
-			<Meta
-				name='description'
-				content="Have questions about our raw goat milk, farm pickups, or local deliveries? Contact Blueberry Dairy — we'd love to hear from you!"
+			<SeoHead
+				title='Contact Us | Blueberry Dairy'
+				description="Have questions about our raw goat milk, farm pickups, or local deliveries? Contact Blueberry Dairy — we'd love to hear from you!"
+				url='https://www.blueberrydairy.com/contact'
+				image='https://res.cloudinary.com/dzhweqopn/image/upload/v1748887807/goat_logo_3_s898tm.png'
 			/>
-			<HeadLink rel='canonical' href='https://blueberrydairy.com/contact' />
-
 			<div
 				className='bg-cover bg-center min-h-screen flex items-center justify-center px-6 py-20'
 				style={{

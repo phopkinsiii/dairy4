@@ -31,6 +31,14 @@ const dropdownSections = [
 		title: 'Users',
 		links: [{ label: 'Manage Users', path: '/admin/users' }],
 	},
+		{
+		title: 'Goats',
+		links: [
+			{ label: 'Add Goat', path: '/admin/goats/add' },
+			// Future links can go here:
+			// { label: 'Manage Goats', path: '/admin/goats/manage' },
+		],
+	},
 ];
 
 const AdminDropdown = ({ scrolled }) => {
