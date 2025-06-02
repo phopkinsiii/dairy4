@@ -15,9 +15,9 @@ ProductList.jsx✅
 
 ProductDetails.jsx ✅ (important to add meta based on the product’s name, category, and description)
 
-Checkout.jsx (less important, but still good for branding keywords)
+Checkout.jsx ✅(less important, but still good for branding keywords)
 
-Confirmation.jsx
+Confirmation.jsx ✅
 
 ✍️ Blog
 BlogPage.jsx
@@ -47,3 +47,12 @@ ProductCard.jsx
 BlogCard.jsx
 
 MenuBar.jsx, Spinner.jsx, Logo.jsx, etc.
+
+{pickupName && pickupLocation && pickupTime && (
+  <SeoHead
+    title={`Order Confirmed for ${pickupName} | Blueberry Dairy`}
+    description={`Thank you, ${pickupName}, for your order from Blueberry Dairy. Pickup is scheduled for ${pickupTime} at ${pickupLocation}.`}
+    image='https://res.cloudinary.com/dzhweqopn/image/upload/v1748887807/goat_logo_3_s898tm.png'
+    url='https://www.blueberrydairy.com/confirmation'
+  />
+)}

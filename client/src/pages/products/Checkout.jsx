@@ -5,7 +5,7 @@ import { useCartContext } from '../../contexts/CartContext';
 import axiosInstance from '../../api/axios';
 import PayNowButton from '../../components/PayNowButton';
 import { toast } from 'react-toastify';
-import { Title, Meta, Link as HeadLink } from 'react-head';
+import SeoHead from '../../components/SeoHead';
 import Spinner from '../../components/Spinner';
 
 const Checkout = () => {
@@ -54,12 +54,12 @@ const Checkout = () => {
 
 	return (
 		<>
-			<Title>Checkout | Blueberry Dairy</Title>
-			<Meta
-				name='description'
-				content='Complete your order and schedule pickup for our farm-fresh dairy products.'
+			<SeoHead
+				title='Checkout | Blueberry Dairy'
+				description='Finalize your order and choose your pickup details at Blueberry Dairy. Locally produced, organic farm goods always fresh.'
+				image='https://res.cloudinary.com/dzhweqopn/image/upload/v1748887807/goat_logo_3_s898tm.png'
+				url='https://www.blueberrydairy.com/checkout'
 			/>
-			<HeadLink rel='canonical' href='https://blueberrydairy.com/checkout' />
 
 			<div
 				className='bg-cover bg-center min-h-screen flex items-center justify-center px-6 py-20'
