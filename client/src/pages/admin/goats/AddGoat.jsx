@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../../api/axios';
 import axios from 'axios';
 import imageCompression from 'browser-image-compression';
-// import { useUserContext } from '../../../contexts/UserContext';
 import { useUserContext } from '../../../contexts/UserContext';
+
+import { validateGoatForm } from '../../../utils/validators';
+import {toast} from 'react-toastify'
 
 const AddGoat = () => {
 	const { state } = useUserContext();
@@ -82,6 +84,11 @@ const AddGoat = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError(null);
+			const errors = validateGoatForm(goat);
+	if (Object.keys(errors).length > 0) {
+		Object.values(errors).forEach((msg) => toast.error(msg));
+		return;
+	}
 
 		try {
 			const token = state.user?.token;

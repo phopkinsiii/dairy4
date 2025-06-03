@@ -133,3 +133,33 @@ export const getPasswordStrength = (password) => {
 
 	return { checks, strength };
 };
+
+export const validateGoatForm = (formData) => {
+	const errors = {};
+
+	if (!formData.nickname?.trim()) {
+		errors.nickname = 'Nickname is required.';
+	}
+
+	if (!formData.dob) {
+		errors.dob = 'Date of birth is required.';
+	} else if (isNaN(Date.parse(formData.dob))) {
+		errors.dob = 'Invalid date format.';
+	}
+
+	if (!formData.gender?.trim()) {
+		errors.gender = 'Gender is required.';
+	}
+
+	if (!formData.adgaId?.trim()) {
+		errors.adgaId = 'ADGA ID is required.';
+	}
+
+	// Optional: validate price if forSale is true
+	if (formData.forSale && (formData.price === undefined || formData.price < 0)) {
+		errors.price = 'Valid price is required if the goat is for sale.';
+	}
+
+	return errors;
+};
+

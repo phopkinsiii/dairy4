@@ -116,3 +116,45 @@ export const validateProductData = ({
 
 	return null;
 };
+
+// server/validators.js
+// ✅ Validate Goat Fields
+export const validateGoatData = (data) => {
+	const errors = [];
+
+	// Required fields
+	if (!data.nickname || typeof data.nickname !== 'string') {
+		errors.push('Nickname is required and must be a string.');
+	}
+
+	if (!data.dob || isNaN(Date.parse(data.dob))) {
+		errors.push('Date of birth (dob) is required and must be a valid date.');
+	}
+
+	if (!data.gender || !['male', 'female', 'wether'].includes(data.gender.toLowerCase())) {
+		errors.push('Gender is required and must be one of: male, female, wether.');
+	}
+
+	if (!data.adgaId || typeof data.adgaId !== 'string') {
+		errors.push('ADGA ID is required and must be a string.');
+	}
+
+	// Optional fields
+	if (data.price && isNaN(Number(data.price))) {
+		errors.push('Price must be a valid number.');
+	}
+
+	if (data.awards && !Array.isArray(data.awards)) {
+		errors.push('Awards must be an array of strings.');
+	}
+
+	if (data.images && !Array.isArray(data.images)) {
+		errors.push('Images must be an array of image URLs.');
+	}
+
+	return {
+		isValid: errors.length === 0,
+		errors,
+	};
+};
+
