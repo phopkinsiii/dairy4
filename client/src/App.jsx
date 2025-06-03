@@ -41,6 +41,7 @@ import AddForumPost from './components/forum/AddForumPost.jsx';
 import ManageInventory from './pages/admin/products/ManageInventory.jsx';
 import GoatList from './pages/goats/GoatList.jsx';
 import AddGoat from './pages/admin/goats/AddGoat.jsx';
+import GoatDetails from './pages/goats/GoatDetails.jsx';
 
 function App() {
 	return (
@@ -155,7 +156,7 @@ function App() {
 					<Route path='access-denied' element={<AccessDenied />} />
 
 					<Route path='/goats' element={<GoatList />} />
-										<Route
+					<Route
 						path='/admin/goats/add'
 						element={
 							<AdminRoute>
@@ -163,6 +164,7 @@ function App() {
 							</AdminRoute>
 						}
 					/>
+					<Route path='/goats/:id' element={<GoatDetails />} />
 				</Routes>
 			</NavbarLayout>
 		</>

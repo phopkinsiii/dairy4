@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useBlogContext } from '../../contexts/BlogContext';
-import { Title, Meta, Link as HeadLink } from 'react-head';
+import SeoHead from '../../components/SeoHead';
 
 const stripHtml = (html) => html.replace(/<[^>]*>/g, '');
 const truncate = (str, length = 160) =>
@@ -42,13 +42,20 @@ const BlogPost = () => {
 
 	return (
 		<>
-			<Title>{`${post.title} | Blueberry Dairy Blog`}</Title>
-			<Meta name='description' content={metaDescription} />
-			<Meta name='keywords' content={keywords} />
-			<HeadLink
-				rel='canonical'
-				href={`https://blueberrydairy.com/blog/${post._id}`}
-			/>
+			{post && (
+				<SeoHead
+					title={`${post.title} | Blueberry Dairy`}
+					description={
+						post.content?.replace(/<[^>]+>/g, '').slice(0, 150) + '...'
+					}
+					image={
+						post.image ||
+						'https://res.cloudinary.com/dzhweqopn/image/upload/v1748887807/goat_logo_3_s898tm.png'
+					}
+					url={`https://www.blueberrydairy.com/blog/${post._id}`}
+					keywords={extractKeywords(post.title + ' ' + post.content)}
+				/>
+			)}
 
 			<div className='max-w-3xl mx-auto px-6 py-12'>
 				<h1 className='text-4xl font-bold mb-4'>{post.title}</h1>

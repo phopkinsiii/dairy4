@@ -7,6 +7,7 @@ const SeoHead = ({
 	description = '',
 	image = 'https://res.cloudinary.com/dzhweqopn/image/upload/v1748887807/goat_logo_3_s898tm.png',
 	url = 'https://www.blueberrydairy.com',
+	keywords, // ✅ Accept keywords as prop
 }) => {
 	// Early exit if essential metadata is missing
 	if (!title || !description || !url) return null;
@@ -15,6 +16,7 @@ const SeoHead = ({
 		<>
 			<Title>{title}</Title>
 			<Meta name='description' content={description} />
+			{keywords && <Meta name='keywords' content={keywords} />}
 			<Meta property='og:title' content={title} />
 			<Meta property='og:description' content={description} />
 			<Meta property='og:image' content={image} />
