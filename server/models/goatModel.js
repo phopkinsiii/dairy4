@@ -5,6 +5,7 @@ const goatSchema = new mongoose.Schema(
 		nickname: { type: String, required: true },
 		registeredName: { type: String },
 		dob: { type: Date, required: true },
+		gender: {type: String, required: true}
 		adgaId: { type: String, required: true },
 		awards: [{ type: String }],
 		pedigree: {
@@ -19,7 +20,7 @@ const goatSchema = new mongoose.Schema(
 		forSale: { type: Boolean, default: false },
 		price: { type: Number },
 		additionalInfo: { type: String },
-		image: { type: String },
+		images: [{ type: String }],
 	},
 	{ timestamps: true }
 );

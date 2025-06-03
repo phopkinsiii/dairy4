@@ -16,6 +16,7 @@ const AddGoat = () => {
 		nickname: '',
 		registeredName: '',
 		dob: '',
+		gender: '',
 		adgaId: '',
 		awards: [''],
 		pedigree: {
@@ -32,7 +33,7 @@ const AddGoat = () => {
 		additionalInfo: '',
 	});
 
-	const [imageFile, setImageFile] = useState(null);
+	const [imageFiles, setImageFiles] = useState([]);
 	const [error, setError] = useState(null);
 
 	const handleChange = (e) => {
@@ -57,8 +58,8 @@ const AddGoat = () => {
 	};
 
 	const handleImageChange = async (e) => {
-		const file = e.target.files[0];
-		if (!file) return;
+		const files = Array.from(e.target.files);
+		if (!files.length) return;
 
 		try {
 			const options = {
@@ -66,11 +67,15 @@ const AddGoat = () => {
 				maxWidthOrHeight: 1200,
 				useWebWorker: true,
 			};
-			const compressedFile = await imageCompression(file, options);
-			setImageFile(compressedFile);
+
+			const compressedFiles = await Promise.all(
+				files.map((file) => imageCompression(file, options))
+			);
+
+			setImageFiles(compressedFiles);
 		} catch (err) {
 			console.error('Image compression failed:', err);
-			setError('Image compression failed. Try a smaller file.');
+			setError('Image compression failed. Try smaller files.');
 		}
 	};
 
@@ -80,11 +85,11 @@ const AddGoat = () => {
 
 		try {
 			const token = state.user?.token;
-			let image = '';
+			let uploadedImages = [];
 
-			if (imageFile) {
+			for (const file of imageFiles) {
 				const formData = new FormData();
-				formData.append('file', imageFile);
+				formData.append('file', file);
 				formData.append(
 					'upload_preset',
 					import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
@@ -94,23 +99,20 @@ const AddGoat = () => {
 					import.meta.env.VITE_CLOUDINARY_UPLOAD_URL,
 					formData
 				);
-				image = uploadRes.data.secure_url;
+				uploadedImages.push(uploadRes.data.secure_url);
 			}
 
 			const goatData = {
 				...goat,
 				price: goat.forSale ? Number(goat.price) : null,
-				image,
+				images: uploadedImages, // ⬅️ Multiple images
 			};
 
 			const res = await axiosInstance.post('/goats', goatData, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
-			console.log('✅ Goat added:', res.data);
 
-			// alert(`✅ Goat added: ${res.data.nickname}`);
 			alert(`✅ Goat added: ${res.data.newGoat.nickname}`);
-
 			navigate('/our-goats');
 		} catch (error) {
 			console.error('❌ Failed to add goat:', error);
@@ -149,6 +151,27 @@ const AddGoat = () => {
 					value={goat.adgaId}
 					onChange={handleChange}
 				/>
+				<div className='mb-4'>
+					<label
+						htmlFor='gender'
+						className='block text-sm font-medium text-gray-700'
+					>
+						Gender <span className='text-red-500'>*</span>
+					</label>
+					<select
+						id='gender'
+						name='gender'
+						required
+						className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2'
+						value={goat.gender}
+						onChange={(e) => setGoat({ ...goat, gender: e.target.value })}
+					>
+						<option value=''>Select</option>
+						<option value='Doe'>Doe</option>
+						<option value='Buck'>Buck</option>
+						<option value='Wether'>Wether</option>
+					</select>
+				</div>
 
 				<div>
 					<label className='block font-medium mb-1'>Awards</label>
@@ -230,7 +253,12 @@ const AddGoat = () => {
 
 				<div>
 					<label className='block font-medium mb-1'>Goat Image</label>
-					<input type='file' accept='image/*' onChange={handleImageChange} />
+					<input
+						type='file'
+						accept='image/*'
+						multiple
+						onChange={handleImageChange}
+					/>
 				</div>
 
 				<button

@@ -2,33 +2,37 @@
 import { Link } from 'react-router-dom';
 
 const GoatCard = ({ goat }) => {
-	const { _id, nickname, registeredName, image, forSale, price, dob } = goat;
+	const image = goat.images?.[0]; // Show only the first image
 
 	return (
-		<article className='bg-white-300/60 text-white backdrop-blur-sm p-4 rounded-b'>
-			<Link to={`/goats/${_id}`} className='block hover:no-underline'>
-				{image && (
+		<div className='bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-stone-200 min-h-[600px] flex flex-col'>
+			<Link to={`/goats/${goat._id}`}>
+				{/* Image */}
+				<div className='h-full w-full'>
 					<img
-						src={image}
-						alt={registeredName || nickname}
-						className='w-full h-90 object-cover'
+						src={goat.images?.[0] || '/images/goat_logo1.png'}
+						alt={goat.nickname}
+						className='w-full h-[500px] sm:h-[600px] object-cover rounded-lg shadow-md'
 						loading='lazy'
 					/>
-				)}
+				</div>
 
-				<div className='p-4 space-y-2'>
-					<h3 className='text-xl font-semibold text-black'>{nickname}</h3>
-					<p className='text-md text-gray-800 italic'>{registeredName}</p>
-					<p className='text-md text-gray-700'>
-						DOB: {new Date(dob).toLocaleDateString()}
-					</p>
+				{/* Info section */}
+				<div className='p-4'>
+					<h3 className='text-xl font-bold text-amber-800 mb-2'>
+						{goat.nickname}
+					</h3>
+					<p className='text-sm text-gray-600'>ADGA ID: {goat.adgaId}</p>
+					<p className='text-sm text-gray-600'>Gender: {goat.gender}</p>
 
-					{forSale && (
-						<p className='text-green-700 font-semibold'>For Sale – ${price}</p>
+					{goat.forSale && (
+						<p className='text-green-700 font-semibold mt-2'>
+							For Sale: ${goat.price}
+						</p>
 					)}
 				</div>
 			</Link>
-		</article>
+		</div>
 	);
 };
 

@@ -5,11 +5,18 @@ import axiosInstance from '../../api/axios';
 import Spinner from '../../components/Spinner';
 import SeoHead from '../../components/SeoHead';
 
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/styles.css';
+import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
+import 'yet-another-react-lightbox/plugins/thumbnails.css';
+import Captions from 'yet-another-react-lightbox/plugins/captions';
+import 'yet-another-react-lightbox/plugins/captions.css';
+
 const GoatDetails = () => {
 	const { id } = useParams();
 	const [goat, setGoat] = useState(null);
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	const [openLightbox, setOpenLightbox] = useState(false);
 
 	useEffect(() => {
 		const fetchGoat = async () => {
@@ -17,23 +24,25 @@ const GoatDetails = () => {
 				const res = await axiosInstance.get(`/goats/${id}`);
 				setGoat(res.data);
 			} catch (err) {
-				setError('Goat not found.');
+				console.error('Failed to fetch goat:', err);
 			} finally {
 				setLoading(false);
 			}
 		};
-
 		fetchGoat();
 	}, [id]);
 
 	if (loading) return <Spinner />;
-	if (error) return <div className='p-8 text-red-600'>{error}</div>;
-	if (!goat) return null;
+	if (!goat)
+		return (
+			<div className='text-center text-red-600 py-10'>Goat not found.</div>
+		);
 
 	const {
 		nickname,
 		registeredName,
 		dob,
+		gender,
 		adgaId,
 		awards,
 		pedigree,
@@ -41,77 +50,119 @@ const GoatDetails = () => {
 		forSale,
 		price,
 		additionalInfo,
-		images = [],
+		images = [], // Array of image URLs
 	} = goat;
+
+	const slides = goat.images?.map((url) => ({
+		src: url,
+		title: goat.nickname,
+	}));
 
 	return (
 		<>
 			<SeoHead
-				title={`${nickname} | Blueberry Dairy Nigerian Dwarf Goat`}
-				description={
-					additionalInfo?.slice(0, 150) ||
-					`Learn more about ${nickname}, a Nigerian Dwarf Goat at Blueberry Dairy.`
-				}
-				image={images[0]}
+				title={`${nickname} | Nigerian Dwarf Goat at Blueberry Dairy`}
+				description={`Meet ${nickname}, a registered Nigerian Dwarf goat at Blueberry Dairy. Born on ${new Date(
+					dob
+				).toLocaleDateString()}, ADGA ID: ${adgaId}. ${additionalInfo}`}
+				image={images[0] || undefined}
 				url={`https://www.blueberrydairy.com/goats/${id}`}
 			/>
 
-			<div className='max-w-5xl mx-auto px-6 py-12'>
+			<div className='max-w-7xl mx-auto px-6 py-12'>
 				<h1 className='text-4xl font-bold text-amber-900 mb-6'>{nickname}</h1>
-				<p className='text-lg text-gray-700 mb-4 italic'>
-					{registeredName}
-				</p>
 
-				{/* Image gallery */}
-				<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6'>
-					{images.map((url, idx) => (
-						<img
-							key={idx}
-							src={url}
-							alt={`${nickname} - ${idx + 1}`}
-							className='w-full h-auto object-cover rounded shadow-md'
-							loading='lazy'
+				{images.length > 0 && (
+					<>
+						<div
+							className='w-full cursor-pointer rounded overflow-hidden shadow-md'
+							onClick={() => setOpenLightbox(true)}
+						>
+							<img
+								src={goat.images?.[1] || '/images/goat_logo1.png'}
+								alt={goat.nickname}
+								className='w-full h-220 object-cover rounded-lg shadow-md'
+								loading='lazy'
+							/>
+							<p className='text-md text-center text-gray-600 mt-2'>
+								Click to view photo gallery
+							</p>
+						</div>
+
+						<Lightbox
+							open={openLightbox}
+							close={() => setOpenLightbox(false)}
+							slides={slides}
+							plugins={[Thumbnails, Captions]}
 						/>
-					))}
-				</div>
+					</>
+				)}
 
-				<ul className='space-y-2 text-gray-800'>
-					<li><strong>Date of Birth:</strong> {dob}</li>
-					<li><strong>ADGA ID:</strong> {adgaId}</li>
-					<li><strong>DNA Confirmed:</strong> {dnaConfirmed ? 'Yes' : 'No'}</li>
-					<li><strong>Available for Sale:</strong> {forSale ? `Yes - $${price}` : 'No'}</li>
-				</ul>
+				<div className='mt-8 space-y-4'>
+					<p>
+						<span className='font-semibold'>Registered Name:</span>{' '}
+						{registeredName}
+					</p>
+					<p>
+						<span className='font-semibold'>Date of Birth:</span>{' '}
+						{new Date(dob).toLocaleDateString()}
+					</p>
+					<p>
+						<span className='font-semibold'>Gender:</span> {gender}
+					</p>
 
-				{awards.length > 0 && (
-					<div className='mt-6'>
-						<h2 className='text-xl font-semibold text-amber-800'>Awards</h2>
-						<ul className='list-disc list-inside text-gray-700'>
-							{awards.map((award, idx) => (
-								<li key={idx}>{award}</li>
-							))}
+					<p>
+						<span className='font-semibold'>ADGA ID:</span> {adgaId}
+					</p>
+					{awards?.length > 0 && (
+						<div>
+							<p className='font-semibold'>Awards:</p>
+							<ul className='list-disc list-inside'>
+								{awards.map((award, idx) => (
+									<li key={idx}>{award}</li>
+								))}
+							</ul>
+						</div>
+					)}
+					<div>
+						<p className='font-semibold mb-1'>Pedigree:</p>
+						<ul className='list-disc list-inside text-sm'>
+							<li>
+								<strong>Sire:</strong> {pedigree?.sire}
+							</li>
+							<li>
+								<strong>Sire’s Sire:</strong> {pedigree?.siresSire}
+							</li>
+							<li>
+								<strong>Sire’s Dam:</strong> {pedigree?.siresDam}
+							</li>
+							<li>
+								<strong>Dam:</strong> {pedigree?.dam}
+							</li>
+							<li>
+								<strong>Dam’s Sire:</strong> {pedigree?.damsSire}
+							</li>
+							<li>
+								<strong>Dam’s Dam:</strong> {pedigree?.damsDam}
+							</li>
 						</ul>
 					</div>
-				)}
-
-				<div className='mt-6'>
-					<h2 className='text-xl font-semibold text-amber-800'>Pedigree</h2>
-					<ul className='text-gray-700 space-y-1'>
-						{Object.entries(pedigree).map(([key, value]) => (
-							<li key={key}>
-								<strong>{key.replace(/([A-Z])/g, ' $1')}:</strong> {value}
-							</li>
-						))}
-					</ul>
+					<p>
+						<span className='font-semibold'>DNA Confirmed:</span>{' '}
+						{dnaConfirmed ? 'Yes' : 'No'}
+					</p>
+					{forSale && (
+						<>
+							<p>
+								<span className='font-semibold'>Price:</span> ${price}
+							</p>
+							<p>
+								<span className='font-semibold'>More Info:</span>{' '}
+								{additionalInfo}
+							</p>
+						</>
+					)}
 				</div>
-
-				{additionalInfo && (
-					<div className='mt-6'>
-						<h2 className='text-xl font-semibold text-amber-800'>
-							Additional Information
-						</h2>
-						<p className='text-gray-700 mt-2'>{additionalInfo}</p>
-					</div>
-				)}
 			</div>
 		</>
 	);
