@@ -42,6 +42,8 @@ import ManageInventory from './pages/admin/products/ManageInventory.jsx';
 import GoatList from './pages/goats/GoatList.jsx';
 import AddGoat from './pages/admin/goats/AddGoat.jsx';
 import GoatDetails from './pages/goats/GoatDetails.jsx';
+import EditGoat from './pages/admin/goats/EditGoat.jsx';
+import ManageGoats from './pages/admin/goats/ManageGoats.jsx';
 
 function App() {
 	return (
@@ -165,6 +167,22 @@ function App() {
 						}
 					/>
 					<Route path='/goats/:id' element={<GoatDetails />} />
+					<Route
+						path='/admin/edit-goat/:id'
+						element={
+							<AdminRoute>
+								<EditGoat />
+							</AdminRoute>
+						}
+					/>
+					<Route
+						path='/manage-goats'
+						element={
+							<AdminRoute>
+								<ManageGoats />
+							</AdminRoute>
+						}
+					/>
 				</Routes>
 			</NavbarLayout>
 		</>

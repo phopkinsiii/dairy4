@@ -131,7 +131,7 @@ export const validateGoatData = (data) => {
 		errors.push('Date of birth (dob) is required and must be a valid date.');
 	}
 
-	if (!data.gender || !['male', 'female', 'wether'].includes(data.gender.toLowerCase())) {
+	if (!data.gender || !['Buck', 'Doe', 'Wether'].includes(data.gender)) {
 		errors.push('Gender is required and must be one of: male, female, wether.');
 	}
 
@@ -157,4 +157,3 @@ export const validateGoatData = (data) => {
 		errors,
 	};
 };
-

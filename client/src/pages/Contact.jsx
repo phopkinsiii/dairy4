@@ -52,11 +52,11 @@ export default function Contact() {
 			<div
 				className='bg-cover bg-center min-h-screen flex items-center justify-center px-6 py-20'
 				style={{
-					backgroundImage: `url('/images/blueberriesxl.jpg')`,
+					backgroundImage: `url('/images/creek_barn.jpg')`,
 					fontFamily: `'Lora', serif`,
 				}}
 			>
-				<div className='bg-white/30 backdrop-blur-md p-10 rounded-lg shadow-2xl max-w-3xl w-full'>
+				<div className='bg-white/20 backdrop-blur-sm p-10 rounded-lg shadow-2xl max-w-3xl w-full'>
 					<h2 className='text-4xl font-bold text-stone-800 mb-6 text-center'>
 						Let’s Connect
 					</h2>
@@ -81,7 +81,7 @@ export default function Contact() {
 								value={firstName}
 								onChange={handleChange}
 								placeholder='First Name'
-								className='w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
+								className='w-full border-2 border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
 							/>
 							<input
 								type='text'
@@ -89,7 +89,7 @@ export default function Contact() {
 								value={lastName}
 								onChange={handleChange}
 								placeholder='Last Name'
-								className='w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
+								className='w-full border-2 border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
 							/>
 						</div>
 
@@ -99,7 +99,7 @@ export default function Contact() {
 							value={email}
 							onChange={handleChange}
 							placeholder='Email'
-							className='w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
+							className='w-full border-2 border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
 						/>
 
 						<input
@@ -108,7 +108,7 @@ export default function Contact() {
 							value={company}
 							onChange={handleChange}
 							placeholder='Company (optional)'
-							className='w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
+							className='w-full border-2 border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
 						/>
 
 						<input
@@ -117,7 +117,7 @@ export default function Contact() {
 							value={subject}
 							onChange={handleChange}
 							placeholder='Subject'
-							className='w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
+							className='w-full border-2 border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400'
 						/>
 
 						<textarea
@@ -126,7 +126,7 @@ export default function Contact() {
 							onChange={handleChange}
 							rows={5}
 							placeholder='Your message...'
-							className='w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none'
+							className='w-full border-2 border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none'
 						/>
 
 						<div className='flex justify-between items-center mt-6'>

@@ -34,12 +34,12 @@ const Home = () => {
 						Blueberry Dairy at Hickory Cove Orchards
 					</h1>
 					<p className='text-lg sm:text-xl drop-shadow-lg text-white bg-black/30 backdrop-blur-md px-4 py-2 rounded-md inline-block'>
-						You want healthy, natural food that nourishes your body and your
-						family. At Blueberry Dairy and Hickory Cove Orchards, we grow
-						nutrient-dense, organically raised food with care, right here in
-						East Tennessee. You don't have to settle for processed groceries,
-						laden with chemicals and trucked in from far away—come discover
-						local food that makes a difference.
+						"You want real, nourishing food for your family—but grocery store
+						labels are confusing, even scary. At Blueberry Dairy and Hickory
+						Cove Orchards, we raise naturally nutritious food organically and
+						with care, right here in East Tennessee. Skip the chemicals and
+						shipping from factory farms hundreds or thousands of miles
+						away—discover the difference local food makes."
 					</p>
 					<RouterLink
 						to='/products'

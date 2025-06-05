@@ -8,7 +8,7 @@ import imageCompression from 'browser-image-compression';
 import { useUserContext } from '../../../contexts/UserContext';
 
 import { validateGoatForm } from '../../../utils/validators';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify';
 
 const AddGoat = () => {
 	const { state } = useUserContext();
@@ -84,11 +84,11 @@ const AddGoat = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError(null);
-			const errors = validateGoatForm(goat);
-	if (Object.keys(errors).length > 0) {
-		Object.values(errors).forEach((msg) => toast.error(msg));
-		return;
-	}
+		const errors = validateGoatForm(goat);
+		if (Object.keys(errors).length > 0) {
+			Object.values(errors).forEach((msg) => toast.error(msg));
+			return;
+		}
 
 		try {
 			const token = state.user?.token;
@@ -120,7 +120,7 @@ const AddGoat = () => {
 			});
 
 			alert(`✅ Goat added: ${res.data.newGoat.nickname}`);
-			navigate('/our-goats');
+			navigate('/goats');
 		} catch (error) {
 			console.error('❌ Failed to add goat:', error);
 			setError(error.response?.data?.message || 'Failed to add goat');

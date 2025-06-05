@@ -25,8 +25,10 @@ export const getGoatById = async (req, res) => {
 export const createGoat = async (req, res) => {
 	const { isValid, errors } = validateGoatData(req.body);
 	if (!isValid) {
+		console.error('❌ Validation errors:', errors);
 		return res.status(400).json({ message: 'Invalid goat data', errors });
 	}
+
 	try {
 		const newGoat = new Goat(req.body);
 		const savedGoat = await newGoat.save();

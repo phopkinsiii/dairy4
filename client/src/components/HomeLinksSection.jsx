@@ -14,8 +14,8 @@ const HomeLinksSection = () => {
     },
     {
       title: 'See Our Goats',
-      image: '/images/Robert.jpg',
-      to: '/products',
+      image: '/images/Goats 2025/Cocoa_and_Babies.jpg',
+      to: '/goats',
     },
   ];
 
