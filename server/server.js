@@ -4,9 +4,7 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import path from 'path';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
+import { corsOptions } from './config/corsOptions.js';
 
 // Debug the loaded environment variable
 console.log('✅ CLIENT_URL from .env:', process.env.CLIENT_URL);
@@ -23,83 +21,23 @@ import webhookRoutes from './routes/webhookRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import forumRoutes from './routes/forumRoutes.js';
 import goatRoutes from './routes/goatRoutes.js';
+import {
+	uploadsMiddleware,
+	uploadsCORSHeaders,
+} from './middleware/uploadsMiddleware.js';
 
 const app = express();
 
-// ✅ Set allowed origins from .env or fallback
-const allowedOrigins = [
-	process.env.CLIENT_URL,
-	'http://localhost:5173',
-	'http://127.0.0.1:5173',
-	'http://localhost:3000',
-].filter(Boolean); // Remove undefined entries
-
-app.use(
-	cors({
-		origin: function (origin, callback) {
-			// Allow requests with no origin (like mobile apps or curl)
-			if (!origin) return callback(null, true);
-
-			if (allowedOrigins.includes(origin)) {
-				console.log('✅ CORS Allowed:', origin);
-				callback(null, true);
-			} else {
-				console.warn('❌ CORS Rejected:', origin);
-				callback(new Error('Not allowed by CORS'));
-			}
-		},
-		credentials: true,
-	})
-);
-
-// ✅ Resolve __dirname (for ES modules)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// ✅ Ensure /uploads directory exists
-const uploadsDir = path.join(__dirname, '/uploads');
-if (!fs.existsSync(uploadsDir)) {
-	fs.mkdirSync(uploadsDir);
-}
-
-// ✅ CORS middleware (with origin logging for debugging)
-app.use(
-	cors({
-		origin: function (origin, callback) {
-			console.log('🔍 Incoming origin:', origin);
-
-			if (!origin || allowedOrigins.includes(origin)) {
-				callback(null, true);
-			} else {
-				console.warn('❌ CORS Rejected origin:', origin);
-				callback(new Error('Not allowed by CORS'));
-			}
-		},
-		credentials: true,
-	})
-);
-
 // Middleware
 app.use(morgan('dev'));
+app.use(cors(corsOptions));
 app.use('/webhook', express.raw({ type: 'application/json' }), webhookRoutes);
-
 app.use(express.json());
 
-// ✅ Serve static files (uploads)
-app.use(
-	'/uploads',
-	(req, res, next) => {
-		res.header('Access-Control-Allow-Origin', process.env.CLIENT_URL || '*');
-		res.header(
-			'Access-Control-Allow-Headers',
-			'Origin, X-Requested-With, Content-Type, Accept'
-		);
-		next();
-	},
-	express.static(uploadsDir)
-);
+// ✅ Serve static uploads
+app.use('/uploads', uploadsCORSHeaders, uploadsMiddleware);
 
-// ✅ Routes
+// ✅ API Routes
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/contacts', contactRoutes);

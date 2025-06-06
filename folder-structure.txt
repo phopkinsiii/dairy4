@@ -1,74 +1,98 @@
 .
-├── .DS_Store
-├── .env
-├── .gitignore
 ├── client
-│   ├── .DS_Store
-│   ├── .env
-│   ├── .gitignore
-│   ├── eslint.config.js
-│   ├── index.html
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── public
-│   │   ├── .DS_Store
+│   ├── dist
+│   │   ├── _redirects
+│   │   ├── assets
+│   │   │   ├── index-CQg1kVbG.css
+│   │   │   └── index-Cvnc3hg3.js
 │   │   ├── images
 │   │   │   ├── ace_ready.jpeg
-│   │   │   ├── Ada.jpg
-│   │   │   ├── Ada2.jpg
-│   │   │   ├── Ada3.HEIC
-│   │   │   ├── albert.jpg
-│   │   │   ├── Amanda2.HEIC
-│   │   │   ├── Amanda2.jpg
 │   │   │   ├── apple1.jpg
 │   │   │   ├── big_dairy.jpg
 │   │   │   ├── BlueberriesInHand.jpg
 │   │   │   ├── blueberrieslg.jpg
 │   │   │   ├── blueberriesxl.jpg
-│   │   │   ├── Cocoa and Babies BW.jpg
-│   │   │   ├── Cocoa_and_Babies.jpg
 │   │   │   ├── cow.jpg
 │   │   │   ├── creek_barn.jpg
 │   │   │   ├── creek1.jpg
 │   │   │   ├── deer_and_apples.webp
-│   │   │   ├── Enrico.jpeg
 │   │   │   ├── farm-banner.jpg
 │   │   │   ├── Final Banner.png
 │   │   │   ├── goat_logo_3.png
 │   │   │   ├── goat_logo1.png
 │   │   │   ├── goat_logo2.png
+│   │   │   ├── Goats 2025
 │   │   │   ├── house.jpg
 │   │   │   ├── house2.jpg
 │   │   │   ├── isaac_banner.jpg
-│   │   │   ├── isaac.jpeg
 │   │   │   ├── Judy_and_ball.jpeg
 │   │   │   ├── judy.jpeg
-│   │   │   ├── Lisa and Patsy.HEIC
-│   │   │   ├── Lisa and Patsy.jpg
-│   │   │   ├── Lisa.HEIC
-│   │   │   ├── Lisa.psd
-│   │   │   ├── Max.jpeg
 │   │   │   ├── milk1.jpg
 │   │   │   ├── mountain_in_clouds.jpeg
 │   │   │   ├── myLogo.png
 │   │   │   ├── navbar-bg.png
+│   │   │   ├── pasture_scene.jpg
 │   │   │   ├── piggyback.png
 │   │   │   ├── Pond.jpg
 │   │   │   ├── Pond2.jpg
 │   │   │   ├── pond3.jpg
-│   │   │   ├── Richard and Missy.HEIC
-│   │   │   ├── richard.jpeg
-│   │   │   ├── Richard2.HEIC
-│   │   │   ├── Richard3.jpg
-│   │   │   ├── Robert.jpg
 │   │   │   ├── rolling_hills.jpg
 │   │   │   ├── rolling_hills2.jpg
 │   │   │   ├── smoothie.jpg
 │   │   │   ├── snow_scene.zip
 │   │   │   └── thumbnails
-│   │   │       ├── apple1-thumb.jpg
-│   │   │       ├── blueberrieslg-thumb.jpg
-│   │   │       └── milk1-thumb.jpg
+│   │   ├── index.html
+│   │   └── videos
+│   │       ├── Albert1.mov
+│   │       ├── Albert2.mov
+│   │       ├── Amanda1.mov
+│   │       ├── Coco and Patsys Kids 2025.mov
+│   │       ├── Cocoa and her Babies 2025.mov
+│   │       ├── Piggy Back 2025.mov
+│   │       ├── The whole gang 2025.mov
+│   │       └── thewholegang.psd
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── public
+│   │   ├── _redirects
+│   │   ├── images
+│   │   │   ├── ace_ready.jpeg
+│   │   │   ├── apple1.jpg
+│   │   │   ├── big_dairy.jpg
+│   │   │   ├── BlueberriesInHand.jpg
+│   │   │   ├── blueberrieslg.jpg
+│   │   │   ├── blueberriesxl.jpg
+│   │   │   ├── cow.jpg
+│   │   │   ├── creek_barn.jpg
+│   │   │   ├── creek1.jpg
+│   │   │   ├── deer_and_apples.webp
+│   │   │   ├── farm-banner.jpg
+│   │   │   ├── Final Banner.png
+│   │   │   ├── goat_logo_3.png
+│   │   │   ├── goat_logo1.png
+│   │   │   ├── goat_logo2.png
+│   │   │   ├── Goats 2025
+│   │   │   ├── house.jpg
+│   │   │   ├── house2.jpg
+│   │   │   ├── isaac_banner.jpg
+│   │   │   ├── Judy_and_ball.jpeg
+│   │   │   ├── judy.jpeg
+│   │   │   ├── milk1.jpg
+│   │   │   ├── mountain_in_clouds.jpeg
+│   │   │   ├── myLogo.png
+│   │   │   ├── navbar-bg.png
+│   │   │   ├── pasture_scene.jpg
+│   │   │   ├── piggyback.png
+│   │   │   ├── Pond.jpg
+│   │   │   ├── Pond2.jpg
+│   │   │   ├── pond3.jpg
+│   │   │   ├── rolling_hills.jpg
+│   │   │   ├── rolling_hills2.jpg
+│   │   │   ├── smoothie.jpg
+│   │   │   ├── snow_scene.zip
+│   │   │   └── thumbnails
 │   │   └── videos
 │   │       ├── Albert1.mov
 │   │       ├── Albert2.mov
@@ -88,18 +112,14 @@
 │   │   │   ├── AdminDropdown.jsx
 │   │   │   ├── AuthButton.jsx
 │   │   │   ├── blog
-│   │   │   │   └── BlogCard.jsx
 │   │   │   ├── ConfirmRoleChangeModal.jsx
 │   │   │   ├── FarmMap.jsx
 │   │   │   ├── ForgotPassword.jsx
 │   │   │   ├── forum
-│   │   │   │   ├── AddForumPost.jsx
-│   │   │   │   ├── ForumPostForm.jsx
-│   │   │   │   └── ForumReplyForm.jsx
+│   │   │   ├── goats
 │   │   │   ├── HomeLinksSection.jsx
 │   │   │   ├── ImageUploadWithPreview.jsx
 │   │   │   ├── layouts
-│   │   │   │   └── DarkPageLayout.jsx
 │   │   │   ├── Logo.jsx
 │   │   │   ├── MenuBar.jsx
 │   │   │   ├── NavbarLayout.jsx
@@ -108,6 +128,7 @@
 │   │   │   ├── PopoverMessage.jsx
 │   │   │   ├── ResetPassword.jsx
 │   │   │   ├── ScrollingBanner.jsx
+│   │   │   ├── SeoHead.jsx
 │   │   │   ├── SlideShow.jsx
 │   │   │   ├── Spinner.jsx
 │   │   │   ├── StickyNavbar.jsx
@@ -123,55 +144,35 @@
 │   │   │   ├── CartContext.jsx
 │   │   │   ├── ContactContext.jsx
 │   │   │   ├── ForumContext.jsx
+│   │   │   ├── GoatContext.jsx
 │   │   │   ├── NavbarContext.jsx
 │   │   │   ├── ProductContext.jsx
 │   │   │   ├── ThemeContext.jsx
-│   │   │   └── userContext.jsx
+│   │   │   └── UserContext.jsx
 │   │   ├── index.css
 │   │   ├── main.jsx
 │   │   ├── pages
 │   │   │   ├── Accessibility.jsx
 │   │   │   ├── admin
-│   │   │   │   ├── AdminRoute.jsx
-│   │   │   │   ├── blog
-│   │   │   │   │   ├── AddBlogPost.jsx
-│   │   │   │   │   ├── BlogEditor.jsx
-│   │   │   │   │   ├── ManagePosts.jsx
-│   │   │   │   │   └── UpdateBlog.jsx
-│   │   │   │   ├── ManageUsers.jsx
-│   │   │   │   ├── PrivateRoute.jsx
-│   │   │   │   └── products
-│   │   │   │       ├── AddProduct.jsx
-│   │   │   │       ├── AdminOrders.jsx
-│   │   │   │       ├── EditProduct.jsx
-│   │   │   │       ├── ManageInventory.jsx
-│   │   │   │       └── ManageProducts.jsx
 │   │   │   ├── blog
-│   │   │   │   ├── BlogPage.jsx
-│   │   │   │   └── BlogPost.jsx
 │   │   │   ├── Contact.jsx
 │   │   │   ├── forum
-│   │   │   │   ├── ForumPage.jsx
-│   │   │   │   └── ForumPost.jsx
+│   │   │   ├── goats
 │   │   │   ├── Home.jsx
 │   │   │   ├── Login.jsx
 │   │   │   ├── OurFarm.jsx
 │   │   │   ├── products
-│   │   │   │   ├── Cart.jsx
-│   │   │   │   ├── Checkout.jsx
-│   │   │   │   ├── Confirmation.jsx
-│   │   │   │   ├── ProductCard.jsx
-│   │   │   │   ├── ProductDetails.jsx
-│   │   │   │   └── ProductList.jsx
 │   │   │   └── Register.jsx
 │   │   ├── reducers
 │   │   │   └── forumReducer.js
 │   │   ├── services
 │   │   │   ├── authService.js
 │   │   │   ├── forumService.js
+│   │   │   ├── goatService.js
 │   │   │   ├── productService.js
 │   │   │   └── uploadService.js
 │   │   └── utils
+│   │       ├── seo.js
 │   │       └── validators.js
 │   └── vite.config.js
 ├── Codesnippets.md
@@ -180,7 +181,6 @@
 ├── package.json
 ├── Readme.md
 ├── server
-│   ├── .env
 │   ├── config
 │   │   ├── db.js
 │   │   └── stripe.js
@@ -193,7 +193,8 @@
 │   │   ├── orderController.js
 │   │   ├── productController.js
 │   │   ├── uploadController.js
-│   │   └── userController.js
+│   │   ├── userController.js
+│   │   └── webhookController.js
 │   ├── middleware
 │   │   ├── authMiddleware.js
 │   │   ├── errorHandler.js
@@ -250,7 +251,6 @@
 │   │   ├── 1748032285527-milk1.jpg
 │   │   └── 1748433405848-albert.jpg
 │   └── utils
-│       ├── .gitignore
 │       ├── createUserResponse.js
 │       ├── generateToken.js
 │       ├── sendEmail.js
@@ -258,4 +258,4 @@
 ├── start-stripe-listener.sh
 └── stripe-testing-readme.md
 
-34 directories, 225 files
+41 directories, 218 files
