@@ -1,10 +1,8 @@
-// @ts-nocheck
+// controllers/webhookController.js
 import Stripe from 'stripe';
-import dotenv from 'dotenv';
 import Order from '../models/orderModel.js';
 import { sendOrderConfirmationEmail } from '../utils/sendEmail.js';
 
-dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const handleStripeWebhook = async (req, res) => {
@@ -12,6 +10,7 @@ export const handleStripeWebhook = async (req, res) => {
 	const sig = req.headers['stripe-signature'];
 
 	let event;
+
 	try {
 		event = stripe.webhooks.constructEvent(
 			req.body,
@@ -32,16 +31,27 @@ export const handleStripeWebhook = async (req, res) => {
 
 		try {
 			console.log('🛍️ Raw metadata.cart:', metadata.cart);
-			cartItems = JSON.parse(session.metadata.cart || '[]');
-			console.log('🧾 Parsed cartItems from metadata:', cartItems);
+			cartItems = JSON.parse(metadata.cart || '[]');
+			console.log('🧾 Parsed cartItems:', cartItems);
 		} catch (err) {
 			console.error('❌ Failed to parse cartItems:', err.message);
+		}
+
+		// Log and validate pickupTime
+		console.log('📅 Raw pickupTime metadata:', metadata.pickupTime);
+		const parsedPickupTime = new Date(metadata.pickupTime);
+		const validPickupTime = isNaN(parsedPickupTime.getTime())
+			? null
+			: parsedPickupTime;
+
+		if (!validPickupTime) {
+			console.warn('⚠️ Invalid or missing pickupTime:', metadata.pickupTime);
 		}
 
 		const newOrder = new Order({
 			guest: true,
 			user: null,
-			name: session.metadata.name || '',
+			name: metadata.name || '',
 			email: session.customer_email || '',
 			cartItems: cartItems.map((item) => ({
 				productId: item.productId,
@@ -50,9 +60,9 @@ export const handleStripeWebhook = async (req, res) => {
 				price: item.price,
 				size: item.selectedSize,
 			})),
-			pickupName: session.metadata.pickupName || '',
-			pickupLocation: session.metadata.pickupLocation || 'Farm',
-			pickupTime: new Date(session.metadata.pickupTime),
+			pickupName: metadata.pickupName || '',
+			pickupLocation: metadata.pickupLocation || 'Farm',
+			pickupTime: validPickupTime,
 			stripeSessionId: session.id,
 		});
 
@@ -61,8 +71,10 @@ export const handleStripeWebhook = async (req, res) => {
 			console.log('📝 Order saved to MongoDB:', newOrder._id);
 		} catch (err) {
 			console.error('❌ Order save failed:', err.message);
+			console.error('Full error:', err);
 		}
 
+		// Send confirmation email to customer
 		if (session.customer_email) {
 			try {
 				await sendOrderConfirmationEmail({
@@ -72,14 +84,17 @@ export const handleStripeWebhook = async (req, res) => {
 					cartItems: newOrder.cartItems,
 					pickupName: newOrder.pickupName,
 					pickupLocation: newOrder.pickupLocation,
-					pickupTime: newOrder.pickupTime.toLocaleString(),
+					pickupTime: validPickupTime
+						? validPickupTime.toLocaleString()
+						: 'Unavailable',
 				});
 				console.log('📧 Confirmation email sent to customer');
 			} catch (err) {
-				console.error('❌ Failed to send confirmation email to customer:', err.message);
+				console.error('❌ Failed to send customer confirmation email:', err.message);
 			}
 		}
 
+		// Optional: Send admin notification
 		try {
 			await sendOrderConfirmationEmail({
 				to: process.env.ADMIN_EMAIL,
@@ -88,12 +103,14 @@ export const handleStripeWebhook = async (req, res) => {
 				cartItems: newOrder.cartItems,
 				pickupName: newOrder.pickupName,
 				pickupLocation: newOrder.pickupLocation,
-				pickupTime: newOrder.pickupTime.toLocaleString(),
+				pickupTime: validPickupTime
+					? validPickupTime.toLocaleString()
+					: 'Unavailable',
 				isAdminCopy: true,
 			});
 			console.log('📧 Admin notification sent');
 		} catch (err) {
-			console.error('❌ Failed to send admin notification:', err.message);
+			console.error('❌ Failed to send admin email:', err.message);
 		}
 	} else {
 		console.log(`ℹ️ Unhandled event type: ${event.type}`);
