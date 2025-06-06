@@ -51,7 +51,6 @@ app.use(
 	})
 );
 
-
 // ✅ Resolve __dirname (for ES modules)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -82,6 +81,7 @@ app.use(
 // Middleware
 app.use(morgan('dev'));
 app.use('/webhook', express.raw({ type: 'application/json' }), webhookRoutes);
+
 app.use(express.json());
 
 // ✅ Serve static files (uploads)

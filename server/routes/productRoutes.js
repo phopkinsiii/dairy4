@@ -44,6 +44,10 @@ const upload = multer({
 });
 
 const router = express.Router();
+//Test route
+router.get('/test', (req, res) => {
+	res.send('✅ Products API working!');
+});
 
 // ✅ Public Routes
 router.get('/', getAllProducts);
