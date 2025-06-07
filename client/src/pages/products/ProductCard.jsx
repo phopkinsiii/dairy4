@@ -42,13 +42,20 @@ const ProductCard = ({ product }) => {
 				className='bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col h-[500px]'
 				style={{ fontFamily: 'Poppins, sans-serif' }}
 			>
-				<img
-					src={`${import.meta.env.VITE_MEDIA_BASE_URL}${product.imageSrc}`}
-					alt={product.imageAlt || 'Product image'}
-					loading='lazy'
-					crossOrigin='anonymous'
-					className='w-full h-48 object-cover rounded-t-lg'
-				/>
+				{product.imageSrc ? (
+					<img
+						src={product.imageSrc}
+						alt={product.imageAlt || 'Product image'}
+						loading='lazy'
+						crossOrigin='anonymous'
+						className='w-full h-48 object-cover rounded-t-lg'
+					/>
+				) : (
+					<div className='w-full h-48 flex items-center justify-center bg-gray-100 text-gray-500'>
+						No Image
+					</div>
+				)}
+
 				<div className='flex flex-col flex-grow p-4'>
 					<h3 className='text-lg font-semibold text-gray-900 mb-1 line-clamp-2'>
 						{product.name}
@@ -84,13 +91,11 @@ const ProductCard = ({ product }) => {
 					<button
 						onClick={() => handleAddToCart(product)}
 						disabled={product.stock === 0}
-						className={`mt-2 px-4 py-2 rounded text-white transition 
-    ${
-			product.stock === 0
-				? 'bg-gray-400 cursor-not-allowed'
-				: 'bg-green-600 hover:bg-green-700'
-		}
-  `}
+						className={`mt-2 px-4 py-2 rounded text-white transition ${
+							product.stock === 0
+								? 'bg-gray-400 cursor-not-allowed'
+								: 'bg-green-600 hover:bg-green-700'
+						}`}
 					>
 						{product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
 					</button>

@@ -3,8 +3,8 @@
 │   ├── dist
 │   │   ├── _redirects
 │   │   ├── assets
-│   │   │   ├── index-CQg1kVbG.css
-│   │   │   └── index-Cvnc3hg3.js
+│   │   │   ├── index-BL3eIzzj.js
+│   │   │   └── index-CQg1kVbG.css
 │   │   ├── images
 │   │   │   ├── ace_ready.jpeg
 │   │   │   ├── apple1.jpg
@@ -57,51 +57,12 @@
 │   ├── package.json
 │   ├── public
 │   │   ├── _redirects
-│   │   ├── images
-│   │   │   ├── ace_ready.jpeg
-│   │   │   ├── apple1.jpg
-│   │   │   ├── big_dairy.jpg
-│   │   │   ├── BlueberriesInHand.jpg
-│   │   │   ├── blueberrieslg.jpg
-│   │   │   ├── blueberriesxl.jpg
-│   │   │   ├── cow.jpg
-│   │   │   ├── creek_barn.jpg
-│   │   │   ├── creek1.jpg
-│   │   │   ├── deer_and_apples.webp
-│   │   │   ├── farm-banner.jpg
-│   │   │   ├── Final Banner.png
-│   │   │   ├── goat_logo_3.png
-│   │   │   ├── goat_logo1.png
-│   │   │   ├── goat_logo2.png
-│   │   │   ├── Goats 2025
-│   │   │   ├── house.jpg
-│   │   │   ├── house2.jpg
-│   │   │   ├── isaac_banner.jpg
-│   │   │   ├── Judy_and_ball.jpeg
-│   │   │   ├── judy.jpeg
-│   │   │   ├── milk1.jpg
-│   │   │   ├── mountain_in_clouds.jpeg
-│   │   │   ├── myLogo.png
-│   │   │   ├── navbar-bg.png
-│   │   │   ├── pasture_scene.jpg
-│   │   │   ├── piggyback.png
-│   │   │   ├── Pond.jpg
-│   │   │   ├── Pond2.jpg
-│   │   │   ├── pond3.jpg
-│   │   │   ├── rolling_hills.jpg
-│   │   │   ├── rolling_hills2.jpg
-│   │   │   ├── smoothie.jpg
-│   │   │   ├── snow_scene.zip
-│   │   │   └── thumbnails
-│   │   └── videos
-│   │       ├── Albert1.mov
-│   │       ├── Albert2.mov
-│   │       ├── Amanda1.mov
-│   │       ├── Coco and Patsys Kids 2025.mov
-│   │       ├── Cocoa and her Babies 2025.mov
-│   │       ├── Piggy Back 2025.mov
-│   │       ├── The whole gang 2025.mov
-│   │       └── thewholegang.psd
+│   │   └── images
+│   │       ├── blog_images
+│   │       ├── goat_images
+│   │       ├── page_images
+│   │       ├── product_images
+│   │       └── thumbnails
 │   ├── README.md
 │   ├── src
 │   │   ├── api
@@ -182,6 +143,7 @@
 ├── Readme.md
 ├── server
 │   ├── config
+│   │   ├── corsOptions.js
 │   │   ├── db.js
 │   │   └── stripe.js
 │   ├── controllers
@@ -198,6 +160,7 @@
 │   ├── middleware
 │   │   ├── authMiddleware.js
 │   │   ├── errorHandler.js
+│   │   ├── uploadsMiddleware.js
 │   │   ├── validateRequest.js
 │   │   ├── validationResultHandler.js
 │   │   └── validators
@@ -224,6 +187,8 @@
 │   │   ├── uploadRoutes.js
 │   │   ├── userRoutes.js
 │   │   └── webhookRoutes.js
+│   ├── scripts
+│   │   └── batchUploadToCloudinary.js
 │   ├── server.js
 │   ├── uploads
 │   │   ├── 1746617396860-Ad Picture.jpg
@@ -258,4 +223,4 @@
 ├── start-stripe-listener.sh
 └── stripe-testing-readme.md
 
-41 directories, 218 files
+44 directories, 180 files

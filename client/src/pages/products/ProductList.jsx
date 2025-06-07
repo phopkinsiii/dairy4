@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect } from 'react';
 import { useProductContext } from '../../contexts/ProductContext.jsx';
 import ProductCard from './ProductCard.jsx';

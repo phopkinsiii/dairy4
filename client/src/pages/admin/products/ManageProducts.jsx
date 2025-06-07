@@ -39,7 +39,7 @@ const ManageProducts = () => {
 						className='bg-white shadow-md rounded-lg p-4 flex flex-col justify-between'
 					>
 						<img
-							src={`${import.meta.env.VITE_MEDIA_BASE_URL}${product.imageSrc}`} // or post.image
+							src={product.imageSrc}
 							alt={product.imageAlt || 'Product Image'}
 							crossOrigin='anonymous'
 							className='w-full h-40 object-cover rounded mb-4'

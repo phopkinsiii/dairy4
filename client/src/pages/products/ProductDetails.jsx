@@ -1,6 +1,5 @@
 // @ts-nocheck
 import { useEffect, useState } from 'react';
-
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axios';
 import { useCartContext } from '../../contexts/CartContext';
@@ -60,7 +59,7 @@ const ProductDetails = () => {
 
 	return (
 		<>
-			{/* SEO Metadata */}
+			{/* ✅ SEO Metadata: no VITE_MEDIA_BASE_URL needed */}
 			<SeoHead
 				title={`${product.name} | Blueberry Dairy`}
 				description={
@@ -68,8 +67,9 @@ const ProductDetails = () => {
 					'Explore this organic farm product from Blueberry Dairy.'
 				}
 				url={`https://www.blueberrydairy.com/products/${product._id}`}
-				image={`${import.meta.env.VITE_MEDIA_BASE_URL}${product.imageSrc}`}
+				image={product.imageSrc}
 			/>
+
 			<div className='max-w-7xl mx-auto px-4 py-12'>
 				<button
 					onClick={() => navigate('/products')}
@@ -79,13 +79,21 @@ const ProductDetails = () => {
 				</button>
 
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-10 items-start'>
-					<img
-						src={`${import.meta.env.VITE_MEDIA_BASE_URL}${product.imageSrc}`}
-						alt={product.imageAlt}
-						loading='lazy'
-						className='w-full h-auto rounded-lg shadow-md object-cover'
-					/>
+					{/* ✅ Image */}
+					{product.imageSrc ? (
+						<img
+							src={product.imageSrc}
+							alt={product.imageAlt || 'Product image'}
+							loading='lazy'
+							className='w-full h-auto rounded-lg shadow-md object-cover'
+						/>
+					) : (
+						<div className='w-full aspect-[4/3] bg-gray-100 text-gray-400 flex items-center justify-center rounded-lg shadow-inner'>
+							No Image
+						</div>
+					)}
 
+					{/* Info */}
 					<div className='space-y-4'>
 						<h1 className='text-3xl font-bold text-gray-800'>{product.name}</h1>
 						<p className='text-gray-700'>{product.description}</p>
@@ -113,12 +121,11 @@ const ProductDetails = () => {
 							onClick={() => handleAddToCart(product)}
 							disabled={product.stock === 0}
 							className={`mt-2 px-4 py-2 rounded text-white transition 
-    ${
-			product.stock === 0
-				? 'bg-gray-400 cursor-not-allowed'
-				: 'bg-green-600 hover:bg-green-700'
-		}
-  `}
+								${
+									product.stock === 0
+										? 'bg-gray-400 cursor-not-allowed'
+										: 'bg-green-600 hover:bg-green-700'
+								}`}
 						>
 							{product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
 						</button>
