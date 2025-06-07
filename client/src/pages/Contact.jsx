@@ -52,12 +52,12 @@ export default function Contact() {
 			<div
 				className='bg-cover bg-center min-h-screen flex items-center justify-center px-6 py-20'
 				style={{
-					backgroundImage: `url('/images/creek_barn.jpg')`,
+					backgroundImage: `url('https://res.cloudinary.com/dzhweqopn/image/upload/v1749317846/appalachian_cabin_v5flx0.jpg')`,
 					fontFamily: `'Lora', serif`,
 				}}
 			>
 				<div className='bg-white/20 backdrop-blur-sm p-10 rounded-lg shadow-2xl max-w-3xl w-full'>
-					<h2 className='text-4xl font-bold text-stone-800 mb-6 text-center'>
+					<h2 className='text-4xl font-bold text-white mb-6 text-center'>
 						Let’s Connect
 					</h2>
 
@@ -73,7 +73,7 @@ export default function Contact() {
 						</div>
 					)}
 
-					<form onSubmit={handleSubmit} className='grid gap-6'>
+					<form onSubmit={handleSubmit} className='grid gap-6 contact-form'>
 						<div className='grid sm:grid-cols-2 gap-6'>
 							<input
 								type='text'

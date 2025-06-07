@@ -30,11 +30,11 @@ const GoatList = () => {
 			<div
 				className='min-h-screen bg-cover bg-center bg-no-repeat relative'
 				style={{
-					backgroundImage: `url('/images/pasture_scene.jpg')`, // You can change this to any path or Cloudinary URL
+					backgroundImage: `url('https://res.cloudinary.com/dzhweqopn/image/upload/v1749318489/pasture_mountains_mat6fw.jpg')`, // You can change this to any path or Cloudinary URL
 				}}
 			>
 				{/* Optional overlay to make text more readable */}
-				<div className='absolute inset-0 bg-white/70 backdrop-blur-sm'></div>
+				<div className='absolute inset-0 bg-white/10 backdrop-blur-xs'></div>
 
 				{/* Content layer */}
 				<div className='relative z-10 max-w-7xl mx-auto py-16 px-6'>

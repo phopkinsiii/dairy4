@@ -2,8 +2,7 @@
 import React from 'react';
 import StickyNavbar from './StickyNavbar';
 import { useNavbarContext } from '../contexts/NavbarContext';
-import { useLocation } from 'react-router-dom';
-import { useCartContext } from '../contexts/CartContext';
+
 
 
 

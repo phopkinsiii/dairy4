@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 import SeoHead from '../components/SeoHead';
 
@@ -95,17 +96,17 @@ export default function OurFarm() {
 			<SeoHead
 				title='About Our Farm | Blueberry Dairy'
 				description="Discover Blueberry Dairy's regenerative farming practices, Nigerian Dwarf dairy goats, and commitment to healthy food and a cleaner planet."
-				url='https://www.blueberrydairy.com/our-farm'
-				image='https://res.cloudinary.com/dzhweqopn/image/upload/v1748887807/goat_logo_3_s898tm.png'
+				url='https://res.cloudinary.com/dzhweqopn/image/upload/v1749237561/blueberrydairy/product_images/pu0slgkfnuiauzjj0egs.png'
 			/>
 			<div
 				className='relative min-h-screen bg-cover bg-center bg-fixed'
 				style={{
-					backgroundImage: "url('/images/rolling_hills.jpg')",
+					backgroundImage:
+						"url('https://res.cloudinary.com/dzhweqopn/image/upload/v1749265835/sunrise_over_pasture2_z7nqq5.jpg')",
 				}}
 			>
 				{/* Combined dark + gradient overlay */}
-				<div className='absolute inset-0 z-0 bg-gradient-to-b from-black/90 via-black/70 to-black/50' />
+				<div className='absolute inset-0 z-0 bg-gradient-to-b from-black/90 via-black/40 to-black/30' />
 				<main className='relative z-10 min-h-screen'>
 					{/* Hero section */}
 					<div className='relative isolate -z-10'>
@@ -116,7 +117,7 @@ export default function OurFarm() {
 										<h1 className='text-5xl font-semibold tracking-tight  text-white sm:text-7xl'>
 											Healthy Food From Healthy Soil!
 										</h1>
-										<p className='mt-8 text-lg font-medium  text-white sm:max-w-md sm:text-xl/8 lg:max-w-none'>
+										<p className='mt-8 text-3xl font-medium  text-white sm:max-w-md sm:text-xl/8 lg:max-w-none'>
 											Health-conscious consumers often struggle to find fresh,
 											organic food. Blueberry Dairy provides fresh, organic
 											fruits and raw dairy products. so you can enjoy
@@ -132,8 +133,8 @@ export default function OurFarm() {
 										<div className='ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80'>
 											<div className='relative'>
 												<img
-													alt=''
-													src='/images/blueberrieslg.jpg'
+													alt='Blueberries on the bush'
+													src='https://res.cloudinary.com/dzhweqopn/image/upload/v1749289805/blueberries_on_bush_m6wznh.jpg'
 													className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
 												/>
 												<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
@@ -142,16 +143,16 @@ export default function OurFarm() {
 										<div className='mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36'>
 											<div className='relative'>
 												<img
-													alt=''
-													src='/images/house.jpg'
+													alt='Farm house from the garden'
+													src='https://res.cloudinary.com/dzhweqopn/image/upload/v1749237548/blueberrydairy/page_images/gpjtsi0g9p8hi9pjvx08.jpg'
 													className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
 												/>
 												<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
 											</div>
 											<div className='relative'>
 												<img
-													alt=''
-													src='/images/pond3.jpg'
+													alt='Pond and Farm Gate'
+													src='https://res.cloudinary.com/dzhweqopn/image/upload/v1749290453/pond_and_gate_qqmtbu.jpg'
 													className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
 												/>
 												<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
@@ -160,17 +161,17 @@ export default function OurFarm() {
 										<div className='w-44 flex-none space-y-8 pt-32 sm:pt-0 p-4'>
 											<div className='relative'>
 												<img
-													alt=''
-													src='/images/apple1.jpg'
+													alt='apple in hand'
+													src='https://res.cloudinary.com/dzhweqopn/image/upload/v1749290648/apple_in_hand_g40ioo.jpg'
 													className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
 												/>
 												<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
 											</div>
 											<div className='relative'>
 												<img
-													alt=''
-													src='/images/milk1.jpg'
-													className='aspect-2/3 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
+													alt='milk and glass'
+													src='https://res.cloudinary.com/dzhweqopn/image/upload/v1749291157/milk_and_glass_tall_umn85y.jpg'
+													className='aspect-1/2 w-full rounded-xl bg-gray-900/5 object-cover shadow-lg'
 												/>
 												<div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-gray-900/10 ring-inset' />
 											</div>
@@ -236,7 +237,7 @@ export default function OurFarm() {
 							Our Farm Story
 						</h2>
 
-						<p className=' text-white text-lg text-start mb-6'>
+						<p className=' text-white text-xl text-start mb-6'>
 							When we retired from busy careers in medicine in 2015, it was a
 							wonderful opportunity to pursue a lifelong dream of full-time
 							farming. Both of us are inveterate gardeners and looked forward to
@@ -250,7 +251,7 @@ export default function OurFarm() {
 							one-acre blueberry orchard.
 						</p>
 
-						<p className='text-white text-lg leading-relaxed mb-6'>
+						<p className='text-white text-xl leading-relaxed mb-6'>
 							Along with a love of growing things, we both have an abiding love
 							and respect for animals. We started with a small flock of chickens
 							which grew to over eighty hens and a small commercial egg
@@ -259,20 +260,20 @@ export default function OurFarm() {
 							several years.
 						</p>
 
-						<p className='text-white text-lg leading-relaxed mb-6'>
+						<p className='text-white text-xl leading-relaxed mb-6'>
 							Farming hasn't turned out to be quite as stress free as we had
 							naively hoped. There are certainly challenges, especially for
 							novice farmers. We anticipated surprises from weather and the many
 							unknowns of the land itself, but there were some things we hadn't
 							even considered.
 							<a
-								href='/images/deer_and_apples.webp'
+								href='https://res.cloudinary.com/dzhweqopn/image/upload/v1749289459/deer_and_apples2_jb3oi4.jpg'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='block float-right w-64 max-w-full ml-6 mb-4'
+								className='block float-right w-88 max-w-full ml-6 mb-4'
 							>
 								<img
-									src='/images/deer_and_apples.webp'
+									src='https://res.cloudinary.com/dzhweqopn/image/upload/v1749289459/deer_and_apples2_jb3oi4.jpg'
 									alt='Deer near apple trees at Blueberry Dairy'
 									className='rounded shadow-md hover:opacity-90 transition'
 								/>
@@ -293,7 +294,7 @@ export default function OurFarm() {
 							of the fun!
 						</p>
 
-						<p className='text-white text-lg leading-relaxed mb-6'>
+						<p className='text-white text-xl leading-relaxed mb-6'>
 							With all the challenges of farming in general, we frequently ask
 							ourselves, "why add the complication of growing organic?" The
 							answer isn't always easy to put into words. We believe that
@@ -308,7 +309,7 @@ export default function OurFarm() {
 							help.
 						</p>
 
-						<p className=' text-white text-lg'>
+						<p className=' text-white text-xl'>
 							Despite all the challenges, or maybe because of them, we both love
 							the opportunity to grow and raise healthy, chemical-free food for
 							the local market and do our part to support a healthy ecosystem.

@@ -9,8 +9,7 @@ const ProductCard = ({ product }) => {
 	const [selectedIndex, setSelectedIndex] = useState(0);
 	const selectedOption = product.priceOptions?.[selectedIndex];
 
-	const handleAddToCart = (e) => {
-		e.preventDefault();
+	const handleAddToCart = () => {
 		if (!selectedOption) return;
 
 		dispatch({
@@ -48,7 +47,7 @@ const ProductCard = ({ product }) => {
 						alt={product.imageAlt || 'Product image'}
 						loading='lazy'
 						crossOrigin='anonymous'
-						className='w-full h-48 object-cover rounded-t-lg'
+						className='w-full h-64 object-cover rounded-t-xl'
 					/>
 				) : (
 					<div className='w-full h-48 flex items-center justify-center bg-gray-100 text-gray-500'>
