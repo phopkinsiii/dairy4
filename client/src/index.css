@@ -219,8 +219,13 @@ h6 {
 }
 
 .contact-form ::placeholder {
-  color: white;
-  font-weight: 600;
-  opacity: 1;
+	color: white;
+	font-weight: 600;
+	opacity: 1;
 }
 
+.contact-form {
+	color: rgb(29, 27, 27);
+	font-weight: bold;
+	opacity: 1;
+}

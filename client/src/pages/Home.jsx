@@ -44,7 +44,7 @@ const Home = () => {
 						away—discover the difference local food makes."
 					</p>
 					<RouterLink
-						to='/our-products'
+						to='/products'
 						aria-label='Browse our local farm products'
 						className='inline-block px-6 py-4 bg-stone-400 hover:bg-amber-700 text-white font-semibold rounded-md text-lg shadow-lg transition-all duration-300'
 					>
