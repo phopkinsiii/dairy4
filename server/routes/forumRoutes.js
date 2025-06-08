@@ -5,7 +5,8 @@ import {
   getPostById,
   addReply,
   deletePost,
-  deleteReply
+  deleteReply,
+  getManageablePosts 
 } from '../controllers/forumController.js';
 import { protect, adminProtect } from '../middleware/authMiddleware.js';
 
@@ -14,6 +15,8 @@ const router = express.Router();
 router.route('/')
   .get(getAllPosts)
   .post(protect, createPost);
+  
+router.get('/manage', protect, adminProtect, getManageablePosts);
 
 router.route('/:id')
   .get(getPostById)

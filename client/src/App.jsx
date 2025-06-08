@@ -35,6 +35,7 @@ import ForumPage from './pages/forum/ForumPage.jsx';
 import ForumPost from './pages/forum/ForumPost.jsx';
 import ForumPostForm from './components/forum/ForumPostForm.jsx';
 import AddForumPost from './components/forum/AddForumPost.jsx';
+import ManageForum from './pages/admin/forum/ManageForum.jsx';
 import ManageInventory from './pages/admin/products/ManageInventory.jsx';
 import GoatList from './pages/goats/GoatList.jsx';
 import AddGoat from './pages/admin/goats/AddGoat.jsx';
@@ -144,6 +145,15 @@ function App() {
 						/>
 						<Route path='/forum' element={<ForumPage />} />
 						<Route path='/forum/:id' element={<ForumPost />} />
+						<Route
+							path='/admin/forum'
+							element={
+								<AdminRoute>
+									<ManageForum />
+								</AdminRoute>
+							}
+						/>
+
 						<Route
 							path='/forum/new'
 							element={

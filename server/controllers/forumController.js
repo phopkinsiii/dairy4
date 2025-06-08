@@ -103,3 +103,18 @@ export const deleteReply = async (req, res) => {
 		res.status(500).json({ message: err.message });
 	}
 };
+
+// GET /api/forum/manage — admin-only view of all posts
+export const getManageablePosts = async (req, res) => {
+	try {
+		const posts = await ForumPost.find()
+			.populate('user', 'name email')
+			.sort({ createdAt: -1 });
+
+		res.json(posts);
+	} catch (error) {
+		console.error('Error fetching manageable forum posts:', error.message);
+		res.status(500).json({ message: 'Failed to fetch manageable posts' });
+	}
+};
+

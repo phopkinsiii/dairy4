@@ -24,7 +24,7 @@ const dropdownSections = [
 		title: 'Forum',
 		links: [
 			{ label: 'Add Forum Post', path: '/forum/new' },
-			{ label: 'Manage Forum Posts', path: '/forum/manage' },
+			{ label: 'Manage Forum Posts', path: '/admin/forum' },
 		],
 	},
 	{

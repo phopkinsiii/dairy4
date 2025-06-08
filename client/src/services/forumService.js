@@ -44,3 +44,11 @@ export const getSinglePost = async (id) => {
 		throw error;
 	}
 };
+
+// ✅ No token needed as it's injected automatically
+export const getManageablePosts = async () => {
+	const response = await axiosInstance.get('/forum/manage');
+	return response.data;
+};
+
+
