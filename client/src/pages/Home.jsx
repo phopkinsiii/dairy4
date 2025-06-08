@@ -5,6 +5,7 @@ import HomeLinksSection from '../components/HomeLinksSection.jsx';
 import { Link as RouterLink } from 'react-router-dom';
 import SeoHead from '../components/SeoHead.jsx';
 import FarmMap from '../components/FarmMap.jsx';
+import Footer from '../components/Footer.jsx';
 
 const Home = () => {
 	return (
@@ -58,7 +59,9 @@ const Home = () => {
 			<div className='bg-white min-h-screen flex flex-col items-center'>
 				<SlideShow />
 				<FarmMap />
+				<Footer />
 			</div>
+
 		</>
 	);
 };

@@ -1,9 +1,11 @@
+// @ts-nocheck
 // src/pages/BlogPage.jsx
 import { useEffect } from 'react';
 import { useBlogContext } from '../../contexts/BlogContext';
 import Spinner from '../../components/Spinner';
 import BlogCard from '../../components/blog/BlogCard';
 import SeoHead from '../../components/SeoHead';
+import Footer from '../../components/Footer';
 
 const BlogPage = () => {
 	const { state, fetchPosts } = useBlogContext();
@@ -35,6 +37,7 @@ const BlogPage = () => {
 					<BlogCard key={post._id} post={post} />
 				))}
 			</div>
+			<Footer />
 		</>
 	);
 };

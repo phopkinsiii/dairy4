@@ -4,6 +4,7 @@ import { useProductContext } from '../../contexts/ProductContext.jsx';
 import ProductCard from './ProductCard.jsx';
 import Spinner from '../../components/Spinner.jsx';
 import SeoHead from '../../components/SeoHead.jsx';
+import Footer from '../../components/Footer.jsx';
 
 const ProductList = () => {
 	const { state, fetchProducts } = useProductContext();
@@ -46,6 +47,7 @@ const ProductList = () => {
 					</div>
 				</div>
 			</div>
+			<Footer />
 		</>
 	);
 };

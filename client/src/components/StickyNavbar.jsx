@@ -79,8 +79,8 @@ const StickyNavbar = () => {
 										className={({ isActive }) =>
 											`transition duration-300 ${
 												isActive
-													? 'text-indigo-500 text-3xl underline'
-													: 'text-gray-800 md:text-white hover:text-green-500'
+													? 'text-gray-400 text-3xl underline'
+													: 'text-gray-800 md:text-white hover:text-amber-600'
 											}`
 										}
 									>
