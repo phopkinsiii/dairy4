@@ -11,7 +11,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 
 import { corsOptions } from './config/corsOptions.js';
-import { apiLimiter } from './middleware/rateLimiter.js'; // Global limiter
+import { globalLimiter } from './middleware/rateLimiter.js'; // Global limiter
 
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
@@ -77,7 +77,7 @@ app.use('/webhook', express.raw({ type: 'application/json' }), webhookRoutes);
 app.use(express.json());
 
 // ✅ Apply global rate limiter to all /api routes
-app.use('/api', apiLimiter);
+app.use('/api', globalLimiter);
 
 // ✅ Static file serving for image uploads
 app.use('/uploads', uploadsCORSHeaders, uploadsMiddleware);
