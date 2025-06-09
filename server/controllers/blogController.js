@@ -4,10 +4,28 @@ import Blog from '../models/blogModel.js';
 // @desc    Get all blog posts
 // @route   GET /api/blogs
 // @access  Public
+
 export const getAllPosts = async (req, res, next) => {
 	try {
-		const posts = await Blog.find().sort({ createdAt: -1 }); // Newest first
-		res.json(posts);
+		const page = parseInt(req.query.page) || 1;
+		const limit = parseInt(req.query.limit) || 10;
+		const skip = (page - 1) * limit;
+
+		const posts = await Blog.find({}, 'title tags image createdAt author') // only needed fields
+			.sort({ createdAt: -1 })
+			.skip(skip)
+			.limit(limit)
+			.populate('author', 'name')
+			.lean();
+
+		const total = await Blog.countDocuments();
+
+		res.json({
+			posts,
+			page,
+			totalPages: Math.ceil(total / limit),
+			total,
+		});
 	} catch (error) {
 		next(error);
 	}
@@ -21,8 +39,10 @@ export const getAllPosts = async (req, res, next) => {
 // @access  Public
 export const getPostById = async (req, res, next) => {
 	try {
-		const post = await Blog.findById(req.params.id).populate('author', 'name role');
-		
+		const post = await Blog.findById(req.params.id)
+			.populate('author', 'name role')
+			.lean(); // ✅ Convert to plain JS object
+
 		if (!post) {
 			return res.status(404).json({ message: 'Post not found' });
 		}
@@ -32,7 +52,6 @@ export const getPostById = async (req, res, next) => {
 		next(error);
 	}
 };
-
 
 // @desc    Create new blog post
 // @route   POST /api/blogs
