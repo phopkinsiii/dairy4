@@ -1,26 +1,26 @@
 // server/config/corsOptions.js
-const allowedOrigins = [
-	process.env.CLIENT_URL,
-	'https://www.blueberrydairy.com',
-	'http://localhost:5173',
-	'http://127.0.0.1:5173',
-	'https://api.blueberrydairy.com',
-].filter(Boolean);
+import dotenv from 'dotenv';
+dotenv.config();
 
-console.log('✅ Allowed CORS Origins:', allowedOrigins);
+const envOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
 
 export const corsOptions = {
-	origin: function (origin, callback) {
-		// Allow requests with no origin (like curl or mobile apps)
+	origin: (origin, callback) => {
+		// Allow no-origin requests like Postman
 		if (!origin) return callback(null, true);
 
-		if (allowedOrigins.includes(origin)) {
-			console.log('✅ CORS Allowed:', origin);
+		const isAllowed = envOrigins.includes(origin);
+		const isHTTPS =
+			origin.startsWith('https://') || origin.startsWith('http://localhost');
+
+		if (isAllowed && isHTTPS) {
 			callback(null, true);
 		} else {
-			console.warn('❌ CORS Rejected:', origin);
-			callback(new Error('Not allowed by CORS'));
+			callback(
+				new Error('Not allowed by CORS (origin not trusted or not HTTPS)')
+			);
 		}
 	},
 	credentials: true,
+	optionsSuccessStatus: 200,
 };

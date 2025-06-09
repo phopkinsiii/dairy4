@@ -7,6 +7,7 @@ import {
 	deleteGoat,
 } from '../controllers/goatController.js';
 import { protect, adminProtect } from '../middleware/authMiddleware.js';
+import { authLimiter } from '../middleware/rateLimiter.js'; // ✅ Import limiter
 
 const router = express.Router();
 
@@ -14,9 +15,9 @@ const router = express.Router();
 router.get('/', getAllGoats);
 router.get('/:id', getGoatById);
 
-// Admin-only routes
-router.post('/', protect, adminProtect, createGoat);
-router.put('/:id', protect, adminProtect, updateGoat);
-router.delete('/:id', protect, adminProtect, deleteGoat);
+// Admin-only routes with rate limiter
+router.post('/', protect, adminProtect, authLimiter, createGoat);
+router.put('/:id', protect, adminProtect, authLimiter, updateGoat);
+router.delete('/:id', protect, adminProtect, authLimiter, deleteGoat);
 
 export default router;

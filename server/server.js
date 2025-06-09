@@ -1,13 +1,17 @@
+// @ts-nocheck
 import dotenv from 'dotenv';
 dotenv.config();
+import { validateEnv } from './config/validateEnv.js';
+validateEnv(); // ✅ Ensure all env variables are defined
 
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { corsOptions } from './config/corsOptions.js';
+import helmet from 'helmet';
+import compression from 'compression';
 
-// Debug the loaded environment variable
-console.log('✅ CLIENT_URL from .env:', process.env.CLIENT_URL);
+import { corsOptions } from './config/corsOptions.js';
+import { apiLimiter } from './middleware/rateLimiter.js'; // Global limiter
 
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
@@ -18,26 +22,67 @@ import uploadRoutes from './routes/uploadRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import checkoutRoutes from './routes/checkoutRoutes.js';
 import webhookRoutes from './routes/webhookRoutes.js';
-import { errorHandler } from './middleware/errorHandler.js';
 import forumRoutes from './routes/forumRoutes.js';
 import goatRoutes from './routes/goatRoutes.js';
+
 import {
 	uploadsMiddleware,
 	uploadsCORSHeaders,
 } from './middleware/uploadsMiddleware.js';
 
+import { errorHandler } from './middleware/errorHandler.js';
+
 const app = express();
 
-// Middleware
-app.use(morgan('dev'));
+// ✅ Compression first for better performance
+app.use(compression());
+
+// ✅ Security headers
+app.use(
+	helmet({
+		crossOriginEmbedderPolicy: false,
+	})
+);
+
+app.use(
+	helmet.contentSecurityPolicy({
+		useDefaults: true,
+		directives: {
+			'default-src': ["'self'"],
+			'img-src': ["'self'", 'data:', 'blob:', '*.cloudinary.com'],
+			'script-src': ["'self'", 'https://js.stripe.com'],
+			'style-src': [
+				"'self'",
+				"'unsafe-inline'",
+				'https://fonts.googleapis.com',
+			],
+			'font-src': ["'self'", 'https://fonts.gstatic.com'],
+			'frame-src': ["'self'", 'https://js.stripe.com'],
+		},
+	})
+);
+
+// ✅ Logger (only in development)
+if (process.env.NODE_ENV !== 'production') {
+	app.use(morgan('dev'));
+}
+
+// ✅ CORS
 app.use(cors(corsOptions));
+
+// ✅ Stripe webhook needs raw body parsing
 app.use('/webhook', express.raw({ type: 'application/json' }), webhookRoutes);
+
+// ✅ Global JSON parser
 app.use(express.json());
 
-// ✅ Serve static uploads
+// ✅ Apply global rate limiter to all /api routes
+app.use('/api', apiLimiter);
+
+// ✅ Static file serving for image uploads
 app.use('/uploads', uploadsCORSHeaders, uploadsMiddleware);
 
-// ✅ API Routes
+// ✅ Route mounts (specific rate limits like authLimiter are inside route files)
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/contacts', contactRoutes);
@@ -48,14 +93,18 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/checkout', checkoutRoutes);
 app.use('/api/goats', goatRoutes);
 
-// ✅ Error handler
+// ✅ Fallback for unknown API routes
+app.use((req, res) => {
+	res.status(404).json({ message: 'Not Found' });
+});
+
+// ✅ Global error handler
 app.use(errorHandler);
 
-// ✅ Connect to DB and start server
+// ✅ Start server
 connectDB();
 
 const port = process.env.PORT || 5050;
-
 app.listen(port, () => {
 	console.log(`✅ Server listening on port ${port}`);
 });

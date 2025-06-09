@@ -1,13 +1,14 @@
+// server/middleware/errorHandler.js
 export const errorHandler = (err, req, res, next) => {
-    //Log the error message for debugging
-    console.error(`Error: ${err.message}`);
+	console.error(`❌ Error: ${err?.message}`);
 
-    //Set the default to 500
-    const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+	const statusCode =
+		res.statusCode && res.statusCode !== 200 ? res.statusCode : 500;
 
-    //Send the error response
-    res.status(statusCode).json({
-        message: err.message || 'Server Error',
-        stack: process.env.NODE_ENV === 'development' ? err.stack : null //Show stack trace only in dev mode
-    })
-}
+	res.status(statusCode).json({
+		message: err?.message || 'Server Error',
+		stack: process.env.NODE_ENV === 'development' ? err?.stack : null,
+		name: err?.name || 'Error',
+		code: err?.code || 'UNKNOWN_ERROR',
+	});
+};

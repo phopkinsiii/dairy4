@@ -1,10 +1,10 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
-import { uploadImage } from '../controllers/uploadController.js';
-import { __dirname } from '../controllers/uploadController.js';
+import { uploadImage, __dirname } from '../controllers/uploadController.js';
+import { protect, adminProtect } from '../middleware/authMiddleware.js';
+import { authLimiter } from '../middleware/rateLimiter.js'; // ✅ Import limiter
 
-// Set up Multer storage
 const storage = multer.diskStorage({
 	destination(req, file, cb) {
 		cb(null, path.join(__dirname, '../uploads'));
@@ -27,11 +27,12 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
 	storage,
 	fileFilter,
-	limits: { fileSize: 10 * 1024 * 1024 }, // 5MB
+	limits: { fileSize: 10 * 1024 * 1024 }, // 10MB max
 });
 
 const router = express.Router();
 
-router.post('/', upload.single('image'), uploadImage);
+// ✅ Admin-only + rate limited upload route
+router.post('/', protect, adminProtect, authLimiter, upload.single('image'), uploadImage);
 
 export default router;
