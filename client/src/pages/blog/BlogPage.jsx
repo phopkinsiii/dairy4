@@ -14,6 +14,7 @@ const BlogPage = () => {
 	useEffect(() => {
 		fetchPosts();
 	}, [fetchPosts]);
+	console.log('📦 Blog posts:', posts);
 
 	if (loading) return <Spinner />;
 	if (error) return <div className='p-10 text-red-600'>{error}</div>;
