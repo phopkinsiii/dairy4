@@ -1,6 +1,6 @@
 # Ignore shell scripts with secrets
 *.sh
-
+*.zip
 # Ignore root-level environment files
 .env
 .env.*
