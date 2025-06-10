@@ -20,6 +20,7 @@ const BlogPage = () => {
 	if (error) return <div className='p-10 text-red-600'>{error}</div>;
 	if (!posts || posts.length === 0)
 		return <div className='p-10 text-gray-700'>No blog posts found.</div>;
+	console.log('✅ posts is now:', posts, 'Is array?', Array.isArray(posts));
 
 	return (
 		<>
@@ -34,9 +35,11 @@ const BlogPage = () => {
 					Blueberry Blog
 				</h1>
 
-				{posts.map((post) => (
-					<BlogCard key={post._id} post={post} />
-				))}
+				{Array.isArray(posts) ? (
+					posts.map((post) => <BlogCard key={post._id} post={post} />)
+				) : (
+					<div className='p-10 text-red-600'>❌ posts is not an array</div>
+				)}
 			</div>
 			<Footer />
 		</>
