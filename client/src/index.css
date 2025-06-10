@@ -22,7 +22,9 @@ body {
 	font-family: 'Quicksand', sans-serif;
 	margin: 0;
 	padding: 0;
-	transition: background-color 0.3s ease, color 0.3s ease;
+	transition:
+		background-color 0.3s ease,
+		color 0.3s ease;
 }
 
 input,
@@ -35,6 +37,19 @@ h4,
 h5,
 h6 {
 	font-family: var(--font-readable);
+}
+input,
+textarea {
+	background-color: transparent;
+	color: black;
+	font-weight: bold;
+}
+
+input:focus,
+textarea:focus {
+	background-color: transparent !important;
+	color: black !important;
+	font-weight: bold;
 }
 
 /* === Tooltip === */
@@ -109,7 +124,7 @@ h6 {
 }
 
 .animate-float-in {
-	animation: float-in 0.8s ease-out both;
+	animation: float-in 2s ease-out both;
 }
 
 @keyframes float {
@@ -126,6 +141,34 @@ h6 {
 
 .animate-float {
 	animation: float 4s ease-in-out infinite;
+}
+
+@keyframes scroll {
+	0% {
+		transform: translateX(100%);
+	}
+	100% {
+		transform: translateX(-100%);
+	}
+}
+
+.animate-scroll {
+	animation: scroll 15s linear infinite;
+	white-space: nowrap;
+	display: inline-block;
+}
+
+@keyframes textFadeToDark {
+	from {
+		color: #f1f5f9; /* light slate (like slate-100) */
+	}
+	to {
+		color: #1e293b; /* dark slate (like slate-800 or indigo-900) */
+	}
+}
+
+.animate-text-fade {
+	animation: textFadeToDark 3s ease-out forwards;
 }
 
 /* === Form Styling === */
