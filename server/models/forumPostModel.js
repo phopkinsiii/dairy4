@@ -17,6 +17,8 @@ const forumPostSchema = new mongoose.Schema(
 		author: {
 			name: { type: String, default: 'Anonymous' },
 		},
+		image: { type: String }, // Optional Cloudinary URL
+
 		replies: [replySchema],
 	},
 	{ timestamps: true }

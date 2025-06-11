@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useProductContext } from '../../../contexts/ProductContext.jsx';
@@ -15,6 +16,7 @@ const EditProduct = () => {
 		category: '',
 		imageSrc: '',
 		imageAlt: '',
+		priceOptions: [{ size: '', price: '' }],
 	});
 
 	useEffect(() => {

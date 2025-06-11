@@ -179,8 +179,9 @@ textarea:focus {
 }
 
 .contact-form {
+	font-size: 1.5rem;
 	color: rgb(29, 27, 27);
-	font-weight: bold;
+	font-weight: 700;
 	opacity: 1;
 }
 

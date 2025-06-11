@@ -4,7 +4,7 @@ import { useProductContext } from '../../contexts/ProductContext.jsx';
 import ProductCard from './ProductCard.jsx';
 import Spinner from '../../components/Spinner.jsx';
 import SeoHead from '../../components/SeoHead.jsx';
-import Footer from '../../components/Footer.jsx';
+import SaleGoatsCard from '../../components/goats/SaleGoatsCard.jsx';
 
 const ProductList = () => {
 	const { state, fetchProducts } = useProductContext();
@@ -40,14 +40,14 @@ const ProductList = () => {
 					<h2 className='text-4xl font-bold mb-8 text-center text-gray-800'>
 						Shop Our Products
 					</h2>
-					<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8'>
+					<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 auto-rows-fr'>
 						{products.map((product) => (
 							<ProductCard key={product._id} product={product} />
 						))}
+						<SaleGoatsCard />
 					</div>
 				</div>
 			</div>
-			<Footer />
 		</>
 	);
 };

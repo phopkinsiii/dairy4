@@ -47,7 +47,11 @@ const ManageProducts = () => {
 						<h3 className='text-xl font-semibold text-gray-900'>
 							{product.name}
 						</h3>
-						<p className='text-gray-600 mb-2'>${product.price}</p>
+						<p className='text-gray-600 mb-2'>
+							{product.priceOptions
+								?.map((opt) => `${opt.size}: $${opt.price}`)
+								.join(', ')}
+						</p>
 						<div className='flex justify-between mt-4'>
 							<button
 								onClick={() => handleEdit(product._id)}

@@ -5,6 +5,7 @@ import axiosInstance from '../../api/axios';
 import { useCartContext } from '../../contexts/CartContext';
 import { toast } from 'react-toastify';
 import Spinner from '../../components/Spinner';
+import AddToCartButton from '../../components/products/AddToCartButton.jsx';
 import SeoHead from '../../components/SeoHead';
 
 const ProductDetails = () => {
@@ -117,18 +118,10 @@ const ProductDetails = () => {
 							</div>
 						)}
 
-						<button
-							onClick={() => handleAddToCart(product)}
-							disabled={product.stock === 0}
-							className={`mt-2 px-4 py-2 rounded text-white transition 
-								${
-									product.stock === 0
-										? 'bg-gray-400 cursor-not-allowed'
-										: 'bg-green-600 hover:bg-green-700'
-								}`}
-						>
-							{product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
-						</button>
+							<AddToCartButton
+						product={product}
+						handleAddToCart={handleAddToCart}
+					/>
 					</div>
 				</div>
 			</div>

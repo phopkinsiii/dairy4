@@ -27,7 +27,7 @@ const BlogPage = () => {
 			<SeoHead
 				title='Farm Blog | Blueberry Dairy'
 				description='Read our farm blog to explore insights, stories, and updates from Blueberry Dairy—an organic farm in East Tennessee raising Nigerian Dwarf goats and growing fresh produce.'
-				image='https://res.cloudinary.com/dzhweqopn/image/upload/v1748887807/goat_logo_3_s898tm.png'
+				image='https://res.cloudinary.com/dzhweqopn/image/upload/v1749237539/blueberrydairy/page_images/gb2tbfao1fno3furhdwt.png'
 				url='https://www.blueberrydairy.com/blog'
 			/>
 			<div className='max-w-6xl mx-auto px-6 py-12 space-y-10'>

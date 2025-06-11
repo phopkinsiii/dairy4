@@ -42,12 +42,12 @@ const Home = () => {
 					</h1>
 
 					<p className='text-lg sm:text-xl text-white bg-black/20 backdrop-blur-lg px-4 py-4 rounded-lg inline-block animate-float-in'>
-						"You want real, nourishing food for your family—but grocery store
-						labels are confusing, even scary. At Blueberry Dairy and Hickory
-						Cove Orchards, we raise naturally nutritious food organically and
-						with care, right here in East Tennessee. Skip the chemicals and
-						shipping from factory farms hundreds or thousands of miles
-						away—discover the difference local food makes."
+						"We get it! You want real, nourishing food for your family—but
+						grocery store labels are confusing, even scary. At Blueberry Dairy
+						and Hickory Cove Orchards, we raise naturally nutritious food
+						organically and with care, right here in East Tennessee. Skip the
+						chemicals and shipping from factory farms hundreds or thousands of
+						miles away—discover the difference local food makes."
 					</p>
 					<RouterLink
 						to='/products'
@@ -64,7 +64,6 @@ const Home = () => {
 			<div className='bg-white min-h-screen flex flex-col items-center'>
 				<SlideShow />
 				<FarmMap />
-				<Footer />
 			</div>
 		</>
 	);

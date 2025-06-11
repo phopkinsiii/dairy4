@@ -1,3 +1,5 @@
+import {Link} from 'react-router-dom'
+
 const footerNavigation = {
 	main: [
 		{ name: 'Home', href: '/' },
@@ -26,11 +28,11 @@ const footerNavigation = {
 
 const Footer = () => {
 	return (
-		<footer className='w-full bg-gray-700 text-white'>
+		<footer className='w-full bg-gray-600 text-white'>
 			<div className='max-w-screen-2xl mx-auto px-6 py-20 sm:py-24'>
 				<nav
 					aria-label='Footer'
-					className='-mb-6 flex flex-wrap justify-center gap-x-12 gap-y-3 text-sm/6'
+					className='mb-2 flex flex-wrap justify-center gap-x-12 gap-y-3 text-md/6'
 				>
 					{footerNavigation.main.map((item) => (
 						<a
@@ -56,12 +58,13 @@ const Footer = () => {
 					))}
 				</div>
 
-				<p className='mt-10 text-center text-sm/6'>
+				<p className='mt-10 text-center text-md/6'>
 					&copy; 2024 Blueberry Dairy and Hickory Cove Orchards, Inc. All rights
 					reserved.
 				</p>
 
 				{/* Logo at the bottom */}
+				<Link to='/'>
 				<div className='mt-10 flex justify-center'>
 					<div className='bg-white rounded-full p-2 shadow-md'>
 						<img
@@ -71,6 +74,7 @@ const Footer = () => {
 						/>
 					</div>
 				</div>
+				</Link>
 			</div>
 		</footer>
 	);

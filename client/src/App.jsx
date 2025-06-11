@@ -43,6 +43,9 @@ import GoatDetails from './pages/goats/GoatDetails.jsx';
 import EditGoat from './pages/admin/goats/EditGoat.jsx';
 import ManageGoats from './pages/admin/goats/ManageGoats.jsx';
 import Footer from './components/Footer.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
+import AddEditProduct from './pages/admin/products/AddEditProduct.jsx';
+import ForSaleGoats from './pages/goats/ForSaleGoats.jsx';
 
 function App() {
 	return (
@@ -62,6 +65,7 @@ function App() {
 			{/* Header + Page Content */}
 			<div className='flex-grow'>
 				<NavbarLayout>
+					<ScrollToTop />
 					<Routes>
 						<Route path='/' element={<Home />} />
 						<Route path='/products' element={<ProductList />} />
@@ -83,15 +87,16 @@ function App() {
 							path='/add-product'
 							element={
 								<AdminRoute>
-									<AddProduct />
+									<AddEditProduct />
 								</AdminRoute>
 							}
 						/>
+
 						<Route
 							path='/admin/edit-product/:id'
 							element={
 								<AdminRoute>
-									<EditProduct />
+									<AddEditProduct />
 								</AdminRoute>
 							}
 						/>
@@ -166,6 +171,7 @@ function App() {
 						<Route path='access-denied' element={<AccessDenied />} />
 
 						<Route path='/goats' element={<GoatList />} />
+
 						<Route
 							path='/admin/goats/add'
 							element={
@@ -191,6 +197,7 @@ function App() {
 								</AdminRoute>
 							}
 						/>
+						<Route path='/goats/for-sale' element={<ForSaleGoats />} />
 					</Routes>
 				</NavbarLayout>
 			</div>

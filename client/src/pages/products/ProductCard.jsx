@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useCartContext } from '../../contexts/CartContext.jsx';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import AddToCartButton from '../../components/products/AddToCartButton.jsx';
 
 const ProductCard = ({ product }) => {
 	const { dispatch } = useCartContext();
@@ -47,7 +48,7 @@ const ProductCard = ({ product }) => {
 						alt={product.imageAlt || 'Product image'}
 						loading='lazy'
 						crossOrigin='anonymous'
-						className='w-full h-64 object-cover rounded-t-xl'
+						className='w-full h-48 object-cover rounded mb-4' // uniform height
 					/>
 				) : (
 					<div className='w-full h-48 flex items-center justify-center bg-gray-100 text-gray-500'>
@@ -87,17 +88,11 @@ const ProductCard = ({ product }) => {
 							</select>
 						</div>
 					)}
-					<button
-						onClick={() => handleAddToCart(product)}
-						disabled={product.stock === 0}
-						className={`mt-2 px-4 py-2 rounded text-white transition ${
-							product.stock === 0
-								? 'bg-gray-400 cursor-not-allowed'
-								: 'bg-green-600 hover:bg-green-700'
-						}`}
-					>
-						{product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
-					</button>
+
+					<AddToCartButton
+						product={product}
+						handleAddToCart={handleAddToCart}
+					/>
 				</div>
 			</div>
 		</section>
