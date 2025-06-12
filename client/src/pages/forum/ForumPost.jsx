@@ -1,11 +1,10 @@
 // @ts-nocheck
-// src/pages/ForumPost.jsx
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useUserContext } from '../../contexts/UserContext';
 import ForumReplyForm from '../../components/forum/ForumReplyForm';
 import Spinner from '../../components/Spinner';
-import { getSinglePost } from '../../services/forumService'; // ✅ Import service directly
+import { getSinglePost } from '../../services/forumService';
 
 const ForumPost = () => {
 	const { id } = useParams();
@@ -14,7 +13,6 @@ const ForumPost = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
-	// ✅ Isolated fetch function to refresh post content
 	const fetchPost = async () => {
 		try {
 			setLoading(true);
@@ -45,15 +43,35 @@ const ForumPost = () => {
 					← Back to Forum
 				</Link>
 
-				<div className='bg-white dark:bg-gray-800 p-6 rounded shadow'>
-					<h1 className='text-3xl font-bold mb-2'>{post.title}</h1>
-					<p className='text-sm text-gray-500 dark:text-gray-400 mb-4'>
+				<div className='bg-white dark:bg-gray-800 p-6 rounded shadow space-y-4'>
+					<h1 className='text-3xl font-bold'>{post.title}</h1>
+					<p className='text-sm text-gray-500 dark:text-gray-400'>
 						By {post.author?.name || 'Anonymous'} •{' '}
 						{new Date(post.createdAt).toLocaleString()}
 					</p>
-					<p className='text-lg whitespace-pre-wrap'>{post.content}</p>
+
+					{/* Image(s) if present */}
+					{Array.isArray(post.images) && post.images.length > 0 && (
+						<div className='grid gap-4'>
+							{post.images.map((url, idx) => (
+								<img
+									key={idx}
+									src={url}
+									alt={`Forum post image ${idx + 1}`}
+									className='rounded shadow-md max-h-96 object-contain w-full'
+								/>
+							))}
+						</div>
+					)}
+
+					{/* Render content as HTML */}
+					<div
+						className='prose dark:prose-invert max-w-none text-lg'
+						dangerouslySetInnerHTML={{ __html: post.content }}
+					/>
 				</div>
 
+				{/* Replies */}
 				<div>
 					<h2 className='text-2xl font-semibold mt-10 mb-4'>Replies</h2>
 					{post.replies?.length > 0 ? (
@@ -62,7 +80,10 @@ const ForumPost = () => {
 								key={reply._id}
 								className='bg-white dark:bg-gray-800 p-4 rounded shadow mb-4'
 							>
-								<p>{reply.content}</p>
+								<div
+									className='prose dark:prose-invert max-w-none'
+									dangerouslySetInnerHTML={{ __html: reply.content }}
+								/>
 								<p className='text-sm text-gray-500 mt-2'>
 									By {reply.author?.name || 'Anonymous'} •{' '}
 									{new Date(reply.createdAt).toLocaleString()}
@@ -76,6 +97,7 @@ const ForumPost = () => {
 					)}
 				</div>
 
+				{/* Reply Form */}
 				{userState.user && (
 					<div className='mt-8'>
 						<ForumReplyForm postId={post._id} onReplySuccess={fetchPost} />

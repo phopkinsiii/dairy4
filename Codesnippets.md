@@ -1,35 +1,68 @@
-<>
-	<SeoHead
-		title='Nigerian Dwarf Goats for Sale | Blueberry Dairy'
-		description='View our registered Nigerian Dwarf goats currently available for sale. In-person pickup only.'
-		url='https://www.blueberrydairy.com/goats/for-sale'
-		image='https://res.cloudinary.com/YOUR_CLOUDINARY_ACCOUNT/image/upload/v123456/goats-for-sale-banner.png'
-	/>
+// src/pages/BlogPost.jsx
+import { extractKeywords } from '../../utils/seo'; // ✅ Reuse shared util
+import SeoHead from '../../components/SeoHead';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useBlogContext } from '../../contexts/BlogContext';
 
-	{/* Full-width Banner */}
-	<div className='w-full'>
-		<img
-			src='https://res.cloudinary.com/YOUR_CLOUDINARY_ACCOUNT/image/upload/v123456/goats-for-sale-banner.png'
-			alt='Nigerian Dwarf Goats for Sale'
-			className='w-full h-[50vh] object-cover object-center'
-		/>
-	</div>
+const stripHtml = (html) => html.replace(/<[^>]*>/g, '');
 
-	{/* White space below banner */}
-	<div className='h-8 bg-white'></div>
+const truncate = (str, length = 160) =>
+	str.length > length ? str.slice(0, length) + '...' : str;
 
-	{/* Card Section with background */}
-	<section className='w-full px-4 py-12 bg-gray-50'>
-		{goats.length === 0 ? (
-			<p className='text-center text-gray-600 text-lg'>
-				No goats currently available for sale. Check back soon!
-			</p>
-		) : (
-			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
-				{goats.map((goat) => (
-					<GoatCard key={goat._id} goat={goat} />
-				))}
+const BlogPost = () => {
+	const { id } = useParams();
+	const { state, fetchPostById } = useBlogContext();
+	const { singlePost: post, loading, error } = state;
+
+	useEffect(() => {
+		if (id) fetchPostById(id);
+	}, [id, fetchPostById]);
+
+	if (loading || !post)
+		return <div className='p-10 text-lg'>Loading post...</div>;
+	if (error) return <div className='p-10 text-red-600'>{error}</div>;
+
+	// SEO metadata generation
+	const cleanText = stripHtml(post.content || '');
+	const metaDescription = truncate(cleanText, 160);
+	const metaKeywords = extractKeywords(`${post.title} ${cleanText}`); // ✅
+
+	const seoImage =
+		post.image ||
+		'https://res.cloudinary.com/dzhweqopn/image/upload/v1748887807/goat_logo_3_s898tm.png';
+
+	return (
+		<>
+			<SeoHead
+				title={`${post.title} | Blueberry Dairy`}
+				description={metaDescription}
+				image={seoImage}
+				url={`https://www.blueberrydairy.com/blog/${post._id}`}
+				keywords={metaKeywords} // ✅ Pass to generalized SeoHead
+			/>
+
+			{post.image && (
+				<div className='w-full h-[100vh] relative mt-[24px]'>
+					<img
+						src={post.image}
+						alt={`Photo related to blog post: ${post.title}`}
+						title={post.title}
+						className='absolute inset-0 w-full h-full object-cover object-center'
+					/>
+				</div>
+			)}
+
+			<div className='max-w-[1800px] px-4 sm:px-6 md:px-8 lg:px-12 py-12'>
+				<h1 className='text-4xl font-bold mb-4'>{post.title}</h1>
+
+				<div
+					className='prose prose-xl lg:prose-3xl max-w-none text-pretty'
+					dangerouslySetInnerHTML={{ __html: post.content }}
+				/>
 			</div>
-		)}
-	</section>
-</>
+		</>
+	);
+};
+
+export default BlogPost;

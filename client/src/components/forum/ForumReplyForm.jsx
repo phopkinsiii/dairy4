@@ -20,7 +20,7 @@ const ForumReplyForm = ({ postId }) => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className='space-y-2 mt-4'>
+		<form onSubmit={handleSubmit} className='space-y-2 mt-4  contact-form'>
 			<textarea
 				value={content}
 				onChange={(e) => setContent(e.target.value)}

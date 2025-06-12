@@ -1,4 +1,5 @@
 // @ts-nocheck
+// src/pages/TipTapEditor.jsx
 import { useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -10,12 +11,17 @@ import ListItem from '@tiptap/extension-list-item';
 import BulletList from '@tiptap/extension-bullet-list';
 import OrderedList from '@tiptap/extension-ordered-list';
 import TextAlign from '@tiptap/extension-text-align';
-import MenuBar from '../../../components/MenuBar';
 import TextStyle from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
-import FontSize from '../../../extensions/fontSize';
+import FontSize from '../../extensions/fontSize';
+import MenuBar from '../../components/MenuBar';
 
-const BlogEditor = ({ content, setContent }) => {
+const TipTapEditor = ({
+	content,
+	setContent,
+	placeholder = 'Write something...',
+	height = 'min-h-[300px]',
+}) => {
 	const editor = useEditor({
 		extensions: [
 			StarterKit,
@@ -42,70 +48,47 @@ const BlogEditor = ({ content, setContent }) => {
 			setContent(html);
 		},
 		editorProps: {
+			attributes: {
+				class: `editor-content focus:outline-none ${height}`,
+			},
 			handlePaste(view, event) {
-				const clipboardData = event.clipboardData;
-				if (!clipboardData) return false;
-
-				const html = clipboardData.getData('text/html');
+				const html = event.clipboardData?.getData('text/html');
 				if (!html) return false;
 
 				event.preventDefault();
+				const parser = new DOMParser();
+				const doc = parser.parseFromString(html, 'text/html');
 
-				const cleanedHTML = cleanGoogleDocsHTML(html);
-				editor.commands.insertContent(cleanedHTML);
+				doc
+					.querySelectorAll('[style]')
+					.forEach((el) => el.removeAttribute('style'));
+				doc
+					.querySelectorAll('meta, style, font, o\\:p')
+					.forEach((el) => el.remove());
+
+				const cleaned = doc.body.innerHTML;
+				editor.commands.insertContent(cleaned);
 				return true;
 			},
 		},
 	});
-
-	const cleanGoogleDocsHTML = (html) => {
-		const parser = new DOMParser();
-		const doc = parser.parseFromString(html, 'text/html');
-
-		// Remove Google Docs junk
-		doc
-			.querySelectorAll('[style]')
-			.forEach((el) => el.removeAttribute('style'));
-		doc.querySelectorAll('span').forEach((el) => {
-			if (!el.textContent.trim()) el.remove();
-		});
-		doc
-			.querySelectorAll('meta, style, font, o\\:p')
-			.forEach((el) => el.remove());
-
-		return doc.body.innerHTML;
-	};
 
 	useEffect(() => {
 		if (editor && content !== editor.getHTML()) {
 			editor.commands.setContent(content, false);
 		}
 	}, [content, editor]);
-	//  className='min-h-screen bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-100 px-4 py-8'
+
 	return (
-		<div
-			className='border rounded-md p-4 min-h-screen px-4 py-8'
-			style={{
-				backgroundColor: 'var(--bg-color)',
-				color: 'var(--text-color)',
-				borderColor: 'var(--border-color)',
-			}}
-		>
+		<div className='bg-white/30 dark:bg-white/10 backdrop-blur-md rounded-lg border border-white/30 p-4 shadow'>
 			{editor && <MenuBar editor={editor} />}
 			<EditorContent
 				editor={editor}
-				className='editor-content'
-				style={{
-					backgroundColor: 'var(--input-bg)',
-					color: 'var(--text-color)',
-					padding: '1rem',
-					borderRadius: '8px',
-					border: '1px solid var(--border-color)',
-					minHeight: '300px',
-				}}
+				className={`bg-transparent font-bold text-black ${height} px-4 py-3 rounded border-2 border-white`}
+				placeholder={placeholder}
 			/>
 		</div>
 	);
 };
 
-export default BlogEditor;
+export default TipTapEditor;

@@ -2,27 +2,13 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useBlogContext } from '../../contexts/BlogContext';
+import { extractKeywords } from '../../utils/seo'; // ✅ Reuse shared util
 import SeoHead from '../../components/SeoHead';
 
 const stripHtml = (html) => html.replace(/<[^>]*>/g, '');
 
 const truncate = (str, length = 160) =>
 	str.length > length ? str.slice(0, length) + '...' : str;
-
-const extractKeywords = (text, limit = 12) => {
-	const words = text.toLowerCase().match(/\b\w{4,}\b/g) || [];
-
-	const frequency = words.reduce((acc, word) => {
-		acc[word] = (acc[word] || 0) + 1;
-		return acc;
-	}, {});
-
-	const sorted = Object.entries(frequency)
-		.sort((a, b) => b[1] - a[1])
-		.map(([word]) => word);
-
-	return sorted.slice(0, limit).join(', ');
-};
 
 const BlogPost = () => {
 	const { id } = useParams();
@@ -54,23 +40,27 @@ const BlogPost = () => {
 				url={`https://www.blueberrydairy.com/blog/${post._id}`}
 				keywords={metaKeywords}
 			/>
-			{post.image && (
-				<div className='w-full h-[100vh] relative mt-[24px]'>
-					<img
-						src={post.image}
-						alt={post.title}
-						className='absolute inset-0 w-full h-full object-cover object-center'
-					/>
-				</div>
-			)}
+{post.image && (
+	<div className='w-full h-[35vh] overflow-hidden mt-6'>
+		<img
+			src={post.image}
+			alt={`Featured image for blog post: ${post.title}`}
+			title={post.title}
+			className='w-full h-full object-cover'
+		/>
+	</div>
+)}
+
 
 			<div className='max-w-[1800px] px-4 sm:px-6 md:px-8 lg:px-12 py-12 mr-0'>
 				<h1 className='text-4xl font-bold mb-4'>{post.title}</h1>
 
-				<div
-					className='prose prose-xl lg:prose-3xl max-w-none text-pretty'
-					dangerouslySetInnerHTML={{ __html: post.content }}
-				/>
+<div
+	className='prose prose-xl lg:prose-3xl max-w-none text-pretty [&_img]:max-w-full [&_img]:h-auto [&_img]:max-h-[500px] [&_img]:object-contain'
+
+	dangerouslySetInnerHTML={{ __html: post.content }}
+/>
+
 			</div>
 		</>
 	);

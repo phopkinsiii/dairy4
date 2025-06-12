@@ -116,3 +116,18 @@ export const deletePost = async (req, res, next) => {
 		next(error);
 	}
 };
+
+
+export const deleteBlogImage = async (req, res, next) => {
+	try {
+		const post = await Blog.findById(req.params.id);
+		if (!post) return res.status(404).json({ message: 'Post not found' });
+
+		post.image = null;
+		await post.save();
+
+		res.json({ message: 'Blog image removed' });
+	} catch (err) {
+		next(err);
+	}
+};

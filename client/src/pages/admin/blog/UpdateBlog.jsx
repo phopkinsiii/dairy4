@@ -35,15 +35,6 @@ const UpdateBlog = () => {
 
 	useEffect(() => {
 		if (post) {
-			// if (
-			// 	post.author._id !== userState.user?._id &&
-			// 	userState.user?.role !== 'admin'
-			// ) {
-			// 	toast.error('Access denied: Only the author can edit this post.');
-			// 	navigate('/manage-posts');
-			// 	return;
-			// }
-
 			const { title, content, tags, image, published } = post;
 			const initial = {
 				title: title || '',
@@ -56,7 +47,7 @@ const UpdateBlog = () => {
 			setFormData(initial);
 			setInitialData(initial);
 		}
-	}, [post, userState.user, navigate]);
+	}, [post]);
 
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
@@ -91,7 +82,6 @@ const UpdateBlog = () => {
 
 			const imageUrl = uploadRes.data.secure_url;
 
-			// ✅ Update image and mark form as changed
 			setFormData((prev) => {
 				const updated = { ...prev, image: imageUrl };
 				setIsChanged(JSON.stringify(updated) !== JSON.stringify(initialData));
@@ -103,6 +93,27 @@ const UpdateBlog = () => {
 			toast.error('Image upload failed');
 		} finally {
 			setUploading(false);
+		}
+	};
+
+	const handleImageDelete = async () => {
+		try {
+			const token = userState.user?.token;
+			console.log('🔍 Deleting image at:', `/blog/${id}/image`);
+			console.log('🔐 Token:', userState.user?.token);
+
+			await axiosInstance.delete(`/blog/${id}/image`, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			setFormData((prev) => {
+				const updated = { ...prev, image: '' };
+				setIsChanged(JSON.stringify(updated) !== JSON.stringify(initialData));
+				return updated;
+			});
+			toast.success('Image removed');
+		} catch (error) {
+			console.error('Error deleting image:', error);
+			toast.error('Failed to remove image');
 		}
 	};
 
@@ -176,12 +187,22 @@ const UpdateBlog = () => {
 					>
 						{uploading ? 'Uploading...' : 'Upload Image'}
 					</button>
+
 					{formData.image && (
-						<img
-							src={formData.image}
-							alt='Current blog'
-							className='w-full max-w-xs rounded mt-2'
-						/>
+						<div className='mt-2'>
+							<img
+								src={formData.image}
+								alt='Current blog'
+								className='w-full max-w-xs rounded mb-2'
+							/>
+							<button
+								type='button'
+								onClick={handleImageDelete}
+								className='text-sm text-red-600 hover:underline'
+							>
+								Remove Image
+							</button>
+						</div>
 					)}
 				</div>
 

@@ -4,20 +4,21 @@ import ForumPost from '../models/forumPostModel.js';
 // POST /api/forum
 export const createPost = async (req, res) => {
 	try {
-		const { title, content, author } = req.body;
+		const { title, content, author, images } = req.body;
 
 		if (!req.user || !title || !content) {
 			return res.status(400).json({ message: 'Missing required fields' });
 		}
 
-		const post = new ForumPost({
-			title,
-			content,
-			user: req.user._id,
-			author: {
-				name: author?.trim() || 'Anonymous',
-			},
-		});
+const post = new ForumPost({
+	title,
+	content,
+	user: req.user._id,
+	author: {
+		name: author?.trim() || 'Anonymous',
+	},
+	images: images || [],
+});
 
 		const savedPost = await post.save();
 		res.status(201).json(savedPost);
@@ -26,6 +27,7 @@ export const createPost = async (req, res) => {
 		res.status(500).json({ message: 'Server error' });
 	}
 };
+
 
 // GET /api/forum
 export const getAllPosts = async (req, res) => {

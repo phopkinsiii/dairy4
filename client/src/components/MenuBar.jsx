@@ -1,4 +1,4 @@
-// @ts-nocheck
+// src/components/MenuBar.jsx
 import {
 	TbBold,
 	TbItalic,
@@ -19,7 +19,6 @@ import { useRef } from 'react';
 
 const MenuBar = ({ editor }) => {
 	const fileInputRef = useRef();
-
 	if (!editor) return null;
 
 	const handleImageUpload = () => fileInputRef.current?.click();
@@ -37,12 +36,11 @@ const MenuBar = ({ editor }) => {
 		);
 
 		try {
-			const response = await fetch(import.meta.env.VITE_CLOUDINARY_UPLOAD_URL, {
+			const res = await fetch(import.meta.env.VITE_CLOUDINARY_UPLOAD_URL, {
 				method: 'POST',
 				body: formData,
 			});
-
-			const data = await response.json();
+			const data = await res.json();
 			if (data.secure_url) insertImage(data.secure_url);
 		} catch (error) {
 			console.error('Cloudinary upload failed:', error);
@@ -59,22 +57,36 @@ const MenuBar = ({ editor }) => {
 			type='button'
 			onClick={onClick}
 			title={label}
-			className={`p-2 rounded hover:bg-[var(--border-color)] ${
-				isActive ? 'bg-[var(--input-bg)]' : 'bg-transparent'
+			className={`p-2 rounded hover:bg-white/20 transition ${
+				isActive ? 'bg-white/20' : 'bg-transparent'
 			}`}
 		>
-			<Icon className='w-5 h-5 text-[var(--text-color)]' />
+			<Icon className='w-6 h-6 text-stone-900 dark:text-stone-800 font-bold' />
 		</button>
 	);
 
 	return (
-		<div
-			className='flex flex-wrap gap-1 mb-4 rounded p-2'
-			style={{
-				backgroundColor: 'var(--input-bg)',
-				border: '1px solid var(--border-color)',
-			}}
-		>
+		<div className='mb-4 rounded-lg border border-white/30 bg-white/30 dark:bg-white/10 backdrop-blur-md p-2 shadow flex flex-wrap gap-1'>
+			{/* Font Size Dropdown */}
+			<select
+				onChange={(e) =>
+					editor.chain().focus().setFontSize(e.target.value).run()
+				}
+				defaultValue=''
+				title='Font Size'
+				className='px-2 py-1 text-sm rounded bg-white/20 dark:bg-white/20 text-black border border-white/30'
+			>
+				<option value='' disabled>
+					Font Size
+				</option>
+				<option value='12'>12px</option>
+				<option value='14'>14px</option>
+				<option value='16'>16px</option>
+				<option value='18'>18px</option>
+				<option value='20'>20px</option>
+				<option value='24'>24px</option>
+			</select>
+
 			{iconButton(
 				TbBold,
 				() => editor.chain().focus().toggleBold().run(),
@@ -151,9 +163,7 @@ const MenuBar = ({ editor }) => {
 				TbLink,
 				() => {
 					const url = window.prompt('Enter URL');
-					if (url) {
-						editor.chain().focus().setLink({ href: url }).run();
-					}
+					if (url) editor.chain().focus().setLink({ href: url }).run();
 				},
 				editor.isActive('link'),
 				'Add Link'

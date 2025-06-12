@@ -5,6 +5,7 @@ import {
 	createPost,
 	updatePost,
 	deletePost,
+	deleteBlogImage,
 } from '../controllers/blogController.js';
 import { protect, adminProtect } from '../middleware/authMiddleware.js';
 
@@ -25,5 +26,8 @@ router.put('/:id', protect, adminProtect, updatePost);
 
 //Delete Post
 router.delete('/:id', protect, adminProtect, deletePost);
+
+//Delete Blog Image
+router.delete('/:id/image', protect, adminProtect, deleteBlogImage);
 
 export default router;

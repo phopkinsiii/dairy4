@@ -1,72 +1,77 @@
 // @ts-nocheck
-// pages/ForumPage.jsx
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useForumContext } from '../../contexts/ForumContext';
-import SeoHead from '../../components/SeoHead';
+import Spinner from '../../components/Spinner';
 
 const ForumPage = () => {
-	const { posts, fetchPosts, loading, error } = useForumContext();
+	const { posts, fetchPosts, loading } = useForumContext();
 
 	useEffect(() => {
 		fetchPosts();
 	}, []);
 
+	if (loading) return <Spinner />;
+
 	return (
-		<>
-			<SeoHead
-				title='Community Forum | Blueberry Dairy'
-				description='Join the Blueberry Dairy community forum to ask questions, share farm stories, and connect with fellow supporters of local, organic agriculture.'
-				url='https://www.blueberrydairy.com/forum'
-				image='https://res.cloudinary.com/dzhweqopn/image/upload/v1749518190/blue_ridge_parkway_yoxhuz.jpg'
-			/>
+		<section className='min-h-screen bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-100 px-4 py-8'>
+			<div className='max-w-5xl mx-auto'>
+				<div className='mb-10 text-center'>
+					<h1 className='text-4xl font-bold mb-2'>Community Forum</h1>
+					<p className='text-lg text-gray-600 dark:text-gray-300'>
+						Read, share, and engage with fellow farm supporters.
+					</p>
+					<Link
+						to='/forum/new'
+						className='inline-block mt-4 bg-green-600 hover:bg-green-500 text-white font-semibold px-6 py-3 rounded transition duration-200'
+					>
+						Start a New Post
+					</Link>
+				</div>
 
-			<div className='relative min-h-screen w-full overflow-hidden font-lora'>
-				{/* Animated background image */}
-				<div
-					className='absolute inset-0 bg-cover bg-center animate-zoom-in-once z-0'
-					style={{
-						backgroundImage: `url('https://res.cloudinary.com/dzhweqopn/image/upload/v1749518190/blue_ridge_parkway_yoxhuz.jpg')`,
-						filter: 'blur(4px) brightness(85%)',
-					}}
-				/>
-
-				{/* Foreground content */}
-				<div className='relative z-10 px-4 py-20 max-w-5xl mx-auto'>
-					<div className='bg-white/30 backdrop-blur-md rounded-lg p-6 md:p-10 shadow-lg text-stone-900 dark:text-white'>
-						<div className='flex justify-between items-center mb-6'>
-							<h1 className='text-3xl font-bold'>Community Forum</h1>
-							<Link
-								to='/forum/new'
-								className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'
+				{posts?.length === 0 ? (
+					<p className='text-center text-gray-600 dark:text-gray-300'>
+						No posts yet. Be the first to start a discussion!
+					</p>
+				) : (
+					<div className='space-y-6'>
+						{posts.map((post) => (
+							<div
+								key={post._id}
+								className='bg-white dark:bg-gray-800 p-6 rounded shadow space-y-2'
 							>
-								New Post
-							</Link>
-						</div>
-
-						{loading && <p className='text-lg'>Loading posts...</p>}
-						{error && <p className='text-red-600'>{error}</p>}
-
-						<div className='space-y-6'>
-							{posts.map((post) => (
 								<Link
 									to={`/forum/${post._id}`}
-									key={post._id}
-									className='block p-4 rounded-lg bg-white/60 dark:bg-black/40 hover:bg-white/80 dark:hover:bg-black/60 transition'
+									className='text-2xl font-semibold text-blue-700 dark:text-blue-400 hover:underline'
 								>
-									<h2 className='text-xl font-semibold mb-1'>{post.title}</h2>
-									<p className='text-sm text-gray-600 dark:text-gray-300 mb-2'>
-										By {post.author?.name || 'Anonymous'} •{' '}
-										{new Date(post.createdAt).toLocaleString()}
-									</p>
-									<p className='line-clamp-3'>{post.content}</p>
+									{post.title}
 								</Link>
-							))}
-						</div>
+
+								<p className='text-sm text-gray-500 dark:text-gray-400'>
+									By {post.author?.name || 'Anonymous'} •{' '}
+									{new Date(post.createdAt).toLocaleString()}
+								</p>
+
+								{/* Optional images preview */}
+								{Array.isArray(post.images) && post.images.length > 0 && (
+									<img
+										src={post.images[0]}
+										alt='Post preview'
+										className='rounded shadow-md max-h-60 w-full object-cover my-2'
+									/>
+								)}
+
+								{/* Render snippet of content */}
+								<div
+									className='prose dark:prose-invert line-clamp-4 overflow-hidden'
+									dangerouslySetInnerHTML={{ __html: post.content }}
+								/>
+							</div>
+						))}
 					</div>
-				</div>
+				)}
 			</div>
-		</>
+		</section>
 	);
 };
 
