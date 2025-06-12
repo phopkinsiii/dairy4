@@ -128,11 +128,11 @@ const AddGoat = () => {
 	};
 
 	return (
-		<div className='max-w-2xl mx-auto p-6 bg-white shadow-md'>
-			<h2 className='text-2xl font-bold mb-4 text-gray-800'>Add New Goat</h2>
+		<div className='max-w-2xl mx-auto p-6 mt-6 bg-white shadow-md'>
+			<h2 className='text-2xl font-bold mb-4 text-gray-800 mt-16'>Add New Goat</h2>
 			{error && <p className='text-red-500 mb-4'>{error}</p>}
 
-			<form onSubmit={handleSubmit} className='space-y-4'>
+			<form onSubmit={handleSubmit} className='space-y-8 pt-6'>
 				<InputField
 					label='Nickname'
 					name='nickname'

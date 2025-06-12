@@ -1,3 +1,4 @@
+// @ts-nocheck
 // controllers/webhookController.js
 import Stripe from 'stripe';
 import Order from '../models/orderModel.js';
@@ -90,7 +91,10 @@ export const handleStripeWebhook = async (req, res) => {
 				});
 				console.log('📧 Confirmation email sent to customer');
 			} catch (err) {
-				console.error('❌ Failed to send customer confirmation email:', err.message);
+				console.error(
+					'❌ Failed to send customer confirmation email:',
+					err.message
+				);
 			}
 		}
 
@@ -113,7 +117,8 @@ export const handleStripeWebhook = async (req, res) => {
 			console.error('❌ Failed to send admin email:', err.message);
 		}
 	} else {
-		console.log(`ℹ️ Unhandled event type: ${event.type}`);
+		console.warn(`⚠️ Unhandled Stripe event type: ${event.type}`);
+		console.debug('🔍 Full event payload:', JSON.stringify(event, null, 2));
 	}
 
 	res.status(200).json({ received: true });

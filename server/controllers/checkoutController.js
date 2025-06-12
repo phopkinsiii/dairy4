@@ -1,46 +1,72 @@
 // @ts-nocheck
 // server/controllers/checkoutController.js
 
-import dotenv from 'dotenv';
-dotenv.config(); // ✅ Load environment variables before anything else
-
 import Stripe from 'stripe';
-const stripe = new Stripe(process.env.STRIPE_RESTRICTED_KEY); // ✅ Initialize with secret key
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-export const createCheckoutSession = async (req, res, next) => {
-  try {
-    const { cartItems } = req.body;
+/**
+ * Create a Stripe Checkout session
+ * Accepts: req.body.form, req.body.cartItems
+ */
+export const createCheckoutSession = async (req, res) => {
+	try {
+		const { form, cartItems } = req.body;
 
-        if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
-      return res.status(400).json({ message: 'No cart items provided' });
-    }
+		if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
+			return res.status(400).json({ message: 'No cart items provided' });
+		}
 
-    if (!process.env.CLIENT_URL) {
-      throw new Error('CLIENT_URL not defined in environment');
-    }
+		if (!form || !form.name || !form.pickupLocation || !form.pickupTime) {
+			return res.status(400).json({ message: 'Incomplete form data' });
+		}
 
-    const lineItems = cartItems.map(item => ({
-      price_data: {
-        currency: 'usd',
-        product_data: {
-          name: item.name,
-        },
-        unit_amount: Math.round(item.price * 100), // Stripe requires amount in cents
-      },
-      quantity: item.quantity,
-    }));
+		if (!process.env.CLIENT_URL) {
+			throw new Error('CLIENT_URL not defined in environment');
+		}
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
-      line_items: lineItems,
-      success_url: `${process.env.CLIENT_URL}/confirmation`,
-      cancel_url: `${process.env.CLIENT_URL}/cart`,
-    });
+		// Convert items to Stripe line_items
+		const lineItems = cartItems.map((item) => ({
+			price_data: {
+				currency: 'usd',
+				product_data: {
+					name: item.name,
+				},
+				unit_amount: Math.round(item.selectedSize?.price * 100), // price in cents
+			},
+			quantity: item.quantity,
+		}));
 
-    res.status(200).json({ sessionId: session.id });
-  } catch (error) {
-    console.error('❌ Stripe session error:', error);
-    res.status(500).json({ message: 'Checkout session creation failed' });
-  }
+		// Metadata for webhook to reconstruct the order
+		const metadata = {
+			cart: JSON.stringify(
+				cartItems.map((item) => ({
+					productId: item._id,
+					name: item.name,
+					quantity: item.quantity,
+					price: item.selectedSize?.price,
+					selectedSize: item.selectedSize?.size,
+				}))
+			),
+			name: form.name || '',
+			email: form.email || '',
+			pickupName: form.pickupName || form.name || '',
+			pickupLocation: form.pickupLocation || '',
+			pickupTime: form.pickupTime || '',
+		};
+
+		// Create the Stripe session
+		const session = await stripe.checkout.sessions.create({
+			payment_method_types: ['card'],
+			mode: 'payment',
+			line_items: lineItems,
+			success_url: `${process.env.CLIENT_URL}/confirmation?session_id={CHECKOUT_SESSION_ID}`,
+			cancel_url: `${process.env.CLIENT_URL}/cart`,
+			metadata,
+		});
+
+		res.status(200).json({ id: session.id });
+	} catch (error) {
+		console.error('❌ Stripe session error:', error);
+		res.status(500).json({ message: 'Checkout session creation failed' });
+	}
 };

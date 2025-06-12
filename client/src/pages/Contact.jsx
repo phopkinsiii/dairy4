@@ -61,7 +61,6 @@ export default function Contact() {
 
 				<div className='relative z-10 px-6 py-20 max-w-8xl mx-auto'>
 					<div className='grid md:grid-cols-[1fr_1.25fr] gap-2 px-8'>
-
 						{/* Address Section */}
 						<div className='text-white text-3xl space-y-4'>
 							<h3 className='text-4xl font-bold mb-2'>Visit Us</h3>
@@ -100,7 +99,7 @@ export default function Contact() {
 						{/* Contact Form */}
 						<form
 							onSubmit={handleSubmit}
-							className='bg-white/30 backdrop-blur-md p-6 rounded-lg shadow-lg space-y-6 contact-form'
+							className='bg-white/30 backdrop-blur-md p-6 rounded-lg shadow-lg space-y-6'
 						>
 							{successMessage && (
 								<div className='p-3 bg-green-100 text-green-800 rounded text-sm'>

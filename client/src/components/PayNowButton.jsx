@@ -50,7 +50,7 @@ const PayNowButton = ({ form, cartItems }) => {
 				: `Pay Now (${formatPrice(
 						cartItems.reduce(
 							(sum, item) =>
-								sum + (item.selectedOption?.price || 0) * (item.quantity || 1),
+								sum + (item.selectedSize?.price || 0) * (item.quantity || 1),
 							0
 						)
 				  )})`}

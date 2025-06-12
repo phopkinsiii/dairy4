@@ -9,6 +9,7 @@ export const validateEnv = () => {
 		'RESEND_API_KEY',
 		'CLOUDINARY_UPLOAD_PRESET',
 		'CLOUDINARY_UPLOAD_URL',
+		'ALLOWED_ORIGINS',
 	];
 
 	const missing = requiredVars.filter((key) => !process.env[key]);

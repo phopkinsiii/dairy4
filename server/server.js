@@ -1,6 +1,8 @@
 // @ts-nocheck
-import dotenv from 'dotenv';
-dotenv.config();
+import dotenv from 'dotenv-flow';
+dotenv.config({ node_env: process.env.NODE_ENV });
+console.log('🧠 NODE_ENV is:', process.env.NODE_ENV);
+
 import { validateEnv } from './config/validateEnv.js';
 validateEnv(); // ✅ Ensure all env variables are defined
 
@@ -69,6 +71,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 // ✅ CORS
 app.use(cors(corsOptions));
+//app.options('*', cors(corsOptions)); // ⛑ Handle preflight OPTIONS requests globally
 
 // ✅ Stripe webhook needs raw body parsing
 app.use('/webhook', express.raw({ type: 'application/json' }), webhookRoutes);
