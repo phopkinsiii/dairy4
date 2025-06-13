@@ -1,17 +1,12 @@
 // @ts-nocheck
-// controllers/webhookController.js
+// server/controllers/webhookController.js
 
-import dotenvFlow from 'dotenv-flow';
-dotenvFlow.config();
-
-import Stripe from 'stripe';
 import Order from '../models/orderModel.js';
-import { sendOrderConfirmationEmail } from '../utils/sendEmail.js';
+import asyncHandler from 'express-async-handler';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-export const handleStripeWebhook = async (req, res) => {
-	console.log('⚡ Webhook received');
+// ✅ Stripe requires raw body; already handled in server.js route
+export const handleStripeWebhook = asyncHandler(async (req, res) => {
+	const stripe = req.stripe;
 	const sig = req.headers['stripe-signature'];
 
 	let event;
@@ -27,106 +22,39 @@ export const handleStripeWebhook = async (req, res) => {
 		return res.status(400).send(`Webhook Error: ${err.message}`);
 	}
 
+	// ✅ Process only relevant event
 	if (event.type === 'checkout.session.completed') {
 		const session = event.data.object;
-		console.log('✅ Payment succeeded:', session.id);
 
+		// ✅ Access metadata directly
 		const metadata = session.metadata || {};
-		let cartItems = [];
+		console.log('⚡ Webhook received: checkout.session.completed');
+		console.log('📨 Metadata:', metadata);
 
 		try {
-			console.log('🛍️ Raw metadata.cart:', metadata.cart);
-			cartItems = JSON.parse(metadata.cart || '[]');
-			console.log('🧾 Parsed cartItems:', cartItems);
-			console.log('📨 Metadata:', metadata);
-			console.log('📦 Creating new order with sessionId:', session.id);
-		} catch (err) {
-			console.error('❌ Failed to parse cartItems:', err.message);
-		}
+			const cartItems = JSON.parse(metadata.cart || '[]');
 
-		// Log and validate pickupTime
-		console.log('📅 Raw pickupTime metadata:', metadata.pickupTime);
-		const parsedPickupTime = new Date(metadata.pickupTime);
-		const validPickupTime = isNaN(parsedPickupTime.getTime())
-			? null
-			: parsedPickupTime;
-
-		if (!validPickupTime) {
-			console.warn('⚠️ Invalid or missing pickupTime:', metadata.pickupTime);
-		}
-
-		const newOrder = new Order({
-			guest: true,
-			user: null,
-			name: metadata.name || '',
-			email: session.customer_email || '',
-			cartItems: cartItems.map((item) => ({
-				productId: item.productId,
-				name: item.name,
-				quantity: item.quantity,
-				price: item.price,
-				size: item.selectedSize,
-			})),
-			pickupName: metadata.pickupName || '',
-			pickupLocation: metadata.pickupLocation || 'Farm',
-			pickupTime: validPickupTime,
-			stripeSessionId: session.id,
-		});
-
-		try {
-			await newOrder.save();
-			console.log('📝 Order saved to MongoDB:', newOrder._id);
-			console.log('✅ Order saved:', newOrder);
-		} catch (err) {
-			console.error('❌ Order save failed:', err.message);
-			console.error('Full error:', err);
-		}
-
-		// Send confirmation email to customer
-		if (session.customer_email) {
-			try {
-				await sendOrderConfirmationEmail({
-					to: session.customer_email,
-					subject: 'Your Blueberry Dairy Order Confirmation',
-					name: newOrder.name,
-					cartItems: newOrder.cartItems,
-					pickupName: newOrder.pickupName,
-					pickupLocation: newOrder.pickupLocation,
-					pickupTime: validPickupTime
-						? validPickupTime.toLocaleString()
-						: 'Unavailable',
-				});
-				console.log('📧 Confirmation email sent to customer');
-			} catch (err) {
-				console.error(
-					'❌ Failed to send customer confirmation email:',
-					err.message
-				);
-			}
-		}
-
-		// Optional: Send admin notification
-		try {
-			await sendOrderConfirmationEmail({
-				to: process.env.ADMIN_EMAIL,
-				subject: 'New Blueberry Dairy Order',
-				name: newOrder.name,
-				cartItems: newOrder.cartItems,
-				pickupName: newOrder.pickupName,
-				pickupLocation: newOrder.pickupLocation,
-				pickupTime: validPickupTime
-					? validPickupTime.toLocaleString()
-					: 'Unavailable',
-				isAdminCopy: true,
+			const newOrder = new Order({
+				guest: true,
+				name: metadata.name,
+				email: metadata.email,
+				cartItems,
+				pickupName: metadata.pickupName,
+				pickupLocation: metadata.pickupLocation,
+				pickupTime: metadata.pickupTime,
+				stripeSessionId: session.id,
 			});
-			console.log('📧 Admin notification sent');
-		} catch (err) {
-			console.error('❌ Failed to send admin email:', err.message);
+
+			await newOrder.save();
+			console.log('✅ Order saved to MongoDB for session:', session.id);
+		} catch (error) {
+			console.error('❌ Failed to create order from session:', error);
+			return res.status(500).json({ message: 'Failed to save order' });
 		}
 	} else {
 		console.warn(`⚠️ Unhandled Stripe event type: ${event.type}`);
-		console.debug('🔍 Full event payload:', JSON.stringify(event, null, 2));
+		console.log('🔍 Full event payload:', event);
 	}
 
-	res.status(200).json({ received: true });
-};
+	res.status(200).send();
+});

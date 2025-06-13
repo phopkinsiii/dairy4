@@ -3,6 +3,9 @@ import dotenv from 'dotenv-flow';
 dotenv.config({ node_env: process.env.NODE_ENV });
 console.log('🧠 NODE_ENV is:', process.env.NODE_ENV);
 
+import Stripe from 'stripe'; // ✅ Moved before use
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
 import { validateEnv } from './config/validateEnv.js';
 validateEnv(); // ✅ Ensure all env variables are defined
 
@@ -11,7 +14,6 @@ import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import compression from 'compression';
-
 import { corsOptions } from './config/corsOptions.js';
 import { globalLimiter } from './middleware/rateLimiter.js'; // Global limiter
 
@@ -74,7 +76,15 @@ app.use(cors(corsOptions));
 //app.options('*', cors(corsOptions)); // ⛑ Handle preflight OPTIONS requests globally
 
 // ✅ Stripe webhook needs raw body parsing
-app.use('/webhook', express.raw({ type: 'application/json' }), webhookRoutes);
+app.use(
+	'/webhook',
+	express.raw({ type: 'application/json' }),
+	(req, res, next) => {
+		req.stripe = stripe;
+		next();
+	},
+	webhookRoutes
+);
 
 // ✅ Global JSON parser
 app.use(express.json());
