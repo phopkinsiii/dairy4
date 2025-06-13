@@ -12,7 +12,7 @@ const router = express.Router();
 
 // ✅ Rate-limited public routes (guest or user)
 router.post('/', authLimiter, createOrder);
-router.get('/session/:sessionId', authLimiter, getOrderBySessionId);
+router.get('/session/:sessionId', getOrderBySessionId);
 
 // ✅ Admin-only routes
 router.get('/', protect, adminProtect, getAllOrders);

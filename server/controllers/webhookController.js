@@ -1,5 +1,9 @@
 // @ts-nocheck
 // controllers/webhookController.js
+
+import dotenvFlow from 'dotenv-flow';
+dotenvFlow.config();
+
 import Stripe from 'stripe';
 import Order from '../models/orderModel.js';
 import { sendOrderConfirmationEmail } from '../utils/sendEmail.js';
@@ -34,6 +38,8 @@ export const handleStripeWebhook = async (req, res) => {
 			console.log('🛍️ Raw metadata.cart:', metadata.cart);
 			cartItems = JSON.parse(metadata.cart || '[]');
 			console.log('🧾 Parsed cartItems:', cartItems);
+			console.log('📨 Metadata:', metadata);
+			console.log('📦 Creating new order with sessionId:', session.id);
 		} catch (err) {
 			console.error('❌ Failed to parse cartItems:', err.message);
 		}
@@ -70,6 +76,7 @@ export const handleStripeWebhook = async (req, res) => {
 		try {
 			await newOrder.save();
 			console.log('📝 Order saved to MongoDB:', newOrder._id);
+			console.log('✅ Order saved:', newOrder);
 		} catch (err) {
 			console.error('❌ Order save failed:', err.message);
 			console.error('Full error:', err);
