@@ -46,6 +46,7 @@ export const createCheckoutSession = async (req, res) => {
 			line_items: lineItems,
 			success_url: `${process.env.FRONTEND_URL}/confirmation?session_id={CHECKOUT_SESSION_ID}`,
 			cancel_url: `${process.env.FRONTEND_URL}/checkout`,
+			customer_email: form.email || '',
 			metadata,
 		});
 
