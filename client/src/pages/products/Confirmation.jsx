@@ -20,15 +20,29 @@ export default function Confirmation() {
 			return;
 		}
 		const fetchOrder = async () => {
-			try {
-				const { data } = await axiosInstance.get(
-					`/orders/session/${sessionId}`
-				);
-				setOrder(data);
-				dispatch({ type: 'CLEAR_CART' });
-			} catch (error) {
-				console.error('❌ Failed to fetch order:', error);
-			}
+			let attempts = 0;
+			const maxAttempts = 5;
+			const delay = 2000; // 2 seconds delay between attempts
+
+			const tryFetch = async () => {
+				try {
+					const { data } = await axiosInstance.get(
+						`/orders/session/${sessionId}`
+					);
+					setOrder(data);
+					dispatch({ type: 'CLEAR_CART' });
+				} catch (error) {
+					if (attempts < maxAttempts && error.response?.status === 404) {
+						attempts++;
+						console.log(`🔄 Retry attempt ${attempts} of ${maxAttempts}`);
+						setTimeout(tryFetch, delay);
+					} else {
+						console.error('❌ Failed to fetch order:', error);
+					}
+				}
+			};
+
+			tryFetch();
 		};
 		fetchOrder();
 	}, [navigate, sessionId, dispatch]);
