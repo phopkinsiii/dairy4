@@ -6,6 +6,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const createCheckoutSession = async (req, res) => {
 	try {
+		console.log('📦 Received checkout request:', {
+			body: req.body,
+			cartItems: req.body.cartItems,
+			form: req.body.form
+		});
+
 		const { form, cartItems } = req.body;
 
 		if (!cartItems?.length) {
@@ -44,6 +50,14 @@ export const createCheckoutSession = async (req, res) => {
 		const successUrl = `https://www.blueberrydairy.com/confirmation?session_id={CHECKOUT_SESSION_ID}`;
 		const cancelUrl = `https://www.blueberrydairy.com/checkout`;
 
+		console.log('✨ Creating Stripe session with:', {
+			line_items: lineItems,
+			customer_email: form.email,
+			metadata,
+			success_url: successUrl,
+			cancel_url: cancelUrl
+		});
+
 		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ['card'],
 			mode: 'payment',
@@ -54,6 +68,14 @@ export const createCheckoutSession = async (req, res) => {
 			cancel_url: cancelUrl,
 		});
 
+		console.log('✅ Stripe session created:', {
+			session_id: session.id,
+			amount_total: session.amount_total,
+			currency: session.currency,
+			customer_email: session.customer_email,
+			status: session.status
+		});
+
 		res.status(200).json({ id: session.id });
 	} catch (error) {
 		console.error('❌ Stripe session creation error:', {
@@ -61,6 +83,7 @@ export const createCheckoutSession = async (req, res) => {
 			stack: error.stack,
 			type: error.type,
 			details: error.details,
+			raw: error.raw
 		});
 		
 		const errorMessage = error.raw && error.raw.message 
