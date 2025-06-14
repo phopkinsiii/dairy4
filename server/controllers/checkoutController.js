@@ -60,7 +60,21 @@ export const createCheckoutSession = async (req, res) => {
 
 		res.status(200).json({ id: session.id });
 	} catch (error) {
-		console.error('❌ Stripe session creation error:', error);
-		res.status(500).json({ message: 'Checkout session creation failed' });
+		console.error('❌ Stripe session creation error:', {
+			message: error.message,
+			stack: error.stack,
+			type: error.type,
+			details: error.details,
+		});
+		
+		const errorMessage = error.raw && error.raw.message 
+			? error.raw.message 
+			: error.message || 'Checkout session creation failed';
+		
+		res.status(500).json({ 
+			message: errorMessage,
+			details: error.details,
+			type: error.type
+		});
 	}
 };
