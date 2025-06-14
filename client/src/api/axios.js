@@ -2,12 +2,19 @@
 // src/api/axios.js
 import axios from 'axios';
 
-const API_BASE_PATH = '/api';
+// Ensure no double /api
+const API_BASE_PATH = import.meta.env.VITE_API_BASE_URL.endsWith('/api') 
+	? '' 
+	: '/api';
+
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-if (import.meta.env.MODE === 'development') {
-	console.log('🔧 Axios Base URL (DEV):', baseURL);
-}
+console.log('🔧 Axios Configuration:', {
+	mode: import.meta.env.MODE,
+	baseURL,
+	apiPath: API_BASE_PATH,
+	fullUrl: `${baseURL}${API_BASE_PATH}`
+});
 
 const axiosInstance = axios.create({
 	baseURL: `${baseURL}${API_BASE_PATH}`,
