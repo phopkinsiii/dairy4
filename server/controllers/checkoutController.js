@@ -40,14 +40,22 @@ export const createCheckoutSession = async (req, res) => {
 			pickupTime: form.pickupTime || '',
 		};
 
+		// Create session first without URLs
 		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ['card'],
 			mode: 'payment',
 			line_items: lineItems,
-			success_url: `${process.env.CLIENT_URL}/confirmation?session_id=${session.id}`,
-			cancel_url: `${process.env.CLIENT_URL}/checkout`,
 			customer_email: form.email || '',
 			metadata,
+		});
+
+		// Now that we have the session ID, update with URLs
+		const successUrl = `${process.env.CLIENT_URL}/confirmation?session_id=${session.id}`;
+		const cancelUrl = `${process.env.CLIENT_URL}/checkout`;
+
+		await stripe.checkout.sessions.update(session.id, {
+			success_url: successUrl,
+			cancel_url: cancelUrl,
 		});
 
 		res.status(200).json({ id: session.id });
