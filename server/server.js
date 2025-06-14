@@ -41,6 +41,7 @@ import checkoutRoutes from './routes/checkoutRoutes.js';
 import webhookRoutes from './routes/webhookRoutes.js';
 import forumRoutes from './routes/forumRoutes.js';
 import goatRoutes from './routes/goatRoutes.js';
+import healthRoutes from './routes/healthRoutes.js';
 
 import {
 	uploadsMiddleware,
@@ -134,16 +135,18 @@ app.use('/api', globalLimiter);
 // ✅ Static file serving for image uploads
 app.use('/uploads', uploadsCORSHeaders, uploadsMiddleware);
 
-// ✅ Route mounts (specific rate limits like authLimiter are inside route files)
-app.use('/api/users', userRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/contacts', contactRoutes);
-app.use('/api/blog', blogRoutes);
-app.use('/api/forum', forumRoutes);
-app.use('/api/uploads', uploadRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/goats', goatRoutes);
-app.use('/api/checkout', checkoutRoutes);
+// ✅ Route mounts (specific rate limits like authLimiter are inside// Mount routes
+app.use('/api', userRoutes);
+app.use('/api', productRoutes);
+app.use('/api', contactRoutes);
+app.use('/api', blogRoutes);
+app.use('/api', uploadRoutes);
+app.use('/api', orderRoutes);
+app.use('/api', checkoutRoutes);
+app.use('/api', webhookRoutes);
+app.use('/api', forumRoutes);
+app.use('/api', goatRoutes);
+app.use('/api', healthRoutes);
 
 // ✅ Fallback for unknown API routes
 app.use((req, res) => {
@@ -156,7 +159,23 @@ app.use(errorHandler);
 // ✅ Start server
 connectDB();
 
-const port = process.env.PORT || 5050;
-app.listen(port, () => {
-	console.log(`✅ Server listening on port ${port}`);
+const PORT = process.env.PORT || 5050;
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('❌ Server error:', err);
+  res.status(500).json({
+    message: 'Internal Server Error',
+    error: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log('🔧 Environment:', {
+    NODE_ENV: process.env.NODE_ENV,
+    PORT,
+    MONGO_URI: process.env.MONGO_URI?.substring(0, 20) + '...', // Mask sensitive parts
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY?.substring(0, 10) + '...' // Mask sensitive parts
+  });
 });
