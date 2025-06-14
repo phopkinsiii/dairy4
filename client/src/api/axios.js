@@ -16,8 +16,8 @@ const axiosInstance = axios.create({
 
 // Add interceptor to handle API path
 axiosInstance.interceptors.request.use((config) => {
-	// If the URL doesn't start with /api, add it
-	if (!config.url.startsWith(API_BASE_PATH)) {
+	// If the URL is not already an absolute URL and doesn't start with /api
+	if (!config.url.startsWith('http') && !config.url.startsWith(API_BASE_PATH)) {
 		config.url = `${API_BASE_PATH}${config.url.startsWith('/') ? '' : '/'}${config.url}`;
 	}
 	
