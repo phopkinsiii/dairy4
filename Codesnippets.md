@@ -1,10 +1,14 @@
-const session = await stripe.checkout.sessions.create({
-  payment_method_types: ['card'],
-  mode: 'payment',
-  line_items,
-  success_url: 'https://www.blueberrydairy.com/confirmation?session_id={CHECKOUT_SESSION_ID}',
-  cancel_url: 'https://www.blueberrydairy.com/checkout',
-  metadata: {
-    // ...
-  },
-});
+import mongoose from 'mongoose';
+
+const connectDB = async () => {
+	try {
+		const conn = await mongoose.connect(process.env.MONGO_URI);
+		console.log(`✅ MongoDB connected to DB: ${conn.connection.name}`);
+	} catch (error) {
+		console.error(`❌ MongoDB connection error: ${error.message}`);
+		process.exit(1);
+	}
+};
+
+export default connectDB;
+

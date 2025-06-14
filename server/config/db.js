@@ -8,9 +8,12 @@ const connectDB = async (retries = 5, delay = 3000) => {
 		try {
 			const conn = await mongoose.connect(uri);
 			console.log(`✅ MongoDB connected: ${conn.connection.host}`);
+			console.log(`✅ MongoDB connected to DB: ${conn.connection.name}`);
 			return;
 		} catch (error) {
-			console.error(`❌ Attempt ${attempt} to connect to MongoDB failed: ${error.message}`);
+			console.error(
+				`❌ Attempt ${attempt} to connect to MongoDB failed: ${error.message}`
+			);
 
 			if (attempt === retries) {
 				console.error('💥 All retries failed. Exiting...');
