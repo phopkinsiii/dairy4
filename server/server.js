@@ -1,7 +1,20 @@
 // @ts-nocheck
 import dotenv from 'dotenv-flow';
-dotenv.config({ node_env: process.env.NODE_ENV });
-console.log('🧠 NODE_ENV is:', process.env.NODE_ENV);
+
+// Load environment variables
+const envPath = process.env.NODE_ENV === 'production' 
+  ? '.env.production' 
+  : '.env.development';
+
+console.log('🔧 Loading environment from:', envPath);
+dotenv.config({ path: envPath });
+
+// Validate environment
+console.log('🧠 Environment variables loaded:', {
+  NODE_ENV: process.env.NODE_ENV,
+  ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
+  CLIENT_URL: process.env.CLIENT_URL
+});
 
 import Stripe from 'stripe'; // ✅ Moved before use
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
