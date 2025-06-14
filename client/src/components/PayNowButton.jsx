@@ -20,7 +20,7 @@ const PayNowButton = ({ form, cartItems, onSuccess }) => {
 			// Debug log for Stripe cart submission
 			console.log('🧾 Sending cartItems to backend:', cartItems);
 
-			const response = await axiosInstance.post('/api/checkout/create-session', {
+			const response = await axiosInstance.post('/checkout/create-session', {
 				form,
 				cartItems,
 			});
