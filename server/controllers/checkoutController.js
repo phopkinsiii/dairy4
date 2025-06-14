@@ -40,20 +40,16 @@ export const createCheckoutSession = async (req, res) => {
 			pickupTime: form.pickupTime || '',
 		};
 
-		// Create session first without URLs
+		// Create session with URLs included
+		const successUrl = `https://www.blueberrydairy.com/confirmation?session_id={CHECKOUT_SESSION_ID}`;
+		const cancelUrl = `https://www.blueberrydairy.com/checkout`;
+
 		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ['card'],
 			mode: 'payment',
 			line_items: lineItems,
 			customer_email: form.email || '',
 			metadata,
-		});
-
-		// Now that we have the session ID, update with URLs
-		const successUrl = `https://www.blueberrydairy.com/confirmation?session_id=${session.id}`;
-		const cancelUrl = `https://www.blueberrydairy.com/checkout`;
-
-		await stripe.checkout.sessions.update(session.id, {
 			success_url: successUrl,
 			cancel_url: cancelUrl,
 		});
