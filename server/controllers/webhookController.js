@@ -4,6 +4,11 @@ import { sendOrderConfirmationEmail } from '../utils/sendEmail.js';
 
 export const handleStripeWebhook = async (req, res) => {
 	console.log('⚡ Webhook route hit');
+	console.log('⚡ Headers:', {
+		'stripe-signature': req.headers['stripe-signature'],
+		'content-type': req.headers['content-type'],
+		'content-length': req.headers['content-length']
+	});
 
 	const stripe = req.stripe;
 	const sig = req.headers['stripe-signature'];
@@ -15,9 +20,21 @@ export const handleStripeWebhook = async (req, res) => {
 			sig,
 			process.env.STRIPE_WEBHOOK_SECRET
 		);
-		console.log(`⚡ Webhook received: ${event.type}`);
+		console.log('⚡ Webhook details:', {
+			eventType: event.type,
+			eventId: event.id,
+			createdAt: new Date(event.created * 1000).toISOString(),
+			livemode: event.livemode,
+			webhookId: event.request?.id,
+			webhookTimestamp: event.request?.id
+		});
 	} catch (err) {
-		console.error(`❌ Webhook signature verification failed: ${err.message}`);
+		console.error('❌ Webhook signature verification error:', {
+			message: err.message,
+			stack: err.stack,
+			type: err.type,
+			details: err.details
+		});
 		return res.status(400).send(`Webhook Error: ${err.message}`);
 	}
 
@@ -26,15 +43,52 @@ export const handleStripeWebhook = async (req, res) => {
 		const session = event.data.object;
 
 		// Debug payload
-		console.log('📨 Metadata:', session.metadata);
+		console.log('📨 Session details:', {
+			sessionId: session.id,
+			amountTotal: session.amount_total,
+			currency: session.currency,
+			customer: session.customer,
+			customerEmail: session.customer_email,
+			livemode: session.livemode,
+			metadata: session.metadata
+		});
 
 		try {
-			const cart = JSON.parse(session.metadata.cart || '[]');
+			// Validate cart data
+			const cart = session.metadata.cart ? JSON.parse(session.metadata.cart) : [];
+			if (!Array.isArray(cart) || cart.length === 0) {
+				throw new Error('Cart is empty or invalid format');
+			}
 
+			// Validate cart items
+			const invalidItems = cart.filter(item => 
+				!item.name || !item.quantity || !item.price || !item.selectedSize
+			);
+			if (invalidItems.length > 0) {
+				throw new Error('Invalid cart items detected');
+			}
+
+			// Validate metadata
+			const requiredFields = ['name', 'email', 'pickupName', 'pickupLocation', 'pickupTime'];
+			const missingFields = requiredFields.filter(field => 
+				!session.metadata[field]
+			);
+			if (missingFields.length > 0) {
+				throw new Error(`Missing required metadata fields: ${missingFields.join(', ')}`);
+			}
+
+			// Validate pickup time
+			const pickupTime = new Date(session.metadata.pickupTime);
+			if (isNaN(pickupTime.getTime())) {
+				throw new Error('Invalid pickup time format');
+			}
+
+			// Create and validate order
 			const order = new Order({
 				guest: !session.customer,
-				name: session.metadata.name || '',
-				email: session.metadata.email || '',
+				user: session.customer ? session.customer : undefined,
+				name: session.metadata.name,
+				email: session.metadata.email,
 				cartItems: cart.map((item) => ({
 					productId: item.productId,
 					name: item.name,
@@ -45,10 +99,12 @@ export const handleStripeWebhook = async (req, res) => {
 				})),
 				pickupName: session.metadata.pickupName,
 				pickupLocation: session.metadata.pickupLocation,
-				pickupTime: session.metadata.pickupTime,
+				pickupTime,
 				stripeSessionId: session.id,
 			});
 
+			// Validate order data
+			await order.validate();
 			await order.save();
 			console.log(`✅ Order saved to MongoDB with ID: ${order._id}`);
 
@@ -76,7 +132,7 @@ export const handleStripeWebhook = async (req, res) => {
 				isAdminCopy: true,
 			});
 
-			console.log('📧 Confirmation emails sent to customer and admin');
+			res.status(200).json({ message: 'Order processed successfully' });
 		} catch (err) {
 			console.error('❌ Failed to create order from session:', err);
 			return res.status(500).send('Webhook processing failed');
