@@ -53,6 +53,13 @@ export const createCheckoutSession = async (req, res) => {
 			line_items: lineItems,
 			customer_email: form.email || '',
 			metadata,
+		});
+
+		// Now that we have the session ID, update with URLs
+		const successUrl = `https://www.blueberrydairy.com/confirmation?session_id=${session.id}`;
+		const cancelUrl = `https://www.blueberrydairy.com/checkout`;
+
+		await stripe.checkout.sessions.update(session.id, {
 			success_url: successUrl,
 			cancel_url: cancelUrl,
 		});
