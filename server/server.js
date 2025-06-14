@@ -135,18 +135,18 @@ app.use('/api', globalLimiter);
 // ✅ Static file serving for image uploads
 app.use('/uploads', uploadsCORSHeaders, uploadsMiddleware);
 
-// ✅ Route mounts (specific rate limits like authLimiter are inside// Mount routes
-app.use('/api', userRoutes);
-app.use('/api', productRoutes);
-app.use('/api', contactRoutes);
-app.use('/api', blogRoutes);
-app.use('/api', uploadRoutes);
-app.use('/api', orderRoutes);
-app.use('/api', checkoutRoutes);
-app.use('/api', webhookRoutes);
-app.use('/api', forumRoutes);
-app.use('/api', goatRoutes);
-app.use('/api', healthRoutes);
+// ✅ Route mounts (specific rate limits like authLimiter are inside// Mount routes with proper order
+app.use('/api', healthRoutes); // Add this first
+app.use('/api/users', userRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/contacts', contactRoutes);
+app.use('/api/blog', blogRoutes);
+app.use('/api/forum', forumRoutes);
+app.use('/api/uploads', uploadRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/goats', goatRoutes);
+app.use('/api/checkout', checkoutRoutes);
+app.use('/api/webhook', webhookRoutes);
 
 // ✅ Fallback for unknown API routes
 app.use((req, res) => {
