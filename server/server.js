@@ -29,6 +29,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 import { corsOptions } from './config/corsOptions.js';
 import { globalLimiter } from './middleware/rateLimiter.js'; // Global limiter
+import apiLogger from './middleware/logger.js';
 
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
@@ -53,15 +54,28 @@ import { errorHandler } from './middleware/errorHandler.js';
 const app = express();
 
 // ✅ CORS
-app.use(
-	cors(corsOptions)
-);
-
-// Debug CORS settings
-console.log('✅ CORS configuration:', {
-	allowedOrigins: process.env.ALLOWED_ORIGINS?.split(',') || [],
-	credentials: corsOptions.credentials,
-	origin: corsOptions.origin
+// CORS middleware with detailed logging
+app.use((req, res, next) => {
+	console.log('🌐 CORS Request:', {
+		method: req.method,
+		url: req.url,
+		origin: req.headers.origin,
+		allowedOrigins: process.env.ALLOWED_ORIGINS?.split(',') || [],
+		credentials: corsOptions.credentials
+	});
+	
+	cors(corsOptions)(req, res, (corsErr) => {
+		if (corsErr) {
+			console.error('❌ CORS Error:', corsErr);
+			res.status(403).json({
+				message: 'CORS request blocked',
+				details: corsErr.message
+			});
+			return;
+		}
+		
+		next();
+	});
 });
 
 // Body parsing middleware must come after CORS
@@ -80,6 +94,9 @@ app.use(
 
 // ✅ Compression first for better performance
 app.use(compression());
+
+// ✅ API logging middleware
+app.use(apiLogger);
 
 // ✅ Security headers
 app.use(
