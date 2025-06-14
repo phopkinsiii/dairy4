@@ -104,6 +104,7 @@ app.use('/api/forum', forumRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/goats', goatRoutes);
+app.use('/api/checkout', checkoutRoutes);
 
 // ✅ Fallback for unknown API routes
 app.use((req, res) => {
@@ -112,9 +113,6 @@ app.use((req, res) => {
 
 // ✅ Global error handler
 app.use(errorHandler);
-
-// ✅ Checkout routes
-app.use('/api/checkout', checkoutRoutes);
 
 // ✅ Start server
 connectDB();
