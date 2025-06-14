@@ -56,23 +56,55 @@ const app = express();
 // ✅ CORS
 // CORS middleware with detailed logging
 app.use((req, res, next) => {
-	console.log('🌐 CORS Request:', {
-		method: req.method,
-		url: req.url,
-		origin: req.headers.origin,
+	const origin = req.headers.origin || 'unknown';
+	const method = req.method || 'unknown';
+	const url = req.url || 'unknown';
+
+	console.log('🌐 CORS Request Details:', {
+		method,
+		url,
+		origin,
+		headers: req.headers,
 		allowedOrigins: process.env.ALLOWED_ORIGINS?.split(',') || [],
-		credentials: corsOptions.credentials
+		credentials: corsOptions.credentials,
+		env: process.env.NODE_ENV
 	});
-	
+
+	// Handle CORS preflight requests
+	if (method === 'OPTIONS') {
+		console.log('✅ Handling CORS preflight request');
+		res.header('Access-Control-Allow-Methods', corsOptions.methods.join(', '));
+		res.header('Access-Control-Allow-Headers', corsOptions.allowedHeaders.join(', '));
+		res.header('Access-Control-Allow-Credentials', 'true');
+		res.header('Access-Control-Max-Age', corsOptions.maxAge);
+		res.status(204).end();
+		return;
+	}
+
+	// Apply CORS middleware
 	cors(corsOptions)(req, res, (corsErr) => {
 		if (corsErr) {
-			console.error('❌ CORS Error:', corsErr);
+			console.error('❌ CORS Error:', {
+				error: corsErr,
+				origin,
+				method,
+				url,
+				message: corsErr.message
+			});
+			
 			res.status(403).json({
 				message: 'CORS request blocked',
-				details: corsErr.message
+				details: corsErr.message,
+				origin,
+				method,
+				url
 			});
 			return;
 		}
+
+		// Add CORS headers for non-preflight requests
+		res.header('Access-Control-Allow-Origin', origin);
+		res.header('Access-Control-Allow-Credentials', 'true');
 		
 		next();
 	});
