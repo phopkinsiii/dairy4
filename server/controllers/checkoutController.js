@@ -50,8 +50,8 @@ export const createCheckoutSession = async (req, res) => {
 		});
 
 		// Now that we have the session ID, update with URLs
-		const successUrl = `${process.env.CLIENT_URL}/confirmation?session_id=${session.id}`;
-		const cancelUrl = `${process.env.CLIENT_URL}/checkout`;
+		const successUrl = `https://www.blueberrydairy.com/confirmation?session_id=${session.id}`;
+		const cancelUrl = `https://www.blueberrydairy.com/checkout`;
 
 		await stripe.checkout.sessions.update(session.id, {
 			success_url: successUrl,
