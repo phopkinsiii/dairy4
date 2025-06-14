@@ -38,6 +38,32 @@ import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 
+// ✅ CORS
+app.use(
+	cors(corsOptions)
+);
+
+// Debug CORS settings
+console.log('✅ CORS configuration:', {
+	allowedOrigins: process.env.ALLOWED_ORIGINS?.split(',') || [],
+	credentials: corsOptions.credentials,
+	origin: corsOptions.origin
+});
+
+// Body parsing middleware must come after CORS
+app.use(
+	express.json({
+		limit: '50mb'
+	})
+);
+
+app.use(
+	express.urlencoded({
+		extended: true,
+		limit: '50mb'
+	})
+);
+
 // ✅ Compression first for better performance
 app.use(compression());
 
