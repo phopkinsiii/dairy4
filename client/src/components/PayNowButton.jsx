@@ -22,7 +22,15 @@ const PayNowButton = ({ form, cartItems, onSuccess }) => {
 
 			const response = await axiosInstance.post('checkout/create-session', {
 				form,
-				cartItems,
+				cartItems: cartItems.map(item => ({
+					_id: item.productId,
+					name: item.name,
+					quantity: item.quantity,
+					selectedOption: {
+						price: item.price,
+						size: item.selectedSize
+					}
+				})),
 			});
 
 			const sessionId = response.data?.id;
